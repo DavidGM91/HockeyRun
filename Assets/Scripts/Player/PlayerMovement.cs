@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -31,6 +32,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     LayerMask groundMask;
 
+    private enum EAnims
+    {
+        JumpStart = 0,
+        JumpLand = 1,
+        PushLeft = 2,
+        PushRight = 3,
+        RotateLeft = 4,
+        RotateRight = 5,
+        Slide = 6,
+        Hit = 7,
+        GameOver = 8
+    }
+
     private float _forwardSpeed = 3; // velocitat a la que anira cap endavant
     private float _lateralSpeed = 4; // velocitat a la que anira cap endavant
 
@@ -40,6 +54,16 @@ public class PlayerMovement : MonoBehaviour
 
     public float coyoteTime = 0.1f;
     private float coyoteTimeCounter = 0;
+    private bool isJumping = false;
+
+    private void PlayAnim(EAnims anim)
+    {
+        animator.SetTrigger(EAnims.GetName(typeof(EAnims), anim));
+    }
+    private void StopAnim(EAnims anim)
+    {
+        animator.ResetTrigger(Enum.GetName(typeof(EAnims), anim));
+    }
 
     public void Restart()
     {
@@ -77,10 +101,16 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        //Lògica de salt
+
         if (coyoteTimeCounter != 0 && checkGround())
         {
             coyoteTimeCounter = 0;
-            animator.ResetTrigger("Jump");
+            if(isJumping)
+            {
+                isJumping = false;
+                PlayAnim(EAnims.JumpLand);
+            }
         }
         else if (!checkGround())
         {
@@ -95,24 +125,11 @@ public class PlayerMovement : MonoBehaviour
             }
             Jump();
         }
-        else
-        {
-            if (coyoteTimeCounter != 0 && checkGround())
-            {
-                coyoteTimeCounter = 0;
-                animator.ResetTrigger("Jump");
-            }
-            else if (!checkGround())
-            {
-                coyoteTimeCounter += Time.deltaTime;
-            }
-        }
-        if (Input.GetKeyUp(upKey))
+        else if (Input.GetKeyUp(upKey))
         {
             jumpTimeCounter = 0;
             coyoteTimeCounter = coyoteTime;
         }
-            
     }
 
     bool checkGround()
@@ -125,10 +142,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (coyoteTimeCounter < coyoteTime)
         {
-            animator.SetTrigger("Jump");
+            isJumping = true;
+            PlayAnim(EAnims.JumpStart);
             jumpTimeCounter = jumpTime;
             coyoteTimeCounter = coyoteTime;
-
         }
     }
 

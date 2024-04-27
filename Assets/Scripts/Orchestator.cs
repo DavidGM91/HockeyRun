@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Orchestrator : MonoBehaviour
@@ -7,6 +8,7 @@ public class Orchestrator : MonoBehaviour
     public GameObject player;
     public GameObject cam;
     public LevelGenerator levelGenerator;
+    public TextMeshProUGUI scoreText;
 
     public float deathHeight = -10;
 
@@ -27,6 +29,7 @@ public class Orchestrator : MonoBehaviour
         {
             levelGenerator.Regenerate();
             playerMovement.Restart();
+            puntos = 0;
         } 
         else
         {
@@ -36,6 +39,7 @@ public class Orchestrator : MonoBehaviour
                 acumulatedTime -= 1;
                 puntos++;
             }
+            scoreText.text = "Score: " + puntos;
         }
     }
 }
