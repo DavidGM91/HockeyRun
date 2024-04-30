@@ -34,15 +34,15 @@ public class PlayerMovement : MonoBehaviour
 
     private enum EAnims
     {
-        JumpStart = 0,
-        JumpLand = 1,
-        PushLeft = 2,
-        PushRight = 3,
-        RotateLeft = 4,
-        RotateRight = 5,
-        Slide = 6,
-        Hit = 7,
-        GameOver = 8
+        JumpStart ,
+        JumpLand,
+        PushLeft,
+        PushRight,
+        RotateLeft,
+        RotateRight,
+        Slide,
+        Hit,
+        GameOver
     }
 
     private float _forwardSpeed = 3; // velocitat a la que anira cap endavant
