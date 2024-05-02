@@ -9,6 +9,7 @@ public class LevelGenerator : MonoBehaviour
     public int sectionsCount = 10;
     public int sectionsBehind = 2;
     public float timeBetweenChecks = 2.0f;
+    public bool menu = true;
     [System.Serializable]
     public class Section
     {
@@ -118,10 +119,14 @@ public class LevelGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = 0; i < sectionsCount; i++)
+        if (menu)
         {
-            GenerateNewSection();
+            for (int i = 0; i < sectionsCount; i++)
+            {
+                GenerateNewSection();
+            }
+            InvokeRepeating("needNewSection", timeBetweenChecks, timeBetweenChecks);
         }
-        InvokeRepeating("needNewSection",timeBetweenChecks,timeBetweenChecks);
+     
     }
 }

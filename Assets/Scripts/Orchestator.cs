@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Orchestrator : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class Orchestrator : MonoBehaviour
     public GameObject cam;
     public LevelGenerator levelGenerator;
     public TextMeshProUGUI scoreText;
+    public GameObject menu;
 
     public KeyCode rotateCamera;
 
@@ -22,9 +24,21 @@ public class Orchestrator : MonoBehaviour
     private int puntos = 0;
     private float acumulatedTime = 0;
 
+    public void ShowMenu()
+    {
+        menu.SetActive(true);
+    }
+
+    public void HideMenu()
+    {
+        menu.SetActive(false);
+    }
     private void Start()
     {
         playerMovement = player.GetComponent<PlayerMovement>();
+        levelGenerator.menu = false;
+        ShowMenu();
+        player.SetActive(false);
     }
 
     // Update is called once per frame
@@ -51,6 +65,10 @@ public class Orchestrator : MonoBehaviour
         //DEBUG TODO REMOVE
         if (Input.GetKey(rotateCamera))
         {
+            HideMenu();
+            levelGenerator.menu = true;
+            player.SetActive(true);
+            /*
             if (isInici)
             {
                 cam.GetComponent<FollowCamera>().Focus(player.GetComponent<Transform>());
@@ -59,6 +77,8 @@ public class Orchestrator : MonoBehaviour
             {
                 cam.GetComponent<FollowCamera>().Focus(inici);
             }
+            */
         }
+     
     }
 }
