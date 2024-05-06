@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
     private enum EAnims
     {
         JumpStart ,
-        JumpLand,
+        JumpEnd,
         PushLeft,
         PushRight,
         RotateLeft,
@@ -45,8 +45,10 @@ public class PlayerMovement : MonoBehaviour
         GameOver
     }
 
-    private float _forwardSpeed = 3; // velocitat a la que anira cap endavant
-    private float _lateralSpeed = 4; // velocitat a la que anira cap endavant
+    private float _forwardSpeed = -1; // velocitat a la que anira cap endavant
+    private float _lateralSpeed = -1; // velocitat a la que anira cap endavant
+
+    private float saveForwardSpeed = -1;
 
 
     private float jumpTimeCounter = 0;
@@ -65,13 +67,41 @@ public class PlayerMovement : MonoBehaviour
         animator.ResetTrigger(Enum.GetName(typeof(EAnims), anim));
     }
 
+    public void setIdle(bool idle)
+    {
+        if(idle)
+        {
+            animator.SetBool("Idle", true);
+            if (forwardSpeed != 0)
+            {
+                saveForwardSpeed = forwardSpeed;
+            }
+            else if(saveForwardSpeed != -1)
+            {
+                saveForwardSpeed = _forwardSpeed;
+            }
+            else
+            {
+                saveForwardSpeed = 3;
+            }
+            forwardSpeed = 0;
+            this.enabled = false;
+        }
+        else
+        {
+            forwardSpeed = saveForwardSpeed;
+            animator.SetBool("Idle", false);
+            this.enabled = true;
+        }
+    }
+
     public void Restart()
     {
         forwardSpeed = _forwardSpeed;
         lateralSpeed = _lateralSpeed;
         this.gameObject.transform.position = new Vector3(0, 0, 0);
     }
-    void Start()
+    public void PlayerStart()
     {
         _forwardSpeed = forwardSpeed;
         _lateralSpeed = lateralSpeed;
@@ -80,6 +110,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(_forwardSpeed == -1)
+        {
+            _forwardSpeed = forwardSpeed;
+            _lateralSpeed = lateralSpeed;
+        }
         transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime, Space.World);
 
         forwardSpeed += speedIncreasePerSecond * Time.deltaTime;
@@ -109,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
             if(isJumping)
             {
                 isJumping = false;
-                PlayAnim(EAnims.JumpLand);
+                PlayAnim(EAnims.JumpEnd);
             }
         }
         else if (!checkGround())

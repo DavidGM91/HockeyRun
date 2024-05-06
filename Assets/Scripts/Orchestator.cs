@@ -17,28 +17,42 @@ public class Orchestrator : MonoBehaviour
 
     public float deathHeight = -10;
 
-    private bool isInici = false;
+    private bool ismenu = true;
 
     private PlayerMovement playerMovement;
 
     private int puntos = 0;
     private float acumulatedTime = 0;
 
+    public void Play()
+    {
+        playerMovement.setIdle(false);
+        HideMenu();
+    }
     public void ShowMenu()
     {
+        cam.GetComponent<FollowCamera>().Focus(inici);
+        Time.timeScale = 0;
+        playerMovement.enabled = false;
+        ismenu = true;
         menu.SetActive(true);
     }
 
     public void HideMenu()
     {
+        cam.GetComponent<FollowCamera>().Focus(player.GetComponent<Transform>());
+        Time.timeScale = 1;
+        playerMovement.enabled = true;
+        ismenu = false;
         menu.SetActive(false);
     }
     private void Start()
     {
+        Time.timeScale = 0;
         playerMovement = player.GetComponent<PlayerMovement>();
-        levelGenerator.menu = false;
+        playerMovement.PlayerStart();
+        playerMovement.setIdle(true);
         ShowMenu();
-        player.SetActive(false);
     }
 
     // Update is called once per frame
@@ -65,19 +79,14 @@ public class Orchestrator : MonoBehaviour
         //DEBUG TODO REMOVE
         if (Input.GetKey(rotateCamera))
         {
-            HideMenu();
-            levelGenerator.menu = true;
-            player.SetActive(true);
-            /*
-            if (isInici)
+            if (ismenu)
             {
-                cam.GetComponent<FollowCamera>().Focus(player.GetComponent<Transform>());
+                HideMenu();
             }
             else
             {
-                cam.GetComponent<FollowCamera>().Focus(inici);
+                ShowMenu();
             }
-            */
         }
      
     }

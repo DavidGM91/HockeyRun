@@ -9,7 +9,6 @@ public class LevelGenerator : MonoBehaviour
     public int sectionsCount = 10;
     public int sectionsBehind = 2;
     public float timeBetweenChecks = 2.0f;
-    public bool menu = true;
     [System.Serializable]
     public class Section
     {
@@ -21,6 +20,7 @@ public class LevelGenerator : MonoBehaviour
         public int[] allowedObstacles;
         public float lenght;
         public Vector3 levelPos;
+        public int coinSides; // 000 -> no coin, 001 -> right, 010 -> middle, 100 -> left if(coinSides & 0b001) -> right
     }
     [SerializeField]
     public Section[] sections;
@@ -43,6 +43,7 @@ public class LevelGenerator : MonoBehaviour
         public Quaternion rot;
         public string name;
         public ObstacleType type;
+        public bool isDeadly = false;
     }
     [SerializeField]
     public List<obstacle> obstacles = new();
@@ -89,6 +90,7 @@ public class LevelGenerator : MonoBehaviour
         nextSectionPos += levelRot * (new Vector3(0, 0, newSection.lenght)+newSection.pos);
         nextSectionPos.x = 0;
         nextSectionPos.y = 0;
+
         if(levelSections.Count > sectionsCount)
         {
             Destroy(levelSections[0]);
@@ -119,14 +121,10 @@ public class LevelGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (menu)
+        for (int i = 0; i < sectionsCount; i++)
         {
-            for (int i = 0; i < sectionsCount; i++)
-            {
-                GenerateNewSection();
-            }
-            InvokeRepeating("needNewSection", timeBetweenChecks, timeBetweenChecks);
+            GenerateNewSection();
         }
-     
+        InvokeRepeating("needNewSection", timeBetweenChecks, timeBetweenChecks);
     }
 }
