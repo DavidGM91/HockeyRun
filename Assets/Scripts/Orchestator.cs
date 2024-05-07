@@ -13,6 +13,7 @@ public class Orchestrator : MonoBehaviour
     public LevelGenerator levelGenerator;
     public TextMeshProUGUI scoreText;
     public GameObject menu;
+    public GameObject customizationMenu;
 
 
     public KeyCode rotateCamera;
@@ -32,7 +33,25 @@ public class Orchestrator : MonoBehaviour
         cam.GetComponent<FollowCamera>().Focus(player.transform);
         HideMenu();
     }
-   
+
+    public void ShowCustomization()
+    {
+        playerMovement.setIdle(true);
+        cam.GetComponent<FollowCamera>().Focus(player.transform);
+        cam.GetComponent<FollowCamera>().AdjustCamera(new Vector3(10, 0, 0), 1);
+        //TODO Camera shows player front
+        menu.SetActive(false);
+        customizationMenu.SetActive(true);
+    }
+    public void HideCustomization()
+    {
+        playerMovement.setIdle(false);
+        cam.GetComponent<FollowCamera>().AdjustCamera(new Vector3(-10, 0, 0), 1);
+        //TODO Camera shows player front
+        menu.SetActive(true);
+        customizationMenu.SetActive(false);
+    }
+
     public void ShowMenu()
 
     {
