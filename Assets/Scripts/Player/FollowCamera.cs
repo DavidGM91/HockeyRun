@@ -17,7 +17,7 @@ public class FollowCamera : MonoBehaviour {
 
     private bool rotating;
     private float elapsed = 0;
-    private float rotationTime = 1.0f;
+    private float rotationTime = 2.0f;
     private Quaternion originalRot;
     private Quaternion toRotate;
 

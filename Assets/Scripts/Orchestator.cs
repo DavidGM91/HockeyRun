@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ public class Orchestrator : MonoBehaviour
     public LevelGenerator levelGenerator;
     public TextMeshProUGUI scoreText;
     public GameObject menu;
+
 
     public KeyCode rotateCamera;
 
@@ -27,13 +29,17 @@ public class Orchestrator : MonoBehaviour
     public void Play()
     {
         playerMovement.setIdle(false);
+        cam.GetComponent<FollowCamera>().Focus(player.transform);
         HideMenu();
     }
+   
     public void ShowMenu()
+
     {
         cam.GetComponent<FollowCamera>().Focus(inici);
         Time.timeScale = 0;
         playerMovement.enabled = false;
+        scoreText.enabled = false;
         ismenu = true;
         menu.SetActive(true);
     }

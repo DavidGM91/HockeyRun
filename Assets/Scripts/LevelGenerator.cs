@@ -9,6 +9,7 @@ public class LevelGenerator : MonoBehaviour
     public int sectionsCount = 10;
     public int sectionsBehind = 2;
     public float timeBetweenChecks = 2.0f;
+    public GameObject prefabCoin;
     [System.Serializable]
     public class Section
     {
@@ -20,7 +21,7 @@ public class LevelGenerator : MonoBehaviour
         public int[] allowedObstacles;
         public float lenght;
         public Vector3 levelPos;
-        public int coinSides; // 000 -> no coin, 001 -> right, 010 -> middle, 100 -> left if(coinSides & 0b001) -> right
+        public int coinSides = 111; // 000 -> no coin, 001 -> right, 010 -> middle, 100 -> left if(coinSides & 0b001) -> right
     }
     [SerializeField]
     public Section[] sections;
@@ -87,6 +88,10 @@ public class LevelGenerator : MonoBehaviour
         currentSection++;
         levelSections.Add(Instantiate(newSection.obj, nextSectionPos+ levelRot * newSection.pos, levelRot * newSection.rot));
         GenerateObstacles(sectionId, nextSectionPos);
+
+        //COINS
+       // GenerateCoinsWrapper(newSection.coinSides);
+
         nextSectionPos += levelRot * (new Vector3(0, 0, newSection.lenght)+newSection.pos);
         nextSectionPos.x = 0;
         nextSectionPos.y = 0;
@@ -101,6 +106,51 @@ public class LevelGenerator : MonoBehaviour
     private void GenerateObstacles(int sectionId, Vector3 pos)
     {
         
+    }
+    
+    private void GenerateCoinsWrapper()
+    {
+        Section newSection;
+        //GenerateCoins(newSection.coinSides);
+    }
+    private void GenerateCoins(int coinSides)
+    {      
+
+        if (coinSides == 0) return; 
+
+        Vector3[] coinSpawnPositions = new Vector3[3];
+        coinSpawnPositions[0] = new Vector3(-1.5f, 0, 0); 
+        coinSpawnPositions[1] = new Vector3(0, 0, 0);
+        coinSpawnPositions[2] = new Vector3(1.5f, 0, 0); 
+
+        int validPositionsCount = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            if ((coinSides & (1 << i)) != 0)
+            {
+                validPositionsCount++;
+            }
+        }
+
+        if (validPositionsCount == 0) return;
+
+        // index aleatori per selecciona una de les posicions
+        int randomIndex = Random.Range(0, validPositionsCount);
+
+        // Encontrar la posición aleatoria entre las posiciones válidas
+        int validIndex = -1;
+        for (int i = 0; i < 3; i++)
+        {
+            if ((coinSides & (1 << i)) != 0)
+            {
+                validIndex++;
+                if (validIndex == randomIndex)
+                {
+                    Instantiate(prefabCoin, transform.TransformPoint(coinSpawnPositions[i]), Quaternion.identity);
+                    break;
+                }
+            }
+        }
     }
 
     private void needNewSection()
@@ -126,5 +176,6 @@ public class LevelGenerator : MonoBehaviour
             GenerateNewSection();
         }
         InvokeRepeating("needNewSection", timeBetweenChecks, timeBetweenChecks);
+        InvokeRepeating("GenerateCoinsWrapper", 0, 0.1f);
     }
 }
