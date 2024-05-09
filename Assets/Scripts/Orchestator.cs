@@ -16,46 +16,53 @@ public class Orchestrator : MonoBehaviour
     public GameObject customizationMenu;
 
 
-    public KeyCode rotateCamera;
+    public KeyCode OpenMenu;
 
     public float deathHeight = -10;
 
     private bool ismenu = true;
 
-    private PlayerMovement playerMovement;
+    private PlayerMovement playerMovement = null;
 
     private int puntos = 0;
     private float acumulatedTime = 0;
 
+    private Vector3 playerOffset = new Vector3(0, 1, -6);
+
     public void Play()
     {
+        if (playerMovement == null)
+            playerMovement = player.GetComponent<PlayerMovement>();
         playerMovement.setIdle(false);
         cam.GetComponent<FollowCamera>().Focus(player.transform);
+        cam.GetComponent<FollowCamera>().AdjustCamera(playerOffset, 1);
         HideMenu();
     }
 
     public void ShowCustomization()
     {
+        if (playerMovement == null)
+            playerMovement = player.GetComponent<PlayerMovement>();
         playerMovement.setIdle(true);
         cam.GetComponent<FollowCamera>().Focus(player.transform);
-        cam.GetComponent<FollowCamera>().AdjustCamera(new Vector3(10, 0, 0), 1);
+        cam.GetComponent<FollowCamera>().AdjustCamera(new Vector3(0, 0.5f, 3), 1);
         //TODO Camera shows player front
         menu.SetActive(false);
         customizationMenu.SetActive(true);
     }
     public void HideCustomization()
     {
+        if (playerMovement == null)
+            playerMovement = player.GetComponent<PlayerMovement>();
         playerMovement.setIdle(false);
-        cam.GetComponent<FollowCamera>().AdjustCamera(new Vector3(-10, 0, 0), 1);
+        cam.GetComponent<FollowCamera>().AdjustCamera(playerOffset, 1);
         //TODO Camera shows player front
         menu.SetActive(true);
         customizationMenu.SetActive(false);
     }
 
     public void ShowMenu()
-
     {
-        cam.GetComponent<FollowCamera>().Focus(inici);
         Time.timeScale = 0;
         playerMovement.enabled = false;
         scoreText.enabled = false;
@@ -73,8 +80,10 @@ public class Orchestrator : MonoBehaviour
     }
     private void Start()
     {
+        cam.GetComponent<FollowCamera>().Focus(inici);
         Time.timeScale = 0;
-        playerMovement = player.GetComponent<PlayerMovement>();
+        if (playerMovement == null)
+            playerMovement = player.GetComponent<PlayerMovement>();
         playerMovement.PlayerStart();
         playerMovement.setIdle(true);
         ShowMenu();
@@ -100,9 +109,7 @@ public class Orchestrator : MonoBehaviour
             scoreText.text = "Score: " + puntos;
         }
 
-
-        //DEBUG TODO REMOVE
-        if (Input.GetKey(rotateCamera))
+        if (Input.GetKey(OpenMenu))
         {
             if (ismenu)
             {

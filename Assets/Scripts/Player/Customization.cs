@@ -44,6 +44,7 @@ public class Customization : MonoBehaviour
     public NamedColor[] Skins;
     public NamedColor[] HairsColors;
 
+    [HideInInspector]
     public GameObject[] Hairs;
     // Start is called before the first frame update
     private int lastHairIndex = -1;
