@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static UnityEditor.PlayerSettings;
 
 public class FollowCamera : MonoBehaviour {
 
@@ -33,9 +32,6 @@ public class FollowCamera : MonoBehaviour {
 
     public void AdjustCamera(Vector3 offset, float dist) {
         this.offset = offset * dist;
-        Vector3 Pos = (offset + objective.position);
-        Pos.x = 0;
-        transCamera.position = Pos;
         Focus(this.objective);
     }
 

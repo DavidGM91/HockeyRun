@@ -13,25 +13,15 @@ public class LevelGenerator : MonoBehaviour
     [System.Serializable]
     public class Section
     {
-        public string name;
         public GameObject obj;
+        public string name;
         public Vector3 pos;
         public Quaternion rot;
-        public Vector2Int[] allowedSectionsAfter;
+        public int[] allowedSectionsAfter;
         public int[] allowedObstacles;
         public float lenght;
         public Vector3 levelPos;
         public int coinSides = 111; // 000 -> no coin, 001 -> right, 010 -> middle, 100 -> left if(coinSides & 0b001) -> right
-
-        private int sectionWeights = 0;
-        public int getSectionWeights()
-        {
-            return sectionWeights;
-        }
-        public void setSectionWeights(int weights)
-        {
-            sectionWeights = weights;
-        }
     }
     [SerializeField]
     public Section[] sections;
@@ -61,8 +51,7 @@ public class LevelGenerator : MonoBehaviour
 
     private List<GameObject> levelSections = new();
 
-    private Vector2Int[] allowedSectionsNext;
-    private int allowedSectionsNextMaxWeight = 0;
+    private int[] allowedSectionsNext;
 
     private Vector3 nextSectionPos = new Vector3(0, 0, 0);
 
@@ -86,46 +75,16 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private int GetRandomSection(Vector2Int[] possibleSections, int maxWeight)
-    {
-        int randomWeight = Random.Range(0, maxWeight);
-        for (int i = 0; i < possibleSections.Length; i++)
-        {
-            randomWeight -= possibleSections[i].y;
-            if (randomWeight <= 0)
-            {
-                return possibleSections[i].x;
-            }
-        }
-        return -1;
-    }
-
-    public void SetLevelRotation(Quaternion rot)
-    {
-        levelRot = rot;
-    }
-
     private void GenerateNewSection()
     {
         if(currentSection == -1)
         {
-            //La primera secció es la 0 per que no caigui el jugador
-            allowedSectionsNext = new Vector2Int[] { new Vector2Int(2, 0) };
+            //La primera seccio es la 0 per que no caigui el jugador
+            allowedSectionsNext = new int[] { 0 };
         }
-        //TODO Fix the random range so it takes into account the allowed sections and add random weights
-        int sectionId = GetRandomSection(allowedSectionsNext, allowedSectionsNextMaxWeight);
-        if(sectionId == -1)
-        {
-            Debug.Log("Error: No section found");
-            Debug.Log("SectionId: " + sectionId);
-            Debug.Log("allowedSectionsNext: " + string.Join(", ", allowedSectionsNext));
-            sectionId = 0;
-        }
-        
-
+        int sectionId = Random.Range(0, allowedSectionsNext.Length);
         Section newSection = sections[sectionId];
         allowedSectionsNext = newSection.allowedSectionsAfter;
-        allowedSectionsNextMaxWeight = newSection.getSectionWeights();
         currentSection++;
         levelSections.Add(Instantiate(newSection.obj, nextSectionPos+ levelRot * newSection.pos, levelRot * newSection.rot));
         GenerateObstacles(sectionId, nextSectionPos);
@@ -212,15 +171,6 @@ public class LevelGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        foreach (var section in sections)
-        {
-            int weights = 0;
-            foreach (var nextSection in section.allowedSectionsAfter)
-            {
-                weights += nextSection.y;
-            }
-            section.setSectionWeights(weights);
-        }
         for (int i = 0; i < sectionsCount; i++)
         {
             GenerateNewSection();
