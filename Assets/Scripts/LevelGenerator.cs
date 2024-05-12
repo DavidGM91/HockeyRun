@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteAlways]
 public class LevelGenerator : MonoBehaviour
 {
     public GameObject player;
@@ -17,7 +18,7 @@ public class LevelGenerator : MonoBehaviour
         public GameObject obj;
         public Vector3 pos;
         public Quaternion rot;
-        public Vector2Int[] allowedSectionsAfter;
+        public namedValue<Vector2Int>[] allowedSectionsAfter;
         public int[] allowedObstacles;
         public float lenght;
         public Vector3 levelPos;
@@ -58,10 +59,25 @@ public class LevelGenerator : MonoBehaviour
     }
     [SerializeField]
     public List<obstacle> obstacles = new();
-
     private List<GameObject> levelSections = new();
 
-    private Vector2Int[] allowedSectionsNext;
+    [System.Serializable]
+    public class namedValue<T>
+    {
+        [HideInInspector]
+        public string name;
+        public T value;
+
+        public namedValue(string v, T value)
+        {
+            name = v;
+            this.value = value;
+        }
+
+        public static implicit operator T(namedValue<T> d) => d.value;
+        public override string ToString() => $"{name}={value}";
+    }
+    private namedValue<Vector2Int>[] allowedSectionsNext;
     private int allowedSectionsNextMaxWeight = 0;
 
     private Vector3 nextSectionPos = new Vector3(0, 0, 0);
@@ -70,6 +86,9 @@ public class LevelGenerator : MonoBehaviour
 
     private int currentSection = -1;
 
+    /// <summary>
+    /// Elimina totes les seccions actuals, genera de noves i torna totes les posicions a l'inici.
+    /// </summary>
     public void Regenerate()
     {
         foreach(GameObject section in levelSections)
@@ -86,18 +105,34 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private int GetRandomSection(Vector2Int[] possibleSections, int maxWeight)
+    /// <summary>
+    /// Retorna un element aleatori d'una llista tenint en compte el pes.
+    /// </summary>
+    /// <param name="possibleSections">Llista de vectors2int on el primer parametre es el valor i el segon el pes d'aquest valor.</param>
+    /// <param name="maxWeight">Suma opcional de tots els valors de la llista precalculats.</param>
+    /// <returns></returns>
+    private int GetRandomSelection(namedValue<Vector2Int>[] possibleSections, int maxWeight = -1)
     {
-        int randomWeight = Random.Range(0, maxWeight);
-        for (int i = 0; i < possibleSections.Length; i++)
+        if(maxWeight == -1)
         {
-            randomWeight -= possibleSections[i].y;
-            if (randomWeight <= 0)
+            maxWeight = 0;
+            foreach (var section in possibleSections)
             {
-                return possibleSections[i].x;
+                maxWeight += section.value.y;
             }
         }
-        return -1;
+        int randomWeight = Random.Range(0, maxWeight+1);
+        if(randomWeight >= maxWeight)
+            return possibleSections[possibleSections.Length].value.x;
+        for (int i = 0; i < possibleSections.Length; i++)
+        {
+            randomWeight -= possibleSections[i].value.y;
+            if (randomWeight <= 0)
+            {
+                return possibleSections[i].value.x;
+            }
+        }
+        return possibleSections[0].value.x;
     }
 
     public void SetLevelRotation(Quaternion rot)
@@ -105,27 +140,22 @@ public class LevelGenerator : MonoBehaviour
         levelRot = rot;
     }
 
+    /// <summary>
+    /// Crea una nova secciÃ³ amb els seus obstacles i monedes i elimina l'Ãºltima secciÃ³.
+    /// </summary>
     private void GenerateNewSection()
     {
         if(currentSection == -1)
         {
-            //La primera secció es la 0 per que no caigui el jugador
-            allowedSectionsNext = new Vector2Int[] { new Vector2Int(2, 0) };
+            allowedSectionsNext = new namedValue<Vector2Int>[] { new namedValue<Vector2Int>("first", new Vector2Int(0, 1)) };
+            allowedSectionsNextMaxWeight = 1;
         }
-        //TODO Fix the random range so it takes into account the allowed sections and add random weights
-        int sectionId = GetRandomSection(allowedSectionsNext, allowedSectionsNextMaxWeight);
-        if(sectionId == -1)
-        {
-            Debug.Log("Error: No section found");
-            Debug.Log("SectionId: " + sectionId);
-            Debug.Log("allowedSectionsNext: " + string.Join(", ", allowedSectionsNext));
-            sectionId = 0;
-        }
-        
-
+        int sectionId = GetRandomSelection(allowedSectionsNext, allowedSectionsNextMaxWeight);
         Section newSection = sections[sectionId];
+
         allowedSectionsNext = newSection.allowedSectionsAfter;
         allowedSectionsNextMaxWeight = newSection.getSectionWeights();
+
         currentSection++;
         levelSections.Add(Instantiate(newSection.obj, nextSectionPos+ levelRot * newSection.pos, levelRot * newSection.rot));
         GenerateObstacles(sectionId, nextSectionPos);
@@ -178,7 +208,7 @@ public class LevelGenerator : MonoBehaviour
         // index aleatori per selecciona una de les posicions
         int randomIndex = Random.Range(0, validPositionsCount);
 
-        // Encontrar la posición aleatoria entre las posiciones válidas
+        // Encontrar la posiciï¿½n aleatoria entre las posiciones vï¿½lidas
         int validIndex = -1;
         for (int i = 0; i < 3; i++)
         {
@@ -193,7 +223,10 @@ public class LevelGenerator : MonoBehaviour
             }
         }
     }
-
+    
+    /// <summary>
+    /// Comproba si derrera del jugador hi ha seccions per trucar a la nova.
+    /// </summary>
     private void needNewSection()
     {
         Transform playerPos = player.GetComponent<Transform>();
@@ -208,24 +241,56 @@ public class LevelGenerator : MonoBehaviour
             lastSectionPos = levelSections[sectionsBehind].GetComponent<Renderer>().bounds;
         }
     }
+    private void OnValidate()
+    {
+        if (!Application.IsPlaying(gameObject))
+        {
+            // Editor logic
+            foreach(var section in sections)
+            {
+                foreach(var nextSection in section.allowedSectionsAfter)
+                {
+                    if(nextSection.value.x >= sections.Length)
+                    {
+                        Debug.LogError("Value of "+section.name+ " for "+nextSection.ToString()+" is out of range.");
+                        break;
+                    }
+                    nextSection.name = sections[nextSection.value.x].name;
+                }
+
+            }
+        }
+        else
+        {
+            // Play logic
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        foreach (var section in sections)
+        if (Application.IsPlaying(gameObject))
         {
-            int weights = 0;
-            foreach (var nextSection in section.allowedSectionsAfter)
+            for (int i = 0; i < sectionsCount; i++)
             {
-                weights += nextSection.y;
+                GenerateNewSection();
             }
-            section.setSectionWeights(weights);
+            needNewSection(); //Aquesta primera call es perque Unity no pensi que no s'utilitza la funciÃ³ i l'elimini en optimitzar ja que els InvokeRepeating no compilan com a call
+            InvokeRepeating("needNewSection", timeBetweenChecks, timeBetweenChecks);
+            InvokeRepeating("GenerateCoinsWrapper", 0, 0.1f);  //Les monedes s'han de generar per secciÃ³ totes a l'hora, 
+                                                                //ja s'encarrega la resta del codi de garantir que es truca quan cal.
         }
-        for (int i = 0; i < sectionsCount; i++)
+        else
         {
-            GenerateNewSection();
+            foreach (var section in sections)
+            {
+                int weights = 0;
+                foreach (var nextSection in section.allowedSectionsAfter)
+                {
+                    weights += nextSection.value.y;
+                }
+                section.setSectionWeights(weights);
+            }
         }
-        InvokeRepeating("needNewSection", timeBetweenChecks, timeBetweenChecks);
-        InvokeRepeating("GenerateCoinsWrapper", 0, 0.1f);
     }
 }

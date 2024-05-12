@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static UnityEditor.PlayerSettings;
+//using static UnityEditor.PlayerSettings; //What is this for?
 
 public class FollowCamera : MonoBehaviour {
 
