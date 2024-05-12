@@ -7,11 +7,13 @@ public class Coin : MonoBehaviour
     public float rotationSpeed = 1; // Velocidad de rotación de la moneda
     public AudioSource coinFX;
 
+    [SerializeField]
     private Orchestrator orchestrator;
 
     private void Start()
     {
-        orchestrator = GameObject.FindObjectOfType<Orchestrator>();
+        if(orchestrator == null)
+            orchestrator = GameObject.FindObjectOfType<Orchestrator>();
     }
 
     private void Update()

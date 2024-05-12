@@ -10,8 +10,6 @@ public class CoinPool : MonoBehaviour
     [SerializeField]
     private List<GameObject> CoinList;
 
-    public static CoinPool instance;
-
     [SerializeField] 
     private int poolSize = 10;
     void Start()

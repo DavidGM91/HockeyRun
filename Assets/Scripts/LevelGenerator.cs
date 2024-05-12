@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Pool;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,6 +8,7 @@ public class LevelGenerator : MonoBehaviour
 {
     public GameObject player;
     public GameObject levelCamera;
+    public CoinPool coinPool;
     public int sectionsCount = 10;
     public int sectionsBehind = 2;
     public float timeBetweenChecks = 2.0f;
@@ -166,24 +166,28 @@ public class LevelGenerator : MonoBehaviour
         currentSection++;
         levelSections.Add(Instantiate(newSection.obj, nextSectionPos+ levelRot * newSection.pos, levelRot * newSection.rot));
 
+        print("New section at " + nextCoinPos);
+
         int coinsNext = GenerateObstacles(sectionId, nextSectionPos);
 
-
-        if (Random.Range(0, 4) == 0)
-        {
-            sectionsWithCoins = Random.Range(3, 6); 
-        }
 
         if(sectionsWithCoins > 0)
         {
             sectionsWithCoins--;
             //COINS
-            GenerateCoins(coinsNext);
+            GenerateCoins(coinsNext,sectionId);
         }
-
+        else
+        {
+            if (Random.Range(0, 4) == 0)
+            {
+                sectionsWithCoins = Random.Range(3, 6);
+            }
+        }
+        /*
         nextSectionPos += levelRot * (new Vector3(0, 0, newSection.lenght)+newSection.pos);
         nextSectionPos.x = 0;
-        nextSectionPos.y = 0;
+        nextSectionPos.y = 0;//*/
 
         if(levelSections.Count > sectionsCount)
         {
@@ -198,7 +202,7 @@ public class LevelGenerator : MonoBehaviour
         return 0b111111;
     }
     
-    private void GenerateCoins(int coinsNext)
+    private void GenerateCoins(int coinsNext, int sectionID)
     {   
         int finalCoinSide = 0;
         List<int> possibleCoinSide = new List<int>();
@@ -216,32 +220,38 @@ public class LevelGenerator : MonoBehaviour
         // 5 monedes per seccio
         for (int i = 0; i < 5; ++i)
         {
-            GameObject coin = CoinPool.instance.RequestCoin();
+            GameObject coin = coinPool.RequestCoin();
             if (coin != null)
             {
-                Vector3 coinPosition = new Vector3();
+                Vector3 coinPosition;
 
                 switch (finalCoinSide)
                 {
                     case 0: // izquierda
-                        coinPosition = new Vector3(-1, nextCoinPos, 0);
+                        coinPosition = new Vector3(-1, 0,0);
                         break;
                     case 1: // medio
-                        coinPosition = new Vector3(0, nextCoinPos, 0);
+                        coinPosition = new Vector3(0, 0, 0);
                         break;
                     case 2: // derecha
-                        coinPosition = new Vector3(1, nextCoinPos, 0);
+                        coinPosition = new Vector3(1, 0, 0);
                         break;
                     case 3: // izquierda flotante
-                        coinPosition = new Vector3(-1, nextCoinPos, 1);
+                        coinPosition = new Vector3(-1, 1, 0);
                         break;
                     case 4: // medio flotante
-                        coinPosition = new Vector3(0, nextCoinPos, 1);
+                        coinPosition = new Vector3(0, 1, 0);
                         break;
                     case 5: // derecha flotante
-                        coinPosition = new Vector3(-1, nextCoinPos, 1);
+                        coinPosition = new Vector3(-1, 1, 0);
+                        break;
+                    default:
+                        coinPosition = new Vector3(0, 0, 0);
                         break;
                 }
+                coinPosition += nextSectionPos + new Vector3(0,0,i-sections[sectionID].lenght/2);
+
+
                 coin.transform.position = coinPosition;
                 nextCoinPos += 1; // distancia entre monedas
             }
