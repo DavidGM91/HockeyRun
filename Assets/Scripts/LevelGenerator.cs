@@ -12,7 +12,6 @@ public class LevelGenerator : MonoBehaviour
     public int sectionsCount = 10;
     public int sectionsBehind = 2;
     public float timeBetweenChecks = 2.0f;
-    public GameObject prefabCoin;
     [System.Serializable]
     public class Section
     {
@@ -179,7 +178,7 @@ public class LevelGenerator : MonoBehaviour
         {
             sectionsWithCoins--;
             //COINS
-            // GenerateCoinsWrapper(newSection.coinSides);
+            GenerateCoins(coinsNext);
         }
 
         nextSectionPos += levelRot * (new Vector3(0, 0, newSection.lenght)+newSection.pos);
@@ -199,47 +198,52 @@ public class LevelGenerator : MonoBehaviour
         return 0b111111;
     }
     
-    private void GenerateCoinsWrapper()
-    {
-        Section newSection;
-        //GenerateCoins(newSection.coinSides);
-    }
-    private void GenerateCoins(int coinSides)
-    {      
-
-        if (coinSides == 0) return; 
-
-        Vector3[] coinSpawnPositions = new Vector3[3];
-        coinSpawnPositions[0] = new Vector3(-1.5f, 0, 0); 
-        coinSpawnPositions[1] = new Vector3(0, 0, 0);
-        coinSpawnPositions[2] = new Vector3(1.5f, 0, 0); 
-
-        int validPositionsCount = 0;
-        for (int i = 0; i < 3; i++)
+    private void GenerateCoins(int coinsNext)
+    {   
+        int finalCoinSide = 0;
+        List<int> possibleCoinSide = new List<int>();
+        for (int i = 0; i < 6; ++i)
         {
-            if ((coinSides & (1 << i)) != 0)
-            {
-                validPositionsCount++;
-            }
+            if (((coinsNext >> i) & 1) == 1) possibleCoinSide.Add(i); // guardo els bits a 1
         }
 
-        if (validPositionsCount == 0) return;
-
-        // index aleatori per selecciona una de les posicions
-        int randomIndex = Random.Range(0, validPositionsCount);
-
-        // Encontrar la posici�n aleatoria entre las posiciones v�lidas
-        int validIndex = -1;
-        for (int i = 0; i < 3; i++)
+        if (possibleCoinSide.Count > 0)
         {
-            if ((coinSides & (1 << i)) != 0)
+            int randomIndex = Random.Range(0, possibleCoinSide.Count);
+            finalCoinSide = possibleCoinSide[randomIndex]; // 0 = izquierda 1 = medio 2 = derecha 3 = izquierda flotante...
+        }
+
+        // 5 monedes per seccio
+        for (int i = 0; i < 5; ++i)
+        {
+            GameObject coin = CoinPool.instance.RequestCoin();
+            if (coin != null)
             {
-                validIndex++;
-                if (validIndex == randomIndex)
+                Vector3 coinPosition = new Vector3();
+
+                switch (finalCoinSide)
                 {
-                    Instantiate(prefabCoin, transform.TransformPoint(coinSpawnPositions[i]), Quaternion.identity);
-                    break;
+                    case 0: // izquierda
+                        coinPosition = new Vector3(-1, nextCoinPos, 0);
+                        break;
+                    case 1: // medio
+                        coinPosition = new Vector3(0, nextCoinPos, 0);
+                        break;
+                    case 2: // derecha
+                        coinPosition = new Vector3(1, nextCoinPos, 0);
+                        break;
+                    case 3: // izquierda flotante
+                        coinPosition = new Vector3(-1, nextCoinPos, 1);
+                        break;
+                    case 4: // medio flotante
+                        coinPosition = new Vector3(0, nextCoinPos, 1);
+                        break;
+                    case 5: // derecha flotante
+                        coinPosition = new Vector3(-1, nextCoinPos, 1);
+                        break;
                 }
+                coin.transform.position = coinPosition;
+                nextCoinPos += 1; // distancia entre monedas
             }
         }
     }
@@ -303,8 +307,8 @@ public class LevelGenerator : MonoBehaviour
             }
             needNewSection(); //Aquesta primera call es perque Unity no pensi que no s'utilitza la funció i l'elimini en optimitzar ja que els InvokeRepeating no compilan com a call
             InvokeRepeating("needNewSection", timeBetweenChecks, timeBetweenChecks);
-            InvokeRepeating("GenerateCoinsWrapper", 0, 0.1f);  //Les monedes s'han de generar per secció totes a l'hora, 
-                                                                //ja s'encarrega la resta del codi de garantir que es truca quan cal.
+             //Les monedes s'han de generar per secció totes a l'hora, 
+            //ja s'encarrega la resta del codi de garantir que es truca quan cal.
         }
         else
         {

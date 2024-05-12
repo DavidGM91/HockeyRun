@@ -68,8 +68,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public void setIdle(bool idle)
-    {
-        /*if(idle)
+    {/*
+        if(idle)
         {
             animator.SetBool("Idle", true);
             if (forwardSpeed != 0)
@@ -136,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        //L�gica de salt
+        //Lògica de salt
 
         if (coyoteTimeCounter != 0 && checkGround())
         {

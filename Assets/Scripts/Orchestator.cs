@@ -74,6 +74,7 @@ public class Orchestrator : MonoBehaviour
     {
         cam.GetComponent<FollowCamera>().Focus(player.GetComponent<Transform>());
         Time.timeScale = 1;
+        scoreText.enabled = true;
         playerMovement.enabled = true;
         ismenu = false;
         menu.SetActive(false);
@@ -89,6 +90,11 @@ public class Orchestrator : MonoBehaviour
         ShowMenu();
     }
 
+    public void IncrementScoreWithCoins(int score)
+    {
+        puntos += score;
+        //scoreText.text = "Score: " + puntos;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -127,4 +133,5 @@ public class Orchestrator : MonoBehaviour
         }
      
     }
+
 }
