@@ -109,6 +109,11 @@ public class Orchestrator : MonoBehaviour
             scoreText.text = "Score: " + puntos;
         }
 
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            levelGenerator.AddLevelRotation(90);
+        }
+
         if (Input.GetKey(OpenMenu))
         {
             if (ismenu)

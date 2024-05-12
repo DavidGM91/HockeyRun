@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void setIdle(bool idle)
     {
-        if(idle)
+        /*if(idle)
         {
             animator.SetBool("Idle", true);
             if (forwardSpeed != 0)
@@ -92,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
             forwardSpeed = saveForwardSpeed;
             animator.SetBool("Idle", false);
             this.enabled = true;
-        }
+        }*/
     }
 
     public void Restart()
@@ -136,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        //Lògica de salt
+        //Lï¿½gica de salt
 
         if (coyoteTimeCounter != 0 && checkGround())
         {

@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Hockey Run.sln"
+    "dotnet.defaultSolution": "Hockey Run.sln",
+    "cmake.configureOnOpen": false
 }

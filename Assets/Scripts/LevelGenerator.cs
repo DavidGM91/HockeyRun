@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Pool;
+using UnityEditor;
 using UnityEngine;
 
 [ExecuteAlways]
@@ -22,7 +24,7 @@ public class LevelGenerator : MonoBehaviour
         public int[] allowedObstacles;
         public float lenght;
         public Vector3 levelPos;
-        public int coinSides = 111; // 000 -> no coin, 001 -> right, 010 -> middle, 100 -> left if(coinSides & 0b001) -> right
+        public int coinSides = 0b111111; // 000 -> no coin, 001 -> right, 010 -> middle, 100 -> left if(coinSides & 0b001) -> right
 
         private int sectionWeights = 0;
         public int getSectionWeights()
@@ -86,6 +88,10 @@ public class LevelGenerator : MonoBehaviour
 
     private int currentSection = -1;
 
+    private int sectionsWithCoins = 0;
+
+    private float nextCoinPos = 0;
+
     /// <summary>
     /// Elimina totes les seccions actuals, genera de noves i torna totes les posicions a l'inici.
     /// </summary>
@@ -123,7 +129,7 @@ public class LevelGenerator : MonoBehaviour
         }
         int randomWeight = Random.Range(0, maxWeight+1);
         if(randomWeight >= maxWeight)
-            return possibleSections[possibleSections.Length].value.x;
+            return possibleSections[possibleSections.Length-1].value.x;
         for (int i = 0; i < possibleSections.Length; i++)
         {
             randomWeight -= possibleSections[i].value.y;
@@ -135,10 +141,12 @@ public class LevelGenerator : MonoBehaviour
         return possibleSections[0].value.x;
     }
 
-    public void SetLevelRotation(Quaternion rot)
+    public void AddLevelRotation(float rot)
     {
-        levelRot = rot;
+        Quaternion rotation = Quaternion.Euler(0, rot, 0);
+        levelRot *= rotation;
     }
+
 
     /// <summary>
     /// Crea una nova secció amb els seus obstacles i monedes i elimina l'última secció.
@@ -158,10 +166,21 @@ public class LevelGenerator : MonoBehaviour
 
         currentSection++;
         levelSections.Add(Instantiate(newSection.obj, nextSectionPos+ levelRot * newSection.pos, levelRot * newSection.rot));
-        GenerateObstacles(sectionId, nextSectionPos);
 
-        //COINS
-       // GenerateCoinsWrapper(newSection.coinSides);
+        int coinsNext = GenerateObstacles(sectionId, nextSectionPos);
+
+
+        if (Random.Range(0, 4) == 0)
+        {
+            sectionsWithCoins = Random.Range(3, 6); 
+        }
+
+        if(sectionsWithCoins > 0)
+        {
+            sectionsWithCoins--;
+            //COINS
+            // GenerateCoinsWrapper(newSection.coinSides);
+        }
 
         nextSectionPos += levelRot * (new Vector3(0, 0, newSection.lenght)+newSection.pos);
         nextSectionPos.x = 0;
@@ -174,9 +193,10 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    private void GenerateObstacles(int sectionId, Vector3 pos)
+    private int GenerateObstacles(int sectionId, Vector3 pos)
     {
-        
+        //TODO Set nextCoinPos
+        return 0b111111;
     }
     
     private void GenerateCoinsWrapper()
@@ -243,7 +263,7 @@ public class LevelGenerator : MonoBehaviour
     }
     private void OnValidate()
     {
-        if (!Application.IsPlaying(gameObject))
+        if (!Application.IsPlaying(gameObject) && EditorGUI.EndChangeCheck())
         {
             // Editor logic
             foreach(var section in sections)
@@ -260,10 +280,6 @@ public class LevelGenerator : MonoBehaviour
 
             }
         }
-        else
-        {
-            // Play logic
-        }
     }
 
     // Start is called before the first frame update
@@ -271,6 +287,16 @@ public class LevelGenerator : MonoBehaviour
     {
         if (Application.IsPlaying(gameObject))
         {
+            foreach (var section in sections)
+            {
+                int weights = 0;
+                foreach (var nextSection in section.allowedSectionsAfter)
+                {
+                    weights += nextSection.value.y;
+                }
+                section.setSectionWeights(weights);
+            }
+
             for (int i = 0; i < sectionsCount; i++)
             {
                 GenerateNewSection();
