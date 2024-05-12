@@ -166,16 +166,19 @@ public class LevelGenerator : MonoBehaviour
         currentSection++;
         levelSections.Add(Instantiate(newSection.obj, nextSectionPos+ levelRot * newSection.pos, levelRot * newSection.rot));
 
+        
+        nextCoinPos = nextSectionPos.z-newSection.lenght/2;
         print("New section at " + nextCoinPos);
 
         int coinsNext = GenerateObstacles(sectionId, nextSectionPos);
+
 
 
         if(sectionsWithCoins > 0)
         {
             sectionsWithCoins--;
             //COINS
-            GenerateCoins(coinsNext,sectionId);
+            GenerateCoins(coinsNext);
         }
         else
         {
@@ -184,10 +187,10 @@ public class LevelGenerator : MonoBehaviour
                 sectionsWithCoins = Random.Range(3, 6);
             }
         }
-        /*
+
         nextSectionPos += levelRot * (new Vector3(0, 0, newSection.lenght)+newSection.pos);
         nextSectionPos.x = 0;
-        nextSectionPos.y = 0;//*/
+        nextSectionPos.y = 0;
 
         if(levelSections.Count > sectionsCount)
         {
@@ -202,7 +205,7 @@ public class LevelGenerator : MonoBehaviour
         return 0b111111;
     }
     
-    private void GenerateCoins(int coinsNext, int sectionID)
+    private void GenerateCoins(int coinsNext)
     {   
         int finalCoinSide = 0;
         List<int> possibleCoinSide = new List<int>();
@@ -223,35 +226,29 @@ public class LevelGenerator : MonoBehaviour
             GameObject coin = coinPool.RequestCoin();
             if (coin != null)
             {
-                Vector3 coinPosition;
+                Vector3 coinPosition = new Vector3();
 
                 switch (finalCoinSide)
                 {
                     case 0: // izquierda
-                        coinPosition = new Vector3(-1, 0,0);
+                        coinPosition = new Vector3(-1, 0,nextCoinPos);
                         break;
                     case 1: // medio
-                        coinPosition = new Vector3(0, 0, 0);
+                        coinPosition = new Vector3(0, 0, nextCoinPos);
                         break;
                     case 2: // derecha
-                        coinPosition = new Vector3(1, 0, 0);
+                        coinPosition = new Vector3(1, 0, nextCoinPos);
                         break;
                     case 3: // izquierda flotante
-                        coinPosition = new Vector3(-1, 1, 0);
+                        coinPosition = new Vector3(-1, 1, nextCoinPos);
                         break;
                     case 4: // medio flotante
-                        coinPosition = new Vector3(0, 1, 0);
+                        coinPosition = new Vector3(0, 1, nextCoinPos);
                         break;
                     case 5: // derecha flotante
-                        coinPosition = new Vector3(-1, 1, 0);
-                        break;
-                    default:
-                        coinPosition = new Vector3(0, 0, 0);
+                        coinPosition = new Vector3(-1, 1, nextCoinPos);
                         break;
                 }
-                coinPosition += nextSectionPos + new Vector3(0,0,i-sections[sectionID].lenght/2);
-
-
                 coin.transform.position = coinPosition;
                 nextCoinPos += 1; // distancia entre monedas
             }
