@@ -163,8 +163,12 @@ public class LevelGenerator : MonoBehaviour
         allowedSectionsNext = newSection.allowedSectionsAfter;
         allowedSectionsNextMaxWeight = newSection.getSectionWeights();
 
+
+
         currentSection++;
-        levelSections.Add(Instantiate(newSection.obj, nextSectionPos+ levelRot * newSection.pos, levelRot * newSection.rot));
+
+        if(newSection.obj != null)
+            levelSections.Add(Instantiate(newSection.obj, nextSectionPos+ levelRot * newSection.pos, levelRot * newSection.rot));
 
         
         nextCoinPos = nextSectionPos.z-newSection.lenght/2;
