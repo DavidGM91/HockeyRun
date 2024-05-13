@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -763,6 +763,9 @@ MonoBehaviour:
   scoreText: {fileID: 257158860}
   menu: {fileID: 1516435075}
   customizationMenu: {fileID: 414511578}
+  scripts:
+  - {fileID: 3984550441764687448}
+  - {fileID: 2128433368}
   OpenMenu: 27
   deathHeight: -10
 --- !u!1 &414511578 stripped
@@ -2036,7 +2039,7 @@ MonoBehaviour:
   player: {fileID: 465205219061187019}
   levelCamera: {fileID: 2128433363}
   coinPool: {fileID: 308465880}
-  sectionsCount: 10
+  sectionsCount: 15
   sectionsBehind: 2
   timeBetweenChecks: 2
   sections:
@@ -3632,6 +3635,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3984550441764687448 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5442569733465156190, guid: 459b71671b20d254a8fe326d012bbdf8,
+    type: 3}
+  m_PrefabInstance: {fileID: 5621353737727459943}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465205219061187019}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc03671cc8a80e4468c36f19144a3b67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5621353737727459943
 PrefabInstance:
   m_ObjectHideFlags: 0

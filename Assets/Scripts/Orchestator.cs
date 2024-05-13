@@ -15,6 +15,8 @@ public class Orchestrator : MonoBehaviour
     public GameObject menu;
     public GameObject customizationMenu;
 
+    public MyMonoBehaviour[] scripts;
+
 
     public KeyCode OpenMenu;
 
@@ -81,6 +83,10 @@ public class Orchestrator : MonoBehaviour
     }
     private void Start()
     {
+        foreach (MyMonoBehaviour script in scripts)
+        {
+            script.myStart();
+        }
         cam.GetComponent<FollowCamera>().Focus(inici);
         Time.timeScale = 0;
         if (playerMovement == null)
@@ -98,6 +104,11 @@ public class Orchestrator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        foreach (MyMonoBehaviour script in scripts)
+        {
+            script.myUpdate();
+        }
         if (player.transform.position.y < deathHeight)
         {
             levelGenerator.Regenerate();
@@ -134,4 +145,9 @@ public class Orchestrator : MonoBehaviour
      
     }
 
+}
+public class MyMonoBehaviour : MonoBehaviour
+{
+    public virtual void myStart() { }
+    public virtual void myUpdate() { }
 }

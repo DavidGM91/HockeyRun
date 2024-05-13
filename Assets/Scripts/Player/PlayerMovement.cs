@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MyMonoBehaviour
 {
     [SerializeField]
     public int lateralSpace = 5;
@@ -108,7 +108,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    override public void myUpdate()
     {
         if(_forwardSpeed == -1)
         {
