@@ -12,6 +12,16 @@ public class LevelGenerator : MonoBehaviour
     public int sectionsCount = 10;
     public int sectionsBehind = 2;
     public float timeBetweenChecks = 2.0f;
+
+    [System.Serializable]
+    public enum SectionType
+    {
+        recte,
+        dreta,
+        esquerra,
+        bifurcacio
+    }
+
     [System.Serializable]
     public class Section
     {
@@ -25,6 +35,9 @@ public class LevelGenerator : MonoBehaviour
         public Vector3 levelPos;
         public int coinSides = 0b111111; // 000 -> no coin, 001 -> right, 010 -> middle, 100 -> left if(coinSides & 0b001) -> right
 
+        public SectionType type;
+
+        [HideInInspector]
         private int sectionWeights = 0;
         public int getSectionWeights()
         {
@@ -193,8 +206,6 @@ public class LevelGenerator : MonoBehaviour
         }
 
         nextSectionPos += levelRot * (new Vector3(0, 0, newSection.lenght)+newSection.pos);
-        nextSectionPos.x = 0;
-        nextSectionPos.y = 0;
 
         if(levelSections.Count > sectionsCount)
         {
