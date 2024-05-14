@@ -253,7 +253,7 @@ public class LevelGenerator : MonoBehaviour
                         coinPosition = new Vector3(-1, 1, nextCoinPos);
                         break;
                 }
-                coin.transform.position = coinPosition;
+                coin.transform.position = coinPosition+ new Vector3(0,1,0);
                 nextCoinPos += 1; // distancia entre monedas
             }
         }
@@ -266,19 +266,19 @@ public class LevelGenerator : MonoBehaviour
     {
         Transform playerPos = player.GetComponent<Transform>();
 
-        Bounds lastSectionPos = levelSections[sectionsBehind].GetComponent<Renderer>().bounds;
+        Bounds lastSectionPos = levelSections[sectionsBehind].GetComponent<BoxCollider>().bounds;
         Vector3 playerForward = playerPos.forward;
         Vector3 playerPosition = playerPos.position;
 
         while (Vector3.Dot(lastSectionPos.center - playerPosition, playerForward) < 0)
         {
             GenerateNewSection();
-            lastSectionPos = levelSections[sectionsBehind].GetComponent<Renderer>().bounds;
+            lastSectionPos = levelSections[sectionsBehind].GetComponent<BoxCollider>().bounds;
         }
     }
     private void OnValidate()
     {
-        if (!Application.IsPlaying(gameObject) && EditorGUI.EndChangeCheck())
+        if (!Application.IsPlaying(gameObject))
         {
             // Editor logic
             foreach(var section in sections)

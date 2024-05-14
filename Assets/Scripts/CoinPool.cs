@@ -33,6 +33,17 @@ public class CoinPool : MonoBehaviour
     {
         
     }
+    public void ReturnCoin(GameObject coin)
+    {
+        coin.SetActive(false);
+    }
+    public void Restart()
+    {
+        foreach (GameObject coin in CoinList)
+        {
+            coin.SetActive(false);
+        }
+    }
 
     public GameObject RequestCoin()
     {

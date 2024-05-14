@@ -68,7 +68,7 @@ public class PlayerMovement : MyMonoBehaviour
     }
 
     public void setIdle(bool idle)
-    {/*
+    {
         if(idle)
         {
             animator.SetBool("Idle", true);
@@ -92,14 +92,14 @@ public class PlayerMovement : MyMonoBehaviour
             forwardSpeed = saveForwardSpeed;
             animator.SetBool("Idle", false);
             this.enabled = true;
-        }*/
+        }
     }
 
     public void Restart()
     {
         forwardSpeed = _forwardSpeed;
         lateralSpeed = _lateralSpeed;
-        this.gameObject.transform.position = new Vector3(0, 0, 0);
+        this.gameObject.transform.position = new Vector3(0, 4, 0);
     }
     public void PlayerStart()
     {

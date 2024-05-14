@@ -14,6 +14,8 @@ public class Coin : MonoBehaviour
     {
         if(orchestrator == null)
             orchestrator = GameObject.FindObjectOfType<Orchestrator>();
+        if (coinFX == null)
+            coinFX = GameObject.FindObjectOfType<AudioSource>();
     }
 
     private void Update()

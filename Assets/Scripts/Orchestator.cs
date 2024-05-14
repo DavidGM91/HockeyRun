@@ -11,7 +11,9 @@ public class Orchestrator : MonoBehaviour
     public Transform inici;
     public GameObject cam;
     public LevelGenerator levelGenerator;
+    public CoinPool coinPool;
     public TextMeshProUGUI scoreText;
+
     public GameObject menu;
     public GameObject customizationMenu;
 
@@ -113,6 +115,7 @@ public class Orchestrator : MonoBehaviour
         {
             levelGenerator.Regenerate();
             playerMovement.Restart();
+            coinPool.Restart();
             puntos = 0;
         }
         else
