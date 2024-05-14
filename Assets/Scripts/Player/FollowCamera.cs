@@ -43,6 +43,7 @@ public class FollowCamera : MyMonoBehaviour {
     override public void myStart()
     {
         transCamera = cam.GetComponent<Transform>();
+      
         AdjustCamera(offset, dist);
         Focus(this.objective);
     }
@@ -51,8 +52,9 @@ public class FollowCamera : MyMonoBehaviour {
     override public void myUpdate()
     {
         Vector3 Pos = offset + objective.position;
-        Pos.x = 0;
+        Pos.x = 2;
         transCamera.position = Pos;
+               
         if(rotating) { 
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / rotationTime); // valor normalitzat

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [ExecuteAlways]
@@ -189,13 +190,13 @@ public class LevelGenerator : MonoBehaviour
 
         int coinsNext = GenerateObstacles(sectionId, nextSectionPos);
 
+        nextSectionPos += levelRot * (new Vector3(0, 0, newSection.lenght)+newSection.pos);
 
 
         if(sectionsWithCoins > 0)
         {
             sectionsWithCoins--;
             //COINS
-            GenerateCoins(coinsNext);
         }
         else
         {
@@ -205,7 +206,7 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        nextSectionPos += levelRot * (new Vector3(0, 0, newSection.lenght)+newSection.pos);
+        GenerateCoins(coinsNext);
 
         if(levelSections.Count > sectionsCount)
         {
@@ -249,34 +250,59 @@ public class LevelGenerator : MonoBehaviour
                         coinPosition = new Vector3(0, 0, nextCoinPos);
                         break;
                     case 1: // medio
-                        coinPosition = new Vector3(1.5f, 0, nextCoinPos);
+                        coinPosition = new Vector3(2, 0, nextCoinPos);
                         break;
                     case 2: // derecha
                         coinPosition = new Vector3(3.5f, 0, nextCoinPos);
                         break;
                     case 3: // izquierda flotante
-                        coinPosition = new Vector3(0, 1, nextCoinPos);
+                        if (i == 0) coinPosition = new Vector3(0, 1, nextCoinPos);
+                        else if (i == 1) coinPosition = new Vector3(0, 1.5f, nextCoinPos);
+                        else if (i == 2) coinPosition = new Vector3(0, 2, nextCoinPos);
+                        else if (i == 3) coinPosition = new Vector3(0, 1.5f, nextCoinPos);
+                        else coinPosition = new Vector3(0, 1, nextCoinPos);
                         break;
                     case 4: // medio flotante
-                        coinPosition = new Vector3(1.5f, 1, nextCoinPos);
+                        if (i == 0) coinPosition = new Vector3(2, 1, nextCoinPos);
+                        else if (i == 1) coinPosition = new Vector3(2, 1.5f, nextCoinPos);
+                        else if (i == 2) coinPosition = new Vector3(2, 2,nextCoinPos);
+                        else if (i == 3) coinPosition = new Vector3(2, 1.5f, nextCoinPos);
+                        else coinPosition = new Vector3(2, 1, nextCoinPos);
                         break;
                     case 5: // derecha flotante
-                        coinPosition = new Vector3(3.5f, 1, nextCoinPos);
+                        if (i == 0) coinPosition = new Vector3(4, 1, nextCoinPos);
+                        else if (i == 1) coinPosition = new Vector3(4, 1.5f, nextCoinPos);
+                        else if (i == 2) coinPosition = new Vector3(4, 2, nextCoinPos);
+                        else if (i == 3) coinPosition = new Vector3(4, 1.5f, nextCoinPos);
+                        else coinPosition = new Vector3(4, 1, nextCoinPos);
+
                         break;
                 }
 
-                //obtenir posicio seccio
-                Vector3 sectionPos = levelSections[levelSections.Count - 1].transform.position;
+                bool coinInActiveSection = false;
 
-                //obtenir rotacio seccio
-                //Quaternion sectionRot = levelSections[levelSections.Count - 1].transform.localRotation;
+                foreach (GameObject section in levelSections)
+                {
+                    BoxCollider sectionCollider = section.GetComponent<BoxCollider>();
+                    if (sectionCollider.bounds.Contains(coinPosition)) coinInActiveSection = true;
+                }
 
-               
-                coinPosition = (levelRot * coinPosition);
-                coinPosition += sectionPos;
+                if (coinInActiveSection)
+                {
+                    //obtenir posicio seccio
+                    Vector3 sectionPos = levelSections[levelSections.Count - 1].transform.position;
 
-                coin.transform.position = coinPosition + new Vector3(0,1,0);
-                nextCoinPos += 1; // distancia entre monedas
+                    //obtenir rotacio seccio
+                    //Quaternion sectionRot = levelSections[levelSections.Count - 1].transform.localRotation;
+
+
+                    coinPosition = (levelRot * coinPosition);
+                    coinPosition += sectionPos;
+
+                    coin.transform.position = coinPosition + new Vector3(0, 1, 0);
+                    nextCoinPos += 1f; // distancia entre monedas
+                }
+                else coinPool.ReturnCoin(coin);
             }
         }
     }
