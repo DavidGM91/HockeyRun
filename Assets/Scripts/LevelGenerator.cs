@@ -201,7 +201,7 @@ public class LevelGenerator : MonoBehaviour
         {
             if (Random.Range(0, 4) == 0)
             {
-                sectionsWithCoins = Random.Range(3, 6);
+                sectionsWithCoins = Random.Range(3, 4);
             }
         }
 
@@ -246,25 +246,36 @@ public class LevelGenerator : MonoBehaviour
                 switch (finalCoinSide)
                 {
                     case 0: // izquierda
-                        coinPosition = new Vector3(-1, 0,nextCoinPos);
-                        break;
-                    case 1: // medio
                         coinPosition = new Vector3(0, 0, nextCoinPos);
                         break;
+                    case 1: // medio
+                        coinPosition = new Vector3(1.5f, 0, nextCoinPos);
+                        break;
                     case 2: // derecha
-                        coinPosition = new Vector3(1, 0, nextCoinPos);
+                        coinPosition = new Vector3(3.5f, 0, nextCoinPos);
                         break;
                     case 3: // izquierda flotante
-                        coinPosition = new Vector3(-1, 1, nextCoinPos);
-                        break;
-                    case 4: // medio flotante
                         coinPosition = new Vector3(0, 1, nextCoinPos);
                         break;
+                    case 4: // medio flotante
+                        coinPosition = new Vector3(1.5f, 1, nextCoinPos);
+                        break;
                     case 5: // derecha flotante
-                        coinPosition = new Vector3(-1, 1, nextCoinPos);
+                        coinPosition = new Vector3(3.5f, 1, nextCoinPos);
                         break;
                 }
-                coin.transform.position = coinPosition+ new Vector3(0,1,0);
+
+                //obtenir posicio seccio
+                Vector3 sectionPos = levelSections[levelSections.Count - 1].transform.position;
+
+                //obtenir rotacio seccio
+                //Quaternion sectionRot = levelSections[levelSections.Count - 1].transform.localRotation;
+
+               
+                coinPosition = (levelRot * coinPosition);
+                coinPosition += sectionPos;
+
+                coin.transform.position = coinPosition + new Vector3(0,1,0);
                 nextCoinPos += 1; // distancia entre monedas
             }
         }
@@ -298,7 +309,7 @@ public class LevelGenerator : MonoBehaviour
                 {
                     if(nextSection.value.x >= sections.Length)
                     {
-                        Debug.LogError("Value of "+section.name+ " for "+nextSection.ToString()+" is out of range.");
+                        //Debug.LogError("Value of "+section.name+ " for "+nextSection.ToString()+" is out of range.");
                         break;
                     }
                     nextSection.name = sections[nextSection.value.x].name;

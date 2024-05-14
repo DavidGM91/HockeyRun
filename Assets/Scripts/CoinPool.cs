@@ -12,8 +12,11 @@ public class CoinPool : MonoBehaviour
 
     [SerializeField] 
     private int poolSize = 10;
+
+    private Transform playerTransform;
     void Start()
     {
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         AddCoins(poolSize);
     }
 
@@ -31,7 +34,7 @@ public class CoinPool : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+       checkPositionCoins();
     }
     public void ReturnCoin(GameObject coin)
     {
@@ -45,6 +48,17 @@ public class CoinPool : MonoBehaviour
         }
     }
 
+    public void checkPositionCoins()
+    {
+        foreach (GameObject coin in CoinList)
+        {
+            // mirar posicio de cada moneda respecte jugador i tornarla a la pool si cal
+            if (coin.activeSelf && coin.transform.position.z + 5 < playerTransform.position.z)
+            {
+                ReturnCoin(coin);
+            }
+        }
+    }
     public GameObject RequestCoin()
     {
         //trobar el primer inactiu, activarlo i retornarlo
@@ -57,8 +71,8 @@ public class CoinPool : MonoBehaviour
             }
         }
         //per afegir dinamicament a la llista
-        AddCoins(1);
-        CoinList[CoinList.Count - 1].SetActive(true);
-        return CoinList[CoinList.Count - 1];
+        //AddCoins(1);
+        //CoinList[CoinList.Count - 1].SetActive(true);
+        return null;//CoinList[CoinList.Count - 1];
     }
 }

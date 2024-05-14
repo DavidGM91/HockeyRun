@@ -6,6 +6,7 @@ public class Coin : MonoBehaviour
     public int scoreValue = 10; // Valor de la puntuación que añadirá al colisionar
     public float rotationSpeed = 1; // Velocidad de rotación de la moneda
     public AudioSource coinFX;
+ 
 
     [SerializeField]
     private Orchestrator orchestrator;
