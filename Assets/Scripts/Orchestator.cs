@@ -31,7 +31,7 @@ public class Orchestrator : MonoBehaviour
     private int puntos = 0;
     private float acumulatedTime = 0;
 
-    private Vector3 playerOffset = new Vector3(0, 1, -6);
+    private Vector3 playerOffset = new Vector3(0, 6, -12);
 
     public void Play()
     {
@@ -39,7 +39,7 @@ public class Orchestrator : MonoBehaviour
             playerMovement = player.GetComponent<PlayerMovement>();
         playerMovement.setIdle(false);
         cam.GetComponent<FollowCamera>().Focus(player.transform);
-        cam.GetComponent<FollowCamera>().AdjustCamera(playerOffset, 1);
+        cam.GetComponent<FollowCamera>().AdjustCamera(playerOffset, 0.5f);
         HideMenu();
     }
 
