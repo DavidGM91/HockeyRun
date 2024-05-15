@@ -3,18 +3,32 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public Transform player; // Referencia al transform del jugador
-    public float speed = 5f; // Velocidad de movimiento del enemigo
+    [SerializeField]
+    private float speed = 15f; // Velocidad de movimiento del enemigo
+
+    [SerializeField]
+    private Orchestrator orchestrator;
 
     void Update()
     {
         if (player != null)
         {
-            // Calcula la dirección hacia el jugador
+            // Calcula la direcció fins al jugador
             Vector3 direction = player.position - transform.position;
-            direction.Normalize(); // Normaliza la dirección para obtener un vector de longitud 1
+            direction.Normalize(); 
+            direction.y = 0;
+            direction.x = 0;
 
-            // Mueve al enemigo hacia el jugador
             transform.Translate(direction * speed * Time.deltaTime);
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            //TODO: fer funcio endgame
+            orchestrator.ShowMenu();
         }
     }
 }

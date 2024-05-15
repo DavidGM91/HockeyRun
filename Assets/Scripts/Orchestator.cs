@@ -145,6 +145,11 @@ public class Orchestrator : MonoBehaviour
                 ShowMenu();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            //setGodMode
+        }
      
     }
 
