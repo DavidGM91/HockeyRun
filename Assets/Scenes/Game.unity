@@ -394,6 +394,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: Manequinv4
       objectReference: {fileID: 0}
+    - target: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
+        type: 3}
+      propertyPath: Head
+      value: 
+      objectReference: {fileID: 1326744074}
+    - target: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
+        type: 3}
+      propertyPath: Skin
+      value: 
+      objectReference: {fileID: 283270409}
+    - target: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
+        type: 3}
+      propertyPath: Wheels
+      value: 
+      objectReference: {fileID: 1844868069}
+    - target: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
+        type: 3}
+      propertyPath: Clothes
+      value: 
+      objectReference: {fileID: 283270409}
+    - target: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
+        type: 3}
+      propertyPath: BodyParent
+      value: 
+      objectReference: {fileID: 398116146}
+    - target: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
+        type: 3}
+      propertyPath: HairsParent
+      value: 
+      objectReference: {fileID: 1042318096}
     - target: {fileID: 7208407309670305425, guid: d179878772218fd4281bf8520d3ab103,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -984,6 +1014,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260336413}
   m_CullTransparentMesh: 1
+--- !u!137 &283270409 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1065096857607357757, guid: d179878772218fd4281bf8520d3ab103,
+    type: 3}
+  m_PrefabInstance: {fileID: 80777352}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &308465879
 GameObject:
   m_ObjectHideFlags: 0
@@ -1062,6 +1098,12 @@ MonoBehaviour:
   - {fileID: 2128433368}
   OpenMenu: 27
   deathHeight: -10
+--- !u!1 &398116146 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2419450220747068627, guid: d179878772218fd4281bf8520d3ab103,
+    type: 3}
+  m_PrefabInstance: {fileID: 80777352}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &414511578 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4973931914695845095, guid: 80b3cd57927795c408ee69d7b2064e82,
@@ -1918,6 +1960,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 990352552}
   m_CullTransparentMesh: 1
+<<<<<<< Updated upstream
 --- !u!1001 &1066707449
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2026,6 +2069,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7208407309670305425, guid: d179878772218fd4281bf8520d3ab103,
     type: 3}
   m_PrefabInstance: {fileID: 202566167}
+=======
+--- !u!1 &1042318096 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2061077140200134386, guid: d179878772218fd4281bf8520d3ab103,
+    type: 3}
+  m_PrefabInstance: {fileID: 80777352}
+>>>>>>> Stashed changes
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1113455835
 GameObject:
@@ -2084,7 +2134,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: HOCKEY RUNNER
+  m_text: 'ROOFTOP
+
+    ROLLER'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2404,13 +2456,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209245967}
   m_CullTransparentMesh: 1
+--- !u!137 &1326744074 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 9084870600564330213, guid: d179878772218fd4281bf8520d3ab103,
+    type: 3}
+  m_PrefabInstance: {fileID: 80777352}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1338642382 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
     type: 3}
   m_PrefabInstance: {fileID: 80777352}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 398116146}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58e6aa3448bd9c34393c14c716fe368c, type: 3}
@@ -3272,6 +3330,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!137 &1844868069 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3864857381584999029, guid: d179878772218fd4281bf8520d3ab103,
+    type: 3}
+  m_PrefabInstance: {fileID: 80777352}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1901926606
 PrefabInstance:
   m_ObjectHideFlags: 0

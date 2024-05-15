@@ -68,7 +68,7 @@ public class PlayerCustomizeMenu : MonoBehaviour
     }
     public void Cancel()
     {
-        customization.Rebert();
+        customization.Revert();
         UpdateTexts();
     }
     private void UpdateTexts()

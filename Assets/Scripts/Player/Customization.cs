@@ -5,13 +5,7 @@ using UnityEngine;
 public class Customization : MonoBehaviour
 {
     [SerializeField]
-    private Material Clothes;
-    [SerializeField]
-    private Material Skin;
-    [SerializeField]
-    private Material Head;
-    [SerializeField] 
-    private Material Wheels;
+    private GameObject BodyParent;
 
     [SerializeField]
     private GameObject HairsParent;
@@ -77,16 +71,34 @@ public class Customization : MonoBehaviour
     }
     public void SetClothesColor(Color vest, Color pants, Color shirt, Color shoes, Color wheels, Color socks_1, Color socks_2, Color wrists, Color hairPiece_1, Color hairPiece_2)
     {
-        Clothes.SetColor("_Color_1_Out", vest);
-        Clothes.SetColor("_Color_2_Out", pants);
-        Clothes.SetColor("_Color_3_Out", hairPiece_1);
-        Clothes.SetColor("_Color_4_Out", shoes);
-        Clothes.SetColor("_Color_5_Out", wrists);
-        Skin.SetColor("_Color_1_Out", shirt);
-        Skin.SetColor("_Color_2_Out", socks_1);
-        Skin.SetColor("_Color_3_Out", socks_2);
-        Head.SetColor("_Color_4_Out", hairPiece_2);
-        Wheels.SetColor("_Color", wheels);
+        foreach (Transform part in BodyParent.transform.GetComponentsInChildren<Transform>())
+        {
+            if (part.gameObject.GetComponent<Renderer>() != null)
+            {
+                if (part.gameObject.GetComponent<Renderer>().material.name == "Clothes (Instance)")
+                {
+                    part.gameObject.GetComponent<Renderer>().material.SetColor("_Color_1_Out", vest);
+                    part.gameObject.GetComponent<Renderer>().material.SetColor("_Color_2_Out", pants);
+                    part.gameObject.GetComponent<Renderer>().material.SetColor("_Color_3_Out", hairPiece_1);
+                    part.gameObject.GetComponent<Renderer>().material.SetColor("_Color_4_Out", shoes);
+                    part.gameObject.GetComponent<Renderer>().material.SetColor("_Color_5_Out", wrists);
+                }
+                else if (part.gameObject.GetComponent<Renderer>().material.name == "Body (Instance)")
+                {
+                    part.gameObject.GetComponent<Renderer>().material.SetColor("_Color_1_Out", shirt);
+                    part.gameObject.GetComponent<Renderer>().material.SetColor("_Color_2_Out", socks_1);
+                    part.gameObject.GetComponent<Renderer>().material.SetColor("_Color_3_Out", socks_2);
+                }
+                else if(part.gameObject.GetComponent<Renderer>().material.name == "Head (Instance)")
+                {
+                    part.gameObject.GetComponent<Renderer>().material.SetColor("_Color_4_Out", hairPiece_2);
+                }
+                else if (part.gameObject.GetComponent<Renderer>().material.name == "Wheels (Instance)")
+                {
+                    part.gameObject.GetComponent<Renderer>().material.SetColor("_Color", wheels);
+                }
+            }
+        }   
     }
     public void SetClothesColor(int uniformIndex)
     {
@@ -96,13 +108,35 @@ public class Customization : MonoBehaviour
     public void SetSkin(int skinIndex)
     {
         toSaveSkin = skinIndex;
-        Skin.SetColor("_Color_4_Out", Skins[skinIndex].Color);
-        Head.SetColor("_Color_1_Out", Skins[skinIndex].Color);
+        foreach (Transform part in BodyParent.transform.GetComponentsInChildren<Transform>())
+        {
+            if (part.gameObject.GetComponent<Renderer>() != null)
+            {
+                if (part.gameObject.GetComponent<Renderer>().material.name == "Head (Instance)")
+                {
+                    part.gameObject.GetComponent<Renderer>().material.SetColor("_Color_1_Out", Skins[skinIndex].Color);
+                }
+                else if (part.gameObject.GetComponent<Renderer>().material.name == "Body (Instance)")
+                {
+                    part.gameObject.GetComponent<Renderer>().material.SetColor("_Color_4_Out", Skins[skinIndex].Color);
+
+                }
+            }
+        }
     }
     public void SetHairColor(int hairColorIndex)
     {
         toSaveHairColor = hairColorIndex;
-        Head.SetColor("_Color_2_Out", HairsColors[hairColorIndex].Color);
+        foreach (GameObject hair in Hairs)
+        {
+            foreach (Material material in hair.GetComponent<Renderer>().materials)
+            {
+                if(material.name == "Head (Instance)")
+                    material.SetColor("_Color_2_Out", HairsColors[hairColorIndex].Color);
+            }
+            hair.GetComponent<Renderer>().material.SetColor("_Color_2_Out", HairsColors[hairColorIndex].Color);
+        }
+        HairsParent.GetComponent<Renderer>().material.SetColor("_Color_2_Out", HairsColors[hairColorIndex].Color);
     }
     public string GetHairColorName(int hairColorIndex)
     {
@@ -127,7 +161,7 @@ public class Customization : MonoBehaviour
         hairIn = toSaveHair;
         hairColorIn = toSaveHairColor;
     }
-    public void Rebert()
+    public void Revert()
     {
         SetClothesColor(uniformIn);
         SetSkin(skinIn);
