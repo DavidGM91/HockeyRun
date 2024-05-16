@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Pool;
 using UnityEngine;
 
 public class CoinPool : MonoBehaviour
@@ -7,72 +8,93 @@ public class CoinPool : MonoBehaviour
     // Start is called before the first frame update
     [SerializeField]
     private GameObject PrefabCoin;
-    [SerializeField]
-    private List<GameObject> CoinList;
 
-    [SerializeField] 
-    private int poolSize = 10;
+    [SerializeField]
+    private List<GameObject> CoinList = new List<GameObject>();
+
+    [SerializeField]
+    private ObjectPool<GameObject> coinPool;
+
+    public int activeCoins = 0;
+    public int unactiveCoins = 0;
+    public int totalCoins = 0;
+
+
+    [SerializeField]
+    private int minPoolSize = 10;
+    [SerializeField]
+    private int maxPoolSize = 1000;
 
     private Transform playerTransform;
     void Start()
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        AddCoins(poolSize);
-    }
-
-    private void AddCoins(int ncoins)
-    {
-        for (int i = 0; i < poolSize; i++)
-        {
+        coinPool = new ObjectPool<GameObject>(() => {
             GameObject coin = Instantiate(PrefabCoin);
-            coin.SetActive(false);
+            coin.GetComponent<Coin>().coinPool = this;
+            return coin;
+        },
+        coin => { 
+            coin.gameObject.SetActive(true);
             CoinList.Add(coin);
-            coin.transform.parent = transform;
-        }
+        },
+        coin => {
+            coin.gameObject.SetActive(false);
+            CoinList.Remove(coin);
+        },
+        coin => { 
+            Destroy(coin.gameObject);
+            CoinList.Remove(coin);
+
+        }, true, minPoolSize, maxPoolSize);
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        activeCoins = coinPool.CountActive;
+        unactiveCoins = coinPool.CountInactive;
+        totalCoins = coinPool.CountAll;
+
        checkPositionCoins();
     }
     public void ReturnCoin(GameObject coin)
     {
-        coin.SetActive(false);
+        coinPool.Release(coin);
     }
     public void Restart()
     {
+        List<GameObject> coinsToRemove = new List<GameObject>();
         foreach (GameObject coin in CoinList)
         {
-            coin.SetActive(false);
+            coinsToRemove.Add(coin);
+        }
+        foreach (GameObject coin in coinsToRemove)
+        {
+            coinPool.Release(coin);
         }
     }
-
     public void checkPositionCoins()
     {
+        List<GameObject> coinsToRemove = new List<GameObject>();
         foreach (GameObject coin in CoinList)
         {
-            // mirar posicio de cada moneda respecte jugador i tornarla a la pool si cal
-            if (coin.activeSelf && coin.transform.position.z + 5 < playerTransform.position.z)
+            Vector3 playerForward = playerTransform.forward;
+            Vector3 playerPosition = playerTransform.position;
+
+            if (Vector3.Dot(coin.transform.position - playerPosition, playerForward) < 0)
             {
-                ReturnCoin(coin);
+                coinsToRemove.Add(coin);
             }
+        }
+        foreach (GameObject coin in coinsToRemove)
+        {
+            coinPool.Release(coin);
         }
     }
     public GameObject RequestCoin()
     {
-        //trobar el primer inactiu, activarlo i retornarlo
-        for (int i =0; i < CoinList.Count; i++)
-        {
-            if (!CoinList[i].activeSelf)
-            {
-                CoinList[i].SetActive(true);
-                return CoinList[i];
-            }
-        }
-        //per afegir dinamicament a la llista
-        //AddCoins(1);
-        //CoinList[CoinList.Count - 1].SetActive(true);
-        return null;//CoinList[CoinList.Count - 1];
+        return coinPool.Get();
     }
 }

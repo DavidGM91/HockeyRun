@@ -7,7 +7,6 @@ using UnityEngine.Rendering;
 public class FollowCamera : MyMonoBehaviour {
 
     [SerializeField]
-    private Camera cam;
     private Transform transCamera;
     [SerializeField]
     private Transform objective;
@@ -41,9 +40,7 @@ public class FollowCamera : MyMonoBehaviour {
 
     // Start is called before the first frame update
     override public void myStart()
-    {
-        transCamera = cam.GetComponent<Transform>();
-      
+    {     
         AdjustCamera(offset, dist);
         Focus(this.objective);
     }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Customization : MonoBehaviour
+public class Customization : MyMonoBehaviour
 {
     [SerializeField]
     private GameObject BodyParent;
@@ -26,8 +26,6 @@ public class Customization : MonoBehaviour
         public string Name;
     }
 
-    public Uniform[] Uniforms;
-
     [System.Serializable]
     public class NamedColor
     {
@@ -37,9 +35,12 @@ public class Customization : MonoBehaviour
 
     public NamedColor[] Skins;
     public NamedColor[] HairsColors;
+    public Uniform[] Uniforms;
 
     [HideInInspector]
     public GameObject[] Hairs;
+
+
     // Start is called before the first frame update
     private int lastHairIndex = -1;
 
@@ -193,7 +194,7 @@ public class Customization : MonoBehaviour
     {
         return hairColorIn;
     }
-    void Start()
+    override public void myStart()
     {
         if (Hairs.Length == 0)
         {

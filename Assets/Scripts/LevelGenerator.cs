@@ -177,16 +177,10 @@ public class LevelGenerator : MonoBehaviour
         allowedSectionsNext = newSection.allowedSectionsAfter;
         allowedSectionsNextMaxWeight = newSection.getSectionWeights();
 
-
-
         currentSection++;
 
         if(newSection.obj != null)
             levelSections.Add(Instantiate(newSection.obj, nextSectionPos+ levelRot * newSection.pos, levelRot * newSection.rot));
-
-        
-        nextCoinPos = nextSectionPos.z-newSection.lenght/2;
-        print("New section at " + nextCoinPos);
 
         int coinsNext = GenerateObstacles(sectionId, nextSectionPos);
 
@@ -197,6 +191,7 @@ public class LevelGenerator : MonoBehaviour
         {
             sectionsWithCoins--;
             //COINS
+            GenerateCoins(coinsNext);
         }
         else
         {
@@ -205,8 +200,6 @@ public class LevelGenerator : MonoBehaviour
                 sectionsWithCoins = Random.Range(3, 4);
             }
         }
-
-        GenerateCoins(coinsNext);
 
         if(levelSections.Count > sectionsCount)
         {
@@ -236,6 +229,9 @@ public class LevelGenerator : MonoBehaviour
             finalCoinSide = possibleCoinSide[randomIndex]; // 0 = izquierda 1 = medio 2 = derecha 3 = izquierda flotante...
         }
 
+        nextCoinPos = -2;
+        Transform sectionPos = levelSections[levelSections.Count - 1].GetComponent<BoxCollider>().transform;
+
         // 5 monedes per seccio
         for (int i = 0; i < 5; ++i)
         {
@@ -243,66 +239,43 @@ public class LevelGenerator : MonoBehaviour
             if (coin != null)
             {
                 Vector3 coinPosition = new Vector3();
-
                 switch (finalCoinSide)
                 {
                     case 0: // izquierda
-                        coinPosition = new Vector3(0, 0, nextCoinPos);
+                        coinPosition = new Vector3(nextCoinPos, 0, 0);
                         break;
                     case 1: // medio
-                        coinPosition = new Vector3(2, 0, nextCoinPos);
+                        coinPosition = new Vector3(nextCoinPos, 0, 2);
                         break;
                     case 2: // derecha
-                        coinPosition = new Vector3(3.5f, 0, nextCoinPos);
+                        coinPosition = new Vector3(nextCoinPos, 0, 3.5f);
                         break;
                     case 3: // izquierda flotante
-                        if (i == 0) coinPosition = new Vector3(0, 1, nextCoinPos);
-                        else if (i == 1) coinPosition = new Vector3(0, 1.5f, nextCoinPos);
-                        else if (i == 2) coinPosition = new Vector3(0, 2, nextCoinPos);
-                        else if (i == 3) coinPosition = new Vector3(0, 1.5f, nextCoinPos);
-                        else coinPosition = new Vector3(0, 1, nextCoinPos);
+                        if (i == 0) coinPosition = new Vector3(nextCoinPos, 1, 0);
+                        else if (i == 1) coinPosition = new Vector3(nextCoinPos, 1.8f, 0);
+                        else if (i == 2) coinPosition = new Vector3(nextCoinPos, 2, 0);
+                        else if (i == 3) coinPosition = new Vector3(nextCoinPos, 1.8f, 0);
+                        else coinPosition = new Vector3(nextCoinPos, 1, 0);
                         break;
                     case 4: // medio flotante
-                        if (i == 0) coinPosition = new Vector3(2, 1, nextCoinPos);
-                        else if (i == 1) coinPosition = new Vector3(2, 1.5f, nextCoinPos);
-                        else if (i == 2) coinPosition = new Vector3(2, 2,nextCoinPos);
-                        else if (i == 3) coinPosition = new Vector3(2, 1.5f, nextCoinPos);
-                        else coinPosition = new Vector3(2, 1, nextCoinPos);
+                        if (i == 0) coinPosition = new Vector3(nextCoinPos, 1, 2);
+                        else if (i == 1) coinPosition = new Vector3(nextCoinPos, 1.8f, 2);
+                        else if (i == 2) coinPosition = new Vector3(nextCoinPos, 2, 2);
+                        else if (i == 3) coinPosition = new Vector3(nextCoinPos, 1.8f, 2);
+                        else coinPosition = new Vector3(nextCoinPos, 1, 2);
                         break;
                     case 5: // derecha flotante
-                        if (i == 0) coinPosition = new Vector3(4, 1, nextCoinPos);
-                        else if (i == 1) coinPosition = new Vector3(4, 1.5f, nextCoinPos);
-                        else if (i == 2) coinPosition = new Vector3(4, 2, nextCoinPos);
-                        else if (i == 3) coinPosition = new Vector3(4, 1.5f, nextCoinPos);
-                        else coinPosition = new Vector3(4, 1, nextCoinPos);
+                        if (i == 0) coinPosition = new Vector3(nextCoinPos, 1, 4);
+                        else if (i == 1) coinPosition = new Vector3(nextCoinPos, 1.8f, 4);
+                        else if (i == 2) coinPosition = new Vector3(nextCoinPos, 2, 4);
+                        else if (i == 3) coinPosition = new Vector3(nextCoinPos, 1.8f, 4);
+                        else coinPosition = new Vector3(nextCoinPos, 1, 4);
 
                         break;
                 }
-
-                bool coinInActiveSection = false;
-
-                foreach (GameObject section in levelSections)
-                {
-                    BoxCollider sectionCollider = section.GetComponent<BoxCollider>();
-                    if (sectionCollider.bounds.Contains(coinPosition)) coinInActiveSection = true;
-                }
-
-                if (coinInActiveSection)
-                {
-                    //obtenir posicio seccio
-                    Vector3 sectionPos = levelSections[levelSections.Count - 1].transform.position;
-
-                    //obtenir rotacio seccio
-                    //Quaternion sectionRot = levelSections[levelSections.Count - 1].transform.localRotation;
-
-
-                    coinPosition = (levelRot * coinPosition);
-                    coinPosition += sectionPos;
-
-                    coin.transform.position = coinPosition + new Vector3(0, 1, 0);
-                    nextCoinPos += 1f; // distancia entre monedas
-                }
-                else coinPool.ReturnCoin(coin);
+                coin.transform.position = sectionPos.position + sectionPos.rotation * coinPosition + new Vector3(0,1,0);
+                //coin.transform.SetParent(sectionPos, true);
+                nextCoinPos += 1f; // distancia entre monedas
             }
         }
     }

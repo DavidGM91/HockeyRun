@@ -6,6 +6,8 @@ public class Coin : MonoBehaviour
     public int scoreValue = 10; // Valor de la puntuación que añadirá al colisionar
     public float rotationSpeed = 1; // Velocidad de rotación de la moneda
     public AudioSource coinFX;
+
+    public CoinPool coinPool;
  
 
     [SerializeField]
@@ -17,6 +19,8 @@ public class Coin : MonoBehaviour
             orchestrator = GameObject.FindObjectOfType<Orchestrator>();
         if (coinFX == null)
             coinFX = GameObject.FindObjectOfType<AudioSource>();
+        if (coinPool == null)
+            coinPool = GameObject.FindObjectOfType<CoinPool>();
     }
 
     private void Update()
@@ -26,16 +30,15 @@ public class Coin : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        coinFX.Play();
-        this.gameObject.SetActive(false);
         // Comprobar si la colisión es con el jugador
         if (other.CompareTag("Player"))
         {
+            coinFX.Play();
             // Aumentar la puntuación
             orchestrator?.IncrementScoreWithCoins(scoreValue);
 
             // Desactivar la moneda
-            gameObject.SetActive(false);
+            coinPool.ReturnCoin(gameObject);
         }
     }
 

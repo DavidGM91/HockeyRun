@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -109,7 +110,15 @@ public class Orchestrator : MonoBehaviour
 
         foreach (MyMonoBehaviour script in scripts)
         {
-            script.myUpdate();
+            if(script.pausable)
+            {
+                if (!ismenu)
+                    script.myUpdate();
+            }
+            else
+            {
+                script.myUpdate();
+            }
         }
         if (player.transform.position.y < deathHeight)
         {
@@ -156,6 +165,7 @@ public class Orchestrator : MonoBehaviour
 }
 public class MyMonoBehaviour : MonoBehaviour
 {
+    public bool pausable = true;
     public virtual void myStart() { }
     public virtual void myUpdate() { }
 }

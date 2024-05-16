@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -246,6 +246,7 @@ MonoBehaviour:
   scoreValue: 10
   rotationSpeed: 1
   coinFX: {fileID: 899337537}
+  coinPool: {fileID: 0}
   orchestrator: {fileID: 0}
 --- !u!1 &41344410
 GameObject:
@@ -418,12 +419,12 @@ PrefabInstance:
         type: 3}
       propertyPath: BodyParent
       value: 
-      objectReference: {fileID: 398116146}
+      objectReference: {fileID: 202566169}
     - target: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
         type: 3}
       propertyPath: HairsParent
       value: 
-      objectReference: {fileID: 1042318096}
+      objectReference: {fileID: 213795903}
     - target: {fileID: 7208407309670305425, guid: d179878772218fd4281bf8520d3ab103,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -511,9 +512,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00df6324edf7833459ae9f8de8e6a25b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pausable: 1
   player: {fileID: 5975597569830665923}
   speed: 10
-  orchestrator: {fileID: 0}
+  orchestrator: {fileID: 314633909}
+  customization: {fileID: 202566170}
 --- !u!65 &134947545
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -557,7 +560,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -614,6 +617,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Manequinv4
       objectReference: {fileID: 0}
+    - target: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
+        type: 3}
+      propertyPath: BodyParent
+      value: 
+      objectReference: {fileID: 202566169}
     - target: {fileID: 4579875296358415497, guid: d179878772218fd4281bf8520d3ab103,
         type: 3}
       propertyPath: m_Effectors.Array.size
@@ -704,6 +712,30 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d179878772218fd4281bf8520d3ab103, type: 3}
+--- !u!1 &202566169 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2419450220747068627, guid: d179878772218fd4281bf8520d3ab103,
+    type: 3}
+  m_PrefabInstance: {fileID: 202566167}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &202566170 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
+    type: 3}
+  m_PrefabInstance: {fileID: 202566167}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202566169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58e6aa3448bd9c34393c14c716fe368c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &213795903 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2061077140200134386, guid: d179878772218fd4281bf8520d3ab103,
+    type: 3}
+  m_PrefabInstance: {fileID: 80777352}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &253101778
 GameObject:
   m_ObjectHideFlags: 0
@@ -1051,7 +1083,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PrefabCoin: {fileID: 23507989}
   CoinList: []
-  poolSize: 10
+  activeCoins: 0
+  unactiveCoins: 0
+  totalCoins: 0
+  minPoolSize: 10
+  maxPoolSize: 1000
 --- !u!4 &308465881
 Transform:
   m_ObjectHideFlags: 0
@@ -1094,16 +1130,17 @@ MonoBehaviour:
   menu: {fileID: 1516435075}
   customizationMenu: {fileID: 414511578}
   scripts:
+  - {fileID: 1338642382}
+  - {fileID: 202566170}
+  - {fileID: 1193655866}
+  - {fileID: 1066707450}
   - {fileID: 397701219221825593}
   - {fileID: 2128433368}
+  - {fileID: 134947544}
+  - {fileID: 1469648600}
+  - {fileID: 2024141102}
   OpenMenu: 27
   deathHeight: -10
---- !u!1 &398116146 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2419450220747068627, guid: d179878772218fd4281bf8520d3ab103,
-    type: 3}
-  m_PrefabInstance: {fileID: 80777352}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &414511578 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4973931914695845095, guid: 80b3cd57927795c408ee69d7b2064e82,
@@ -1973,6 +2010,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Manequinv4
       objectReference: {fileID: 0}
+    - target: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
+        type: 3}
+      propertyPath: BodyParent
+      value: 
+      objectReference: {fileID: 2024141101}
     - target: {fileID: 4579875296358415497, guid: d179878772218fd4281bf8520d3ab103,
         type: 3}
       propertyPath: m_Effectors.Array.size
@@ -2063,6 +2105,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d179878772218fd4281bf8520d3ab103, type: 3}
+--- !u!114 &1066707450 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
+    type: 3}
+  m_PrefabInstance: {fileID: 1066707449}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58e6aa3448bd9c34393c14c716fe368c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1106269510 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7208407309670305425, guid: d179878772218fd4281bf8520d3ab103,
@@ -2224,6 +2278,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Manequinv4
       objectReference: {fileID: 0}
+    - target: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
+        type: 3}
+      propertyPath: BodyParent
+      value: 
+      objectReference: {fileID: 1193655867}
     - target: {fileID: 4579875296358415497, guid: d179878772218fd4281bf8520d3ab103,
         type: 3}
       propertyPath: m_Effectors.Array.size
@@ -2314,6 +2373,24 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d179878772218fd4281bf8520d3ab103, type: 3}
+--- !u!114 &1193655866 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3534090481246459236, guid: d179878772218fd4281bf8520d3ab103,
+    type: 3}
+  m_PrefabInstance: {fileID: 1193655865}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193655867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58e6aa3448bd9c34393c14c716fe368c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1193655867 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2419450220747068627, guid: d179878772218fd4281bf8520d3ab103,
+    type: 3}
+  m_PrefabInstance: {fileID: 1193655865}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1209245967
 GameObject:
   m_ObjectHideFlags: 0
@@ -2460,7 +2537,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 80777352}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 398116146}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58e6aa3448bd9c34393c14c716fe368c, type: 3}
@@ -2683,7 +2760,7 @@ MonoBehaviour:
     - name: 0 StartRoof
       value: {x: 0, y: 1}
     allowedObstacles: 
-    lenght: 5
+    lenght: 7
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 0
     type: 0
@@ -2871,9 +2948,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00df6324edf7833459ae9f8de8e6a25b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pausable: 1
   player: {fileID: 5975597569830665923}
-  speed: 5
-  orchestrator: {fileID: 0}
+  speed: 10
+  orchestrator: {fileID: 314633909}
+  customization: {fileID: 1193655866}
 --- !u!65 &1469648601
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2917,7 +2996,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -4066,9 +4145,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00df6324edf7833459ae9f8de8e6a25b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pausable: 1
   player: {fileID: 5975597569830665923}
-  speed: 5
-  orchestrator: {fileID: 0}
+  speed: 10
+  orchestrator: {fileID: 314633909}
+  customization: {fileID: 1066707450}
 --- !u!65 &2024141103
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4112,7 +4193,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -4306,7 +4387,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73b7ad30f53af874bb817a24ad1d5021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 2128433366}
+  pausable: 0
+  transCamera: {fileID: 2128433367}
   objective: {fileID: 5975597569830665923}
   offset: {x: 0, y: 1, z: -6}
   dist: 1
@@ -4322,6 +4404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc03671cc8a80e4468c36f19144a3b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pausable: 1
   lateralSpace: 5
   forwardSpeed: 9
   lateralSpeed: 4
