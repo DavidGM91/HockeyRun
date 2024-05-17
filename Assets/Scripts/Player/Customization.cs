@@ -13,6 +13,7 @@ public class Customization : MyMonoBehaviour
     [System.Serializable]
     public class Uniform
     {
+        public string Name;
         public Color Vest;
         public Color Pants;
         public Color Shirt;
@@ -23,7 +24,6 @@ public class Customization : MyMonoBehaviour
         public Color Wrists;
         public Color HairPiece_1;
         public Color HairPiece_2;
-        public string Name;
     }
 
     [System.Serializable]

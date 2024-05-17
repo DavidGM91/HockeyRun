@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &436038146865752642
+--- !u!1 &8515668662573791910
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,59 +8,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3372496779391661741}
-  - component: {fileID: 3700020971311452331}
+  - component: {fileID: 2057869323090296539}
+  - component: {fileID: 1662405784634110670}
   m_Layer: 0
-  m_Name: GameController
+  m_Name: CoinPool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3372496779391661741
+--- !u!4 &2057869323090296539
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 436038146865752642}
+  m_GameObject: {fileID: 8515668662573791910}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.46}
+  m_LocalPosition: {x: -22.605814, y: -10.005743, z: 9.432203}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3700020971311452331
+--- !u!114 &1662405784634110670
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 436038146865752642}
+  m_GameObject: {fileID: 8515668662573791910}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17e35dbbdac1cc242866b61783f28f18, type: 3}
+  m_Script: {fileID: 11500000, guid: ed6973e071d0af84d9f87f83728d0ed3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  inici: {fileID: 0}
-  cam: {fileID: 0}
-  levelGenerator: {fileID: 0}
-  coinPool: {fileID: 0}
-  scoreText: {fileID: 0}
-  menu: {fileID: 0}
-  customizationMenu: {fileID: 0}
-  scripts:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  OpenMenu: 27
-  deathHeight: -10
+  PrefabCoin: {fileID: 1561003792969892489, guid: b9764aaf81e5bbc459319b5f2a8b2cc7,
+    type: 3}
+  CoinList: []
+  activeCoins: 0
+  unactiveCoins: 0
+  totalCoins: 0
+  minPoolSize: 10
+  maxPoolSize: 1000
