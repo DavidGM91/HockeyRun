@@ -1930,9 +1930,15 @@ MonoBehaviour:
     rot: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
     allowedSectionsAfter:
     - name: 1 Straight Roof
-      value: {x: 1, y: 2}
+      value: {x: 1, y: 4}
     - name: 2 EndRoof
-      value: {x: 2, y: 1}
+      value: {x: 2, y: 2}
+    - name: 4 Rturn
+      value: {x: 4, y: 1}
+    - name: 5 Lturn
+      value: {x: 5, y: 1}
+    - name: 6 TSplit
+      value: {x: 6, y: 1}
     allowedObstacles: 
     lenght: 5
     levelPos: {x: 0, y: 0, z: 0}
@@ -1962,6 +1968,48 @@ MonoBehaviour:
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 0
     type: 0
+  - name: 4 Rturn
+    obj: {fileID: 3116529689570988212, guid: df1acb5825c25e24b82a10a996e78072, type: 3}
+    pos: {x: 0, y: 0, z: 0}
+    rot: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    allowedSectionsAfter:
+    - name: 1 Straight Roof
+      value: {x: 1, y: 3}
+    - name: 2 EndRoof
+      value: {x: 2, y: 1}
+    allowedObstacles: 
+    lenght: 7
+    levelPos: {x: 0, y: 0, z: 0}
+    coinSides: 0
+    type: 1
+  - name: 5 Lturn
+    obj: {fileID: 3854902001279634877, guid: c2200a2016d3eab4a9818d4969f21810, type: 3}
+    pos: {x: 0, y: 0, z: 0}
+    rot: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    allowedSectionsAfter:
+    - name: 1 Straight Roof
+      value: {x: 1, y: 3}
+    - name: 2 EndRoof
+      value: {x: 2, y: 1}
+    allowedObstacles: 
+    lenght: 7
+    levelPos: {x: 0, y: 0, z: 0}
+    coinSides: 0
+    type: 2
+  - name: 6 TSplit
+    obj: {fileID: 7120036636223300838, guid: 4e824261584e4574c9d595874e0386ad, type: 3}
+    pos: {x: 0, y: 0, z: 0}
+    rot: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    allowedSectionsAfter:
+    - name: 1 Straight Roof
+      value: {x: 1, y: 3}
+    - name: 2 EndRoof
+      value: {x: 2, y: 1}
+    allowedObstacles: 
+    lenght: 7
+    levelPos: {x: 0, y: 0, z: 0}
+    coinSides: 0
+    type: 3
   obstacles: []
 --- !u!4 &1386186829
 Transform:
