@@ -1,8 +1,8 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [ExecuteAlways]
 public class LevelGenerator : MonoBehaviour
@@ -10,9 +10,12 @@ public class LevelGenerator : MonoBehaviour
     public GameObject player;
     public GameObject levelCamera;
     public CoinPool coinPool;
+    public MyEventSystem eventSystem;
     public int sectionsCount = 10;
     public int sectionsBehind = 2;
     public float timeBetweenChecks = 2.0f;
+
+    public float timeToQTE = 2.0f;
 
     [System.Serializable]
     public enum SectionType
@@ -74,7 +77,8 @@ public class LevelGenerator : MonoBehaviour
     }
     [SerializeField]
     public List<obstacle> obstacles = new();
-    private List<GameObject> levelSections = new();
+    private Dictionary<uint, GameObject> levelSections = new();
+    private List<Tuple<uint, uint>> bifur = new();
 
     [System.Serializable]
     public class namedValue<T>
@@ -105,19 +109,23 @@ public class LevelGenerator : MonoBehaviour
 
     private float nextCoinPos = 0;
 
+    private float distance = 0;
+
     /// <summary>
     /// Elimina totes les seccions actuals, genera de noves i torna totes les posicions a l'inici.
     /// </summary>
     public void Regenerate()
     {
-        foreach(GameObject section in levelSections)
+        foreach (var section in levelSections)
         {
-            Destroy(section);
+            Destroy(section.Value);
+            eventSystem.IgnoreEvent(section.Key);
         }
         levelSections.Clear();
         currentSection = -1;
         nextSectionPos = new Vector3(0, 0, 0);
         levelRot = Quaternion.Euler(0, 0, 0);
+        distance = 0;
         for (int i = 0; i < sectionsCount; i++)
         {
             GenerateNewSection();
@@ -179,34 +187,47 @@ public class LevelGenerator : MonoBehaviour
 
         currentSection++;
 
-        if(newSection.obj != null)
-            levelSections.Add(Instantiate(newSection.obj, nextSectionPos+ levelRot * newSection.pos, levelRot * newSection.rot));
+        distance += newSection.lenght;
 
-        int coinsNext = GenerateObstacles(sectionId, nextSectionPos);
+        MyEvent myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * newSection.lenght, SectionEvent);
+        uint id = eventSystem.AddEvent(myEvent);
+
+        if (newSection.obj != null)
+            levelSections.Add(id,Instantiate(newSection.obj, nextSectionPos+ levelRot * newSection.pos, levelRot * newSection.rot));
+
+
+
+        int coinsNext = GenerateObstacles(sectionId, levelSections[id].GetComponent<BoxCollider>());
 
         if(newSection.type == SectionType.bifurcacio)
         {
-            AddLevelRotation(90);
+            //TODO: Generar doble seccions a les bifurcacions
+            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght, TurnRightSectionEvent, KeyCode.W, timeToQTE);
+            uint rEventId = eventSystem.AddEvent(myRQTEEvent);
+            MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.lenght, TurnLeftSectionEvent, KeyCode.D, timeToQTE);
+            bifur.Add(new Tuple<uint,uint>(rEventId,eventSystem.AddEvent(myLQTEEvent)));
         }
         else if (newSection.type == SectionType.dreta)
         {
             AddLevelRotation(90);
+            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght, TurnRightSectionEvent, KeyCode.W, timeToQTE);
+            eventSystem.AddEvent(myRQTEEvent);
         }
         else if (newSection.type == SectionType.esquerra)
         {
             AddLevelRotation(-90);
+            MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.lenght, TurnLeftSectionEvent, KeyCode.D, timeToQTE);
+            eventSystem.AddEvent(myLQTEEvent);
         }
 
         nextSectionPos += levelRot * (new Vector3(0, 0, newSection.lenght)+newSection.pos);
-
-
-
+        
 
         if(sectionsWithCoins > 0)
         {
             sectionsWithCoins--;
             //COINS
-            GenerateCoins(coinsNext);
+            GenerateCoins(coinsNext, levelSections[id].GetComponent<BoxCollider>());
         }
         else
         {
@@ -215,21 +236,91 @@ public class LevelGenerator : MonoBehaviour
                 sectionsWithCoins = Random.Range(3, 4);
             }
         }
-
-        if(levelSections.Count > sectionsCount)
+    }
+    public void TurnRightSectionEvent(uint id, bool success)
+    {
+        bool isBifur = false;
+        for(int i = 0; i < bifur.Count; i++)
         {
-            Destroy(levelSections[0]);
-            levelSections.RemoveAt(0);
+            if (bifur[i].Item1 == id)
+            {
+                isBifur = true;
+                if (success)
+                {
+                    //TODO: Rotar el jugador cap a la dreta
+                }
+                else
+                {
+                    //Això indica que el jugador ha fallat la bifurcació cap a la dreta, que es truca sempre abans que la de l'esquerra.
+                    bifur[i] = new Tuple<uint, uint>(0, bifur[i].Item2);
+                }
+                break;
+            }
+        }
+        if (!isBifur)
+        {
+            if (success)
+            {
+                //TODO: Rotar el jugador cap a la dreta
+            }
+            else
+            {
+                //TODO: OH NO EL JUGADOR CAU!
+            }
+        }
+    }
+    public void TurnLeftSectionEvent(uint id, bool success)
+    {
+        bool isBifur = false;
+        for (int i = 0; i < bifur.Count; i++)
+        {
+            if (bifur[i].Item2 == id)
+            {
+                isBifur = true;
+                if (success)
+                {
+                    //TODO: Rotar el jugador cap a l'esquerra
+                }
+                else
+                {
+                    if (bifur[i].Item1 == 0)
+                    {
+                        //Això indica que el jugador ha fallat ambdues bifurcacions, per tant ha de caure.
+                        //TODO: OH NO EL JUGADOR CAU!
+                    }
+                }
+                break;
+            }
+        }
+        if (!isBifur)
+        {
+            if (success)
+            {
+                //TODO: Rotar el jugador cap a l'esquerra
+            }
+            else
+            {
+                //TODO: OH NO EL JUGADOR CAU!
+            }
+        }
+    }
+    public void SectionEvent(uint id, bool success)
+    {
+        if (success)
+        {
+            GenerateNewSection();
+            Destroy(levelSections[id]);
+            levelSections.Remove(id);
         }
     }
 
-    private int GenerateObstacles(int sectionId, Vector3 pos)
+    private int GenerateObstacles(int sectionId, BoxCollider section)
     {
         //TODO Set nextCoinPos
         return 0b111111;
     }
     
-    private void GenerateCoins(int coinsNext)
+    private void GenerateCoins(int coinsNext, BoxCollider section)
     {   
         int finalCoinSide = 0;
         List<int> possibleCoinSide = new List<int>();
@@ -245,7 +336,7 @@ public class LevelGenerator : MonoBehaviour
         }
 
         nextCoinPos = -2;
-        Transform sectionPos = levelSections[levelSections.Count - 1].GetComponent<BoxCollider>().transform;
+        Transform sectionPos = section.transform;
 
         // 5 monedes per seccio
         for (int i = 0; i < 5; ++i)
@@ -295,23 +386,6 @@ public class LevelGenerator : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Comproba si derrera del jugador hi ha seccions per trucar a la nova.
-    /// </summary>
-    private void needNewSection()
-    {
-        Transform playerPos = player.GetComponent<Transform>();
-
-        Bounds lastSectionPos = levelSections[sectionsBehind].GetComponent<BoxCollider>().bounds;
-        Vector3 playerForward = playerPos.forward;
-        Vector3 playerPosition = playerPos.position;
-
-        while (Vector3.Dot(lastSectionPos.center - playerPosition, playerForward) < 0)
-        {
-            GenerateNewSection();
-            lastSectionPos = levelSections[sectionsBehind].GetComponent<BoxCollider>().bounds;
-        }
-    }
     private void OnValidate()
     {
         if (!Application.IsPlaying(gameObject))
@@ -352,9 +426,7 @@ public class LevelGenerator : MonoBehaviour
             {
                 GenerateNewSection();
             }
-            needNewSection(); //Aquesta primera call es perque Unity no pensi que no s'utilitza la funció i l'elimini en optimitzar ja que els InvokeRepeating no compilan com a call
-            InvokeRepeating("needNewSection", timeBetweenChecks, timeBetweenChecks);
-             //Les monedes s'han de generar per secció totes a l'hora, 
+            //Les monedes s'han de generar per secció totes a l'hora, 
             //ja s'encarrega la resta del codi de garantir que es truca quan cal.
         }
         else

@@ -9,7 +9,7 @@ public class Orchestrator : MonoBehaviour
     public LevelGenerator levelGenerator;
     public CoinPool coinPool;
 
-    public EventSystem eS;
+    public MyEventSystem eS;
 
     public TextMeshProUGUI scoreText;
 

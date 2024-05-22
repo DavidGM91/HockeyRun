@@ -1906,9 +1906,11 @@ MonoBehaviour:
   player: {fileID: 2918473490309789172}
   levelCamera: {fileID: 2128433363}
   coinPool: {fileID: 308465880}
+  eventSystem: {fileID: 1553359221}
   sectionsCount: 25
   sectionsBehind: 2
   timeBetweenChecks: 2
+  timeToQTE: 2
   sections:
   - name: 0 StartRoof
     obj: {fileID: 54204123008985139, guid: 02b652570eae5d442b19e5cdddebd4d7, type: 3}
@@ -1957,9 +1959,9 @@ MonoBehaviour:
     coinSides: 0
     type: 0
   - name: 3 Void
-    obj: {fileID: 0}
+    obj: {fileID: 192617452447761226, guid: 4d3b79eb239963841aa7cb62e6dcd35a, type: 3}
     pos: {x: 0, y: 0, z: 0}
-    rot: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    rot: {x: 0, y: 0, z: 0, w: 1}
     allowedSectionsAfter:
     - name: 0 StartRoof
       value: {x: 0, y: 1}
@@ -1970,7 +1972,7 @@ MonoBehaviour:
     type: 0
   - name: 4 Rturn
     obj: {fileID: 3116529689570988212, guid: df1acb5825c25e24b82a10a996e78072, type: 3}
-    pos: {x: 0, y: 0, z: 0}
+    pos: {x: -0.5, y: 0, z: 0}
     rot: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
     allowedSectionsAfter:
     - name: 1 Straight Roof
@@ -1984,7 +1986,7 @@ MonoBehaviour:
     type: 1
   - name: 5 Lturn
     obj: {fileID: 3854902001279634877, guid: c2200a2016d3eab4a9818d4969f21810, type: 3}
-    pos: {x: 0, y: 0, z: 0}
+    pos: {x: -0.5, y: 0, z: 0}
     rot: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
     allowedSectionsAfter:
     - name: 1 Straight Roof
@@ -1998,7 +2000,7 @@ MonoBehaviour:
     type: 2
   - name: 6 TSplit
     obj: {fileID: 7120036636223300838, guid: 4e824261584e4574c9d595874e0386ad, type: 3}
-    pos: {x: 0, y: 0, z: 0}
+    pos: {x: -0.5, y: 0, z: 0}
     rot: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
     allowedSectionsAfter:
     - name: 1 Straight Roof
@@ -2342,7 +2344,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1553359218}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e57698995d3780a498a110ba9603bad3, type: 3}
+  m_Script: {fileID: 11500000, guid: b19a470c511453541aa451ba1c5c949a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1675312477
