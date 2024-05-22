@@ -12,6 +12,9 @@ public class PlayerMovement : MyMonoBehaviour
     public float lateralSpeed = 4; // velocitat a la que anira cap endavant
     public float speedIncreasePerSecond = 0.1f; // augment de velocitat per cada segon
 
+    public float distance = 0;
+    public float lateralDistance = 0;
+
     [SerializeField]
     public Animator animator;
 
@@ -115,24 +118,29 @@ public class PlayerMovement : MyMonoBehaviour
             _forwardSpeed = forwardSpeed;
             _lateralSpeed = lateralSpeed;
         }
+        distance += forwardSpeed * Time.deltaTime;
         transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime, Space.World);
 
         forwardSpeed += speedIncreasePerSecond * Time.deltaTime;
         if (Input.GetKey(leftKey))
         {
             //Comprovar que no es surt dels limits
+            //TODO rotacions al if
             if (this.gameObject.transform.position.x > (lateralSpace * -1))
             {
                 transform.Translate(Vector3.left * Time.deltaTime * lateralSpeed);
+                lateralDistance += lateralSpeed * Time.deltaTime;
             }
         }
 
         if (Input.GetKey(rightKey))
         {
             //Comprovar que no es surt dels limits
+            //TODO rotacions al if
             if (this.gameObject.transform.position.x < lateralSpace)
             {
                 transform.Translate(Vector3.right * Time.deltaTime * lateralSpeed);
+                lateralDistance -= lateralSpeed * Time.deltaTime;
             }
         }
 

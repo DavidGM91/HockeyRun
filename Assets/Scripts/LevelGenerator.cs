@@ -184,7 +184,22 @@ public class LevelGenerator : MonoBehaviour
 
         int coinsNext = GenerateObstacles(sectionId, nextSectionPos);
 
+        if(newSection.type == SectionType.bifurcacio)
+        {
+            AddLevelRotation(90);
+        }
+        else if (newSection.type == SectionType.dreta)
+        {
+            AddLevelRotation(90);
+        }
+        else if (newSection.type == SectionType.esquerra)
+        {
+            AddLevelRotation(-90);
+        }
+
         nextSectionPos += levelRot * (new Vector3(0, 0, newSection.lenght)+newSection.pos);
+
+
 
 
         if(sectionsWithCoins > 0)

@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Orchestrator : MonoBehaviour
 {
@@ -13,6 +8,9 @@ public class Orchestrator : MonoBehaviour
     public GameObject cam;
     public LevelGenerator levelGenerator;
     public CoinPool coinPool;
+
+    public EventSystem eS;
+
     public TextMeshProUGUI scoreText;
 
     public GameObject menu;
@@ -107,7 +105,8 @@ public class Orchestrator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        eS.UpdateTimes(Time.deltaTime, playerMovement.distance);
+        eS.checkEvents(playerMovement.distance, playerMovement.lateralDistance);
         foreach (MyMonoBehaviour script in scripts)
         {
             if(script.pausable)
