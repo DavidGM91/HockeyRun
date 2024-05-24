@@ -7,13 +7,16 @@ using UnityEngine;
 public class PlayerMovement : MyMonoBehaviour
 {
     [SerializeField]
-    public int lateralSpace = 5;
-    public float forwardSpeed = 3; // velocitat a la que anira cap endavant
-    public float lateralSpeed = 4; // velocitat a la que anira cap endavant
+    public int lateralSpace = 7;
+    public float forwardSpeed = 3; // velocitat a la que anirà cap endavant
+    public float lateralSpeed = 4; // velocitat a la que anirà cap els costats
     public float speedIncreasePerSecond = 0.1f; // augment de velocitat per cada segon
+    public Transform OGanchor;
+    public Transform anchor;
 
     public float distance = 0;
     public float lateralDistance = 0;
+    private float forwardDistance = 0;
 
     [SerializeField]
     public Animator animator;
@@ -48,8 +51,8 @@ public class PlayerMovement : MyMonoBehaviour
         GameOver
     }
 
-    private float _forwardSpeed = -1; // velocitat a la que anira cap endavant
-    private float _lateralSpeed = -1; // velocitat a la que anira cap endavant
+    private float _forwardSpeed = -1; // Copia de la velocitat a la que anirà cap endavant
+    private float _lateralSpeed = -1; // Copia de la velocitat a la que anirà cap els costats
 
     private float saveForwardSpeed = -1;
 
@@ -61,6 +64,16 @@ public class PlayerMovement : MyMonoBehaviour
     private float coyoteTimeCounter = 0;
     private bool isJumping = false;
 
+    override public void myStart()
+    {
+        PlayerStart();
+        rb = GetComponent<Rigidbody>();
+        if (anchor == null)
+        {
+            anchor = OGanchor;
+        }
+        lateralDistance = lateralSpace / 2;
+    }
     private void PlayAnim(EAnims anim)
     {
         animator.SetTrigger(EAnims.GetName(typeof(EAnims), anim));
@@ -102,7 +115,11 @@ public class PlayerMovement : MyMonoBehaviour
     {
         forwardSpeed = _forwardSpeed;
         lateralSpeed = _lateralSpeed;
-        this.gameObject.transform.position = new Vector3(0, 4, 0);
+        forwardDistance = 0;
+        lateralDistance = 0;
+        distance = 0;
+        anchor = OGanchor;
+        transform.position = new Vector3(0, 4, 3);
     }
     public void PlayerStart()
     {
@@ -110,46 +127,44 @@ public class PlayerMovement : MyMonoBehaviour
         _lateralSpeed = lateralSpeed;
     }
 
+    public void ChangeAnchor(Vector3 newPos, Quaternion newRot)
+    {
+        //TODO: Make the player lerp from the positions
+        anchor.position = newPos;
+        anchor.rotation = newRot;
+        forwardDistance = 0;
+        transform.rotation = anchor.rotation;
+        myUpdate();
+    }
+
     // Update is called once per frame
     override public void myUpdate()
     {
-        if(_forwardSpeed == -1)
-        {
-            _forwardSpeed = forwardSpeed;
-            _lateralSpeed = lateralSpeed;
-        }
-        distance += forwardSpeed * Time.deltaTime;
-        transform.Translate(Vector3.forward * forwardSpeed * Time.deltaTime, Space.World);
-
-        forwardSpeed += speedIncreasePerSecond * Time.deltaTime;
-        if (Input.GetKey(leftKey))
-        {
-            //Comprovar que no es surt dels limits
-            //TODO rotacions al if
-            if (this.gameObject.transform.position.x > (lateralSpace * -1))
-            {
-                transform.Translate(Vector3.left * Time.deltaTime * lateralSpeed);
-                lateralDistance += lateralSpeed * Time.deltaTime;
-            }
-        }
-
+        // Adjust lateral distance based on input
         if (Input.GetKey(rightKey))
         {
-            //Comprovar que no es surt dels limits
-            //TODO rotacions al if
-            if (this.gameObject.transform.position.x < lateralSpace)
-            {
-                transform.Translate(Vector3.right * Time.deltaTime * lateralSpeed);
-                lateralDistance -= lateralSpeed * Time.deltaTime;
-            }
+            lateralDistance -= lateralSpeed * Time.deltaTime;
+            lateralDistance = Mathf.Clamp(lateralDistance, 0f, lateralSpace);
+        }
+        if (Input.GetKey(leftKey))
+        {
+            lateralDistance += lateralSpeed * Time.deltaTime;
+            lateralDistance = Mathf.Clamp(lateralDistance, 0f, lateralSpace);
         }
 
-        //Lògica de salt
+        distance += forwardSpeed * Time.deltaTime;
+        forwardDistance += forwardSpeed * Time.deltaTime;
 
+        Vector3 newPos = anchor.position - anchor.right * forwardDistance - anchor.forward * lateralDistance;
+        newPos.y = transform.position.y;
+        transform.position = newPos;
+
+
+         // Jump logic
         if (coyoteTimeCounter != 0 && checkGround())
         {
             coyoteTimeCounter = 0;
-            if(isJumping)
+            if (isJumping)
             {
                 isJumping = false;
                 PlayAnim(EAnims.JumpEnd);
@@ -174,6 +189,7 @@ public class PlayerMovement : MyMonoBehaviour
             coyoteTimeCounter = coyoteTime;
         }
     }
+
 
     bool checkGround()
     {

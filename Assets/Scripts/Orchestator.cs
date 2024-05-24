@@ -121,8 +121,9 @@ public class Orchestrator : MonoBehaviour
         }
         if (player.transform.position.y < deathHeight)
         {
-            levelGenerator.Regenerate();
             playerMovement.Restart();
+            levelGenerator.Regenerate();
+            eS.Restart();
             coinPool.Restart();
             puntos = 0;
         }
@@ -156,7 +157,7 @@ public class Orchestrator : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.G))
         {
-            //setGodMode
+            player.GetComponent<Rigidbody>().useGravity = !player.GetComponent<Rigidbody>().useGravity;
         }
      
     }

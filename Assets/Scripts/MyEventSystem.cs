@@ -1,32 +1,76 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MyEventSystem : MonoBehaviour
 {
-    [SerializeField]
-    private Queue<MyEvent> events = new Queue<MyEvent>();
+
+    public bool debug = true;
+    public class EventDistanceComparer : IComparer<MyEvent>
+    {
+        public int Compare(MyEvent x, MyEvent y)
+        {
+            return x.Distance.CompareTo(y.Distance);
+        }
+    }
+
+    SortedSet<MyEvent> events = new SortedSet<MyEvent>(new EventDistanceComparer());
     private uint nextID = 1;
-    private List<uint> ignoredEvents = new List<uint>();
+    private List<MyEvent> tickingEvents = new List<MyEvent>();
 
     public void IgnoreEvent(uint ID)
     {
-        ignoredEvents.Add(ID);
+        MyEvent eventToRemove = events.FirstOrDefault(e => e.ID == ID);
+        if (eventToRemove != null)
+        {
+            events.Remove(eventToRemove);
+        }
     }
+
     public uint AddEvent(MyEvent e)
     {
         e.ID = nextId();
-        events.Enqueue(e);
+        events.Add(e);
+        if (debug)
+        {
+            // Create a 3D marker at the distance marked by the event
+            GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            marker.transform.position = new Vector3(-e.Distance, 2f, 0f);
+            marker.name = "Event " + e.Name;
+            if (e is MyQTEEvent)
+            {
+                marker.GetComponent<Renderer>().material.color = Color.red;
+                marker.transform.position = new Vector3(-e.Distance, 2.5f, 1f);
+            }
+            else if (e is MyQTEAreaEvent)
+            {
+                marker.GetComponent<Renderer>().material.color = Color.blue;
+                marker.transform.position = new Vector3(-e.Distance, 3f, 1f);
+            }
+            else if (e is MyAreaEvent)
+            {
+                marker.GetComponent<Renderer>().material.color = Color.green;
+                marker.transform.position = new Vector3(-e.Distance, 3.5f, 1f);
+            }
+            else
+            {
+                marker.GetComponent<Renderer>().material.color = Color.yellow;
+            }
+        }
         return e.ID;
     }
+    public void Restart()
+    {
+        events.Clear();
+        tickingEvents.Clear();
+        nextID = 1;
+    }
+
     public void UpdateTimes(float deltaTime, float distance)
     {
         foreach (MyEvent e in events)
         {
-            if(ignoredEvents.Contains(e.ID))
-            {
-                continue;
-            }
             if (e is MyQTEEvent)
             {
                 MyQTEEvent qte = (MyQTEEvent)e;
@@ -38,12 +82,27 @@ public class MyEventSystem : MonoBehaviour
                 qte.updateRemainingTime(deltaTime, distance);
             }
         }
+        for (int i = 0; i < tickingEvents.Count; i++)
+        {
+            MyEvent next = tickingEvents[i];
+            if (next is MyQTEEvent)
+            {
+                MyQTEEvent qte = (MyQTEEvent)next;
+                qte.updateRemainingTime(deltaTime, distance);
+            }
+            else if (next is MyQTEAreaEvent)
+            {
+                MyQTEAreaEvent qte = (MyQTEAreaEvent)next;
+                qte.updateRemainingTime(deltaTime, distance);
+            }
+        }
     }
+
     private uint nextId()
     {
         uint ID = nextID;
         nextID++;
-        if (nextID > uint.MaxValue)
+        if (nextID >= uint.MaxValue)
         {
             nextID = 1;
         }
@@ -54,60 +113,24 @@ public class MyEventSystem : MonoBehaviour
     {
         uint index;
         MyEvent.checkResult result = MyEvent.checkResult.Success;
-        while (result != MyEvent.checkResult.NotYet)
+        List<int> _toRemove = new List<int>();
+        for (int i = 0; i < tickingEvents.Count; i++)
         {
-            MyEvent next = events.Peek();
-            if(ignoredEvents.Contains(next.ID))
-            {
-                events.Dequeue();
-                continue;
-            }
-            //Debug.Log("Checking event: " + next.ID +"at "+next.Distance + " vs "+ distance);
-            if (next is MyEvent)
-            {
-                result = next.checkEvent(distance);
-                index = next.ID;
-                if (result == MyAreaEvent.checkResult.Success)
-                {
-                    next.callBack(index, true);
-                    events.Dequeue();
-                }
-                else if (result == MyAreaEvent.checkResult.Fail)
-                {
-                    next.callBack(index, false);
-                    events.Dequeue();
-                }
-            }
-            else if (next is MyAreaEvent)
-            {
-                MyAreaEvent area = (MyAreaEvent)next;
-                result = area.checkEvent(distance, pos);
-                index = area.ID;
-                if (result == MyAreaEvent.checkResult.Success)
-                {
-                    area.callBack(index, true);
-                    events.Dequeue();
-                }
-                else if (result == MyAreaEvent.checkResult.Fail)
-                {
-                    area.callBack(index, false);
-                    events.Dequeue();
-                }
-            }
-            else if (next is MyQTEEvent)
+            MyEvent next = tickingEvents[i];
+            if (next is MyQTEEvent)
             {
                 MyQTEEvent qte = (MyQTEEvent)next;
                 result = qte.checkEvent(distance);
                 index = qte.ID;
-                if (result == MyQTEEvent.checkResult.Success)
+                if (result == MyEvent.checkResult.Success)
                 {
                     qte.callBack(index, true);
-                    events.Dequeue();
+                    _toRemove.Add(i);
                 }
-                else if (result == MyQTEEvent.checkResult.Fail)
+                else if (result == MyEvent.checkResult.Fail)
                 {
                     qte.callBack(index, false);
-                    events.Dequeue();
+                    _toRemove.Add(i);
                 }
             }
             else if (next is MyQTEAreaEvent)
@@ -115,15 +138,98 @@ public class MyEventSystem : MonoBehaviour
                 MyQTEAreaEvent qte = (MyQTEAreaEvent)next;
                 result = qte.checkEvent(distance, pos);
                 index = qte.ID;
-                if (result == MyQTEAreaEvent.checkResult.Success)
+                if (result == MyEvent.checkResult.Success)
                 {
                     qte.callBack(index, true);
-                    events.Dequeue();
+                    _toRemove.Add(i);
                 }
-                else if (result == MyQTEAreaEvent.checkResult.Fail)
+                else if (result == MyEvent.checkResult.Fail)
                 {
                     qte.callBack(index, false);
-                    events.Dequeue();
+                    _toRemove.Add(i);
+                }
+            }
+        }
+        for (int i = _toRemove.Count - 1; i >= 0; i--)
+        {
+            tickingEvents.RemoveAt(_toRemove[i]);
+        }
+
+        while (result != MyEvent.checkResult.NotYet && events.Count > 0)
+        {
+            MyEvent next = events.Min;
+            
+            if (next is MyAreaEvent)
+            {
+                MyAreaEvent area = (MyAreaEvent)next;
+                result = area.checkEvent(distance, pos);
+                index = area.ID;
+                if (result == MyEvent.checkResult.Success)
+                {
+                    area.callBack(index, true);
+                    events.Remove(next);
+                }
+                else if (result == MyEvent.checkResult.Fail)
+                {
+                    area.callBack(index, false);
+                    events.Remove(next);
+                }
+            }
+            else if (next is MyQTEEvent)
+            {
+                MyQTEEvent qte = (MyQTEEvent)next;
+                result = qte.checkEvent(distance);
+                index = qte.ID;
+                if (result == MyEvent.checkResult.Success)
+                {
+                    qte.callBack(index, true);
+                    events.Remove(next);
+                }
+                else if (result == MyEvent.checkResult.Fail)
+                {
+                    qte.callBack(index, false);
+                    events.Remove(next);
+                }
+                else if (result == MyEvent.checkResult.Ticking)
+                {
+                    tickingEvents.Add(next);
+                    events.Remove(next);
+                }
+            }
+            else if (next is MyQTEAreaEvent)
+            {
+                MyQTEAreaEvent qte = (MyQTEAreaEvent)next;
+                result = qte.checkEvent(distance, pos);
+                index = qte.ID;
+                if (result == MyEvent.checkResult.Success)
+                {
+                    qte.callBack(index, true);
+                    events.Remove(next);
+                }
+                else if (result == MyEvent.checkResult.Fail)
+                {
+                    qte.callBack(index, false);
+                    events.Remove(next);
+                }
+                else if (result == MyEvent.checkResult.Ticking)
+                {
+                    tickingEvents.Add(next);
+                    events.Remove(next);
+                }
+            }
+            else if (next is MyEvent)
+            {
+                result = next.checkEvent(distance);
+                index = next.ID;
+                if (result == MyEvent.checkResult.Success)
+                {
+                    next.callBack(index, true);
+                    events.Remove(next);
+                }
+                else if (result == MyEvent.checkResult.Fail)
+                {
+                    next.callBack(index, false);
+                    events.Remove(next);
                 }
             }
         }
@@ -133,11 +239,12 @@ public class MyEventSystem : MonoBehaviour
 
 public class MyEvent
 {
-    protected string Name;
+    public string Name;
     public uint ID;
     public enum checkResult
     {
         NotYet,
+        Ticking,
         Success,
         Fail
     };
@@ -194,6 +301,7 @@ public class MyQTEEvent : MyEvent
     {
         if (distance >= Distance && remainingTime > 0)
         {
+            //Debug.Log("Remaining time: " + remainingTime);
             remainingTime -= deltaTime;
         }
     }
@@ -201,11 +309,14 @@ public class MyQTEEvent : MyEvent
     {
         if (distance >= Distance)
         {
-            if (Input.GetKeyDown(key) && remainingTime > 0)
+            if (Input.GetKey(key) && remainingTime > 0)
             {
                 return checkResult.Success;
             }
-            return checkResult.Fail;
+            if(remainingTime <= 0)
+                return checkResult.Fail;
+            else
+                return checkResult.Ticking;
         }
         return checkResult.NotYet;
     }
@@ -236,13 +347,19 @@ public class MyQTEAreaEvent : MyEvent
         {
             if (areaPos >= initialAreaPos && areaPos <= finalAreaPos)
             {
-                if (Input.GetKeyDown(key) && remainingTime > 0)
+                if (Input.GetKey(key) && remainingTime > 0)
                 {
                     return checkResult.Success;
                 }
-                return checkResult.Fail;
+                if (remainingTime <= 0)
+                    return checkResult.Fail;
+                else
+                    return checkResult.Ticking;
             }
-            return checkResult.Fail;
+            if (remainingTime <= 0)
+                return checkResult.Fail;
+            else
+                return checkResult.Ticking;
         }
         return checkResult.NotYet;
     }

@@ -56,8 +56,7 @@ public class CoinPool : MonoBehaviour
         activeCoins = coinPool.CountActive;
         unactiveCoins = coinPool.CountInactive;
         totalCoins = coinPool.CountAll;
-
-       checkPositionCoins();
+        checkPositionCoins();
     }
     public void ReturnCoin(GameObject coin)
     {

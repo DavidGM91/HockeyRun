@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
 using Random = UnityEngine.Random;
 
 [ExecuteAlways]
@@ -9,11 +10,13 @@ public class LevelGenerator : MonoBehaviour
 {
     public GameObject player;
     public GameObject levelCamera;
+    public Section firstSection;
     public CoinPool coinPool;
     public MyEventSystem eventSystem;
     public int sectionsCount = 10;
     public int sectionsBehind = 2;
     public float timeBetweenChecks = 2.0f;
+    public int minStraightSectionsBetweenRotations = 15;
 
     public float timeToQTE = 2.0f;
 
@@ -21,6 +24,7 @@ public class LevelGenerator : MonoBehaviour
     public enum SectionType
     {
         recte,
+        final,
         dreta,
         esquerra,
         bifurcacio
@@ -80,6 +84,12 @@ public class LevelGenerator : MonoBehaviour
     private Dictionary<uint, GameObject> levelSections = new();
     private List<Tuple<uint, uint>> bifur = new();
 
+
+    private Dictionary<uint, Transform> rightRotations = new();
+    private Dictionary<uint, Transform> leftRotations = new();
+
+    private PlayerMovement playerMovement = null;
+
     [System.Serializable]
     public class namedValue<T>
     {
@@ -100,6 +110,7 @@ public class LevelGenerator : MonoBehaviour
     private int allowedSectionsNextMaxWeight = 0;
 
     private Vector3 nextSectionPos = new Vector3(0, 0, 0);
+    private Vector3 nextSectionPos2 = new Vector3(0, 0, 0);
 
     private Quaternion levelRot = Quaternion.Euler(0, 0, 0);
 
@@ -109,7 +120,16 @@ public class LevelGenerator : MonoBehaviour
 
     private float nextCoinPos = 0;
 
+
     private float distance = 0;
+
+    private uint justRotatedRight = 0;
+    private uint justRotatedLeft = 0;
+
+    private int gracePeriodNoRots = 10;
+
+    private bool bifurcateCopy = false;
+
 
     /// <summary>
     /// Elimina totes les seccions actuals, genera de noves i torna totes les posicions a l'inici.
@@ -119,13 +139,14 @@ public class LevelGenerator : MonoBehaviour
         foreach (var section in levelSections)
         {
             Destroy(section.Value);
-            eventSystem.IgnoreEvent(section.Key);
         }
         levelSections.Clear();
         currentSection = -1;
         nextSectionPos = new Vector3(0, 0, 0);
         levelRot = Quaternion.Euler(0, 0, 0);
         distance = 0;
+        gracePeriodNoRots = minStraightSectionsBetweenRotations;
+        bifurcateCopy = false;
         for (int i = 0; i < sectionsCount; i++)
         {
             GenerateNewSection();
@@ -170,63 +191,139 @@ public class LevelGenerator : MonoBehaviour
 
 
     /// <summary>
-    /// Crea una nova secció amb els seus obstacles i monedes i elimina l'última secció.
+    /// Crea una nova secció amb els seus obstacles i monedes.
     /// </summary>
     private void GenerateNewSection()
     {
+        //SECCIONS
+        //Primera secció forcem first
+        bool isFirst = false;
         if(currentSection == -1)
         {
+            isFirst = true;
             allowedSectionsNext = new namedValue<Vector2Int>[] { new namedValue<Vector2Int>("first", new Vector2Int(0, 1)) };
             allowedSectionsNextMaxWeight = 1;
         }
+        //Escollim la següent secció
         int sectionId = GetRandomSelection(allowedSectionsNext, allowedSectionsNextMaxWeight);
         Section newSection = sections[sectionId];
 
+        //Si encara estem copiant la bifurcació o seguim en periode de gracia forcem a ser un final la secció aleatori(No té en compte el pes aleatori en ser un cas limit).
+        if (newSection.type != SectionType.recte && newSection.type != SectionType.final && (gracePeriodNoRots > 0 || bifurcateCopy))
+        {
+            bool finalFound = false;
+            foreach (Section _section in sections)
+            {
+                if(_section.type == SectionType.final && !finalFound)
+                {
+                    if (finalFound)
+                    {
+                        if (Random.Range(0, 2) == 0)
+                            newSection = _section;
+                    }
+                    else
+                    {
+                        finalFound = true;
+                        newSection = _section;
+                    }
+                }
+            }
+        }
+        gracePeriodNoRots--;
+
+        //Preparem les que poden venir després
         allowedSectionsNext = newSection.allowedSectionsAfter;
         allowedSectionsNextMaxWeight = newSection.getSectionWeights();
+
 
         currentSection++;
 
         distance += newSection.lenght;
 
+        //Event de neteja
         MyEvent myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * newSection.lenght, SectionEvent);
         uint id = eventSystem.AddEvent(myEvent);
+        uint id2 = 0;
 
+        //Creació i snapping de la secció
         if (newSection.obj != null)
-            levelSections.Add(id,Instantiate(newSection.obj, nextSectionPos+ levelRot * newSection.pos, levelRot * newSection.rot));
+            levelSections.Add(id,Instantiate(newSection.obj));
 
+        SpawnSection section = levelSections[id].GetComponent<SpawnSection>();
+        section.positionYourselfPlease(nextSectionPos);
+        section.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
+        nextSectionPos = section.GetSpawn(0);
 
-
-        int coinsNext = GenerateObstacles(sectionId, levelSections[id].GetComponent<BoxCollider>());
-
-        if(newSection.type == SectionType.bifurcacio)
+        if(isFirst)
         {
-            //TODO: Generar doble seccions a les bifurcacions
-            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght, TurnRightSectionEvent, KeyCode.W, timeToQTE);
+            playerMovement.ChangeAnchor(section.GetSpawn(0), section.transform.rotation);
+        }
+
+        if (bifurcateCopy)
+        {
+            id2 = eventSystem.AddEvent(myEvent);
+            levelSections.Add(id2, Instantiate(newSection.obj));
+            SpawnSection section2 = levelSections[id2].GetComponent<SpawnSection>();
+            section2.positionYourselfPlease(nextSectionPos2);
+            section2.rotateYourselfAroundYourOriginPlease((levelRot* Quaternion.Euler(0, 180, 0)).eulerAngles);
+            nextSectionPos2 = section2.GetSpawn(0);
+        }
+
+        if(justRotatedRight != 0 && justRotatedLeft == 0)
+        {
+            rightRotations.Add(justRotatedRight, levelSections[id].transform);
+            justRotatedRight = 0;
+        }
+        if(justRotatedLeft != 0 && justRotatedRight == 0)
+        {
+            leftRotations.Add(justRotatedLeft, levelSections[id].transform);
+            justRotatedLeft = 0;
+        }
+        if(justRotatedRight != 0 && justRotatedLeft != 0)
+        {
+            rightRotations.Add(justRotatedRight, levelSections[id].transform);
+            leftRotations.Add(justRotatedLeft, levelSections[id2].transform);
+            justRotatedRight = 0;
+            justRotatedLeft = 0;
+        }
+
+        //Events de girs
+        if (newSection.type == SectionType.bifurcacio)
+        {
+            //Assumim que gira a la esquerra per generar el nivell
+            AddLevelRotation(90);
+            bifurcateCopy = true;
+            gracePeriodNoRots = minStraightSectionsBetweenRotations;
+            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght*2, TurnRightSectionEvent, KeyCode.W, timeToQTE);
             uint rEventId = eventSystem.AddEvent(myRQTEEvent);
-            MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.lenght, TurnLeftSectionEvent, KeyCode.D, timeToQTE);
+            MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.lenght*2, TurnLeftSectionEvent, KeyCode.D, timeToQTE);
             bifur.Add(new Tuple<uint,uint>(rEventId,eventSystem.AddEvent(myLQTEEvent)));
+            justRotatedRight = bifur.Last().Item1;
+            justRotatedLeft = bifur.Last().Item2;
+            nextSectionPos2 = section.GetSpawn(1);
         }
         else if (newSection.type == SectionType.dreta)
-        {
+         {
             AddLevelRotation(90);
+            gracePeriodNoRots = minStraightSectionsBetweenRotations;
             MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght, TurnRightSectionEvent, KeyCode.W, timeToQTE);
-            eventSystem.AddEvent(myRQTEEvent);
+            justRotatedRight = eventSystem.AddEvent(myRQTEEvent);
         }
         else if (newSection.type == SectionType.esquerra)
         {
             AddLevelRotation(-90);
+            gracePeriodNoRots = minStraightSectionsBetweenRotations;
             MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.lenght, TurnLeftSectionEvent, KeyCode.D, timeToQTE);
-            eventSystem.AddEvent(myLQTEEvent);
+            justRotatedLeft = eventSystem.AddEvent(myLQTEEvent);
         }
 
-        nextSectionPos += levelRot * (new Vector3(0, 0, newSection.lenght)+newSection.pos);
-        
+        //OBSTACLES
+        int coinsNext = GenerateObstacles(sectionId, levelSections[id].GetComponent<BoxCollider>());
 
-        if(sectionsWithCoins > 0)
+        //MONEDES
+        if (sectionsWithCoins > 0)
         {
             sectionsWithCoins--;
-            //COINS
             GenerateCoins(coinsNext, levelSections[id].GetComponent<BoxCollider>());
         }
         else
@@ -239,6 +336,7 @@ public class LevelGenerator : MonoBehaviour
     }
     public void TurnRightSectionEvent(uint id, bool success)
     {
+        Debug.Log("TurnRightSectionEvent "+id+" "+success);
         bool isBifur = false;
         for(int i = 0; i < bifur.Count; i++)
         {
@@ -247,11 +345,14 @@ public class LevelGenerator : MonoBehaviour
                 isBifur = true;
                 if (success)
                 {
-                    //TODO: Rotar el jugador cap a la dreta
+                    playerMovement.ChangeAnchor(rightRotations[id].position, rightRotations[id].rotation);
+                    rightRotations.Remove(id);
+                    leftRotations.Remove(bifur[i].Item2);
+                    bifurcateCopy = false;
                 }
                 else
                 {
-                    //Això indica que el jugador ha fallat la bifurcació cap a la dreta, que es truca sempre abans que la de l'esquerra.
+                    //Això indica que el jugador ha fallat la bifurcació cap a la dreta, que es truca sempre abans que la de l'esquerra.(crec)
                     bifur[i] = new Tuple<uint, uint>(0, bifur[i].Item2);
                 }
                 break;
@@ -261,7 +362,7 @@ public class LevelGenerator : MonoBehaviour
         {
             if (success)
             {
-                //TODO: Rotar el jugador cap a la dreta
+                playerMovement.ChangeAnchor(rightRotations[id].position, rightRotations[id].rotation);
             }
             else
             {
@@ -271,6 +372,7 @@ public class LevelGenerator : MonoBehaviour
     }
     public void TurnLeftSectionEvent(uint id, bool success)
     {
+        Debug.Log("TurnLeftSectionEvent "+id+" "+success);
         bool isBifur = false;
         for (int i = 0; i < bifur.Count; i++)
         {
@@ -279,7 +381,10 @@ public class LevelGenerator : MonoBehaviour
                 isBifur = true;
                 if (success)
                 {
-                    //TODO: Rotar el jugador cap a l'esquerra
+                    playerMovement.ChangeAnchor(leftRotations[id].position, leftRotations[id].rotation);
+                    rightRotations.Remove(bifur[i].Item1);
+                    leftRotations.Remove(id);
+                    bifurcateCopy = false;
                 }
                 else
                 {
@@ -296,7 +401,7 @@ public class LevelGenerator : MonoBehaviour
         {
             if (success)
             {
-                //TODO: Rotar el jugador cap a l'esquerra
+                playerMovement.ChangeAnchor(leftRotations[id].position, leftRotations[id].rotation);
             }
             else
             {
@@ -412,6 +517,7 @@ public class LevelGenerator : MonoBehaviour
     {
         if (Application.IsPlaying(gameObject))
         {
+            playerMovement = player.GetComponent<PlayerMovement>();
             foreach (var section in sections)
             {
                 int weights = 0;
