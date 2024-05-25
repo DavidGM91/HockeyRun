@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class Orchestrator : MonoBehaviour
@@ -160,6 +161,14 @@ public class Orchestrator : MonoBehaviour
             player.GetComponent<Rigidbody>().useGravity = !player.GetComponent<Rigidbody>().useGravity;
         }
      
+    }
+
+    public void stopGame()
+    {
+        #if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+        #endif
+
     }
 
 }

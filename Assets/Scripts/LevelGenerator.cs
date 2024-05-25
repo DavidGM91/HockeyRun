@@ -294,9 +294,9 @@ public class LevelGenerator : MonoBehaviour
             AddLevelRotation(90);
             bifurcateCopy = true;
             gracePeriodNoRots = minStraightSectionsBetweenRotations;
-            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght*2, TurnRightSectionEvent, KeyCode.W, timeToQTE);
+            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght*2, TurnRightSectionEvent, KeyCode.D, timeToQTE);
             uint rEventId = eventSystem.AddEvent(myRQTEEvent);
-            MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.lenght*2, TurnLeftSectionEvent, KeyCode.D, timeToQTE);
+            MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.lenght*2, TurnLeftSectionEvent, KeyCode.A, timeToQTE);
             bifur.Add(new Tuple<uint,uint>(rEventId,eventSystem.AddEvent(myLQTEEvent)));
             justRotatedRight = bifur.Last().Item1;
             justRotatedLeft = bifur.Last().Item2;
