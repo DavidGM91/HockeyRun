@@ -31,7 +31,12 @@ public class MyEventSystem : MonoBehaviour
     public uint AddEvent(MyEvent e)
     {
         e.ID = nextId();
-        events.Add(e);
+
+        while (!events.Add(e))
+        {
+            e.Distance += 0.01f;
+            e.ID = nextId();
+        }
         if (debug)
         {
             // Create a 3D marker at the distance marked by the event
@@ -304,10 +309,11 @@ public class MyQTEEvent : MyEvent
         }
     }
     public new checkResult checkEvent(float distance)
-    {
+     {
         if (distance >= Distance)
         {
-            if (Input.GetKey(key) && remainingTime > 0)
+            bool b = Input.GetKey(key);
+            if (b && remainingTime > 0)
             {
                 return checkResult.Success;
             }

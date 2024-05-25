@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 429228566418448609}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.0018486935, y: 0.01673254, z: 0.09620133, w: 0.9952195}
+  m_LocalPosition: {x: -2.3266687e-10, y: 2.6227097e-11, z: 9.3099417e-10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -35,7 +35,7 @@ Transform:
   - {fileID: 2257707719923500531}
   - {fileID: 8449151685076462473}
   m_Father: {fileID: 3826261667687156107}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.395, y: 1.888, z: 11.036}
 --- !u!114 &7078255161766669601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1236,7 +1236,7 @@ Transform:
   m_GameObject: {fileID: 2197273918946380386}
   serializedVersion: 2
   m_LocalRotation: {x: -0.044685483, y: -0.00001700432, z: -0.0013018595, w: 0.99900025}
-  m_LocalPosition: {x: 0, y: 0.7749566, z: -0.037437797}
+  m_LocalPosition: {x: -0.0000000111758665, y: 0.7749568, z: -0.037437614}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1330,8 +1330,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2343664219138950876}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0831607, y: 0, z: 0.229}
+  m_LocalRotation: {x: -0, y: -0, z: 8.858476e-10, w: 1}
+  m_LocalPosition: {x: 0.08316056, y: -0.000000085681684, z: 0.22899999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1391,7 +1391,12 @@ Animator:
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Stomach'\n\tTransform 'feet_r'\n\tTransform
+    'upperleg_l'\n\tTransform 'skull'\n\tTransform 'upperarm_l'\n\tTransform 'upperarm_r'\n\tTransform
+    'upperleg_r'\n\tTransform 'lowerleg_r'\n\tTransform 'pelvis'\n\tTransform 'Armature'\n\tand
+    more ..."
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -1696,7 +1701,7 @@ Transform:
   m_GameObject: {fileID: 2584757887416394343}
   serializedVersion: 2
   m_LocalRotation: {x: 0.27842456, y: 0.0065603894, z: 0.006560388, w: 0.9604133}
-  m_LocalPosition: {x: 0.001073204, y: 1.1856608, z: -0.07425326}
+  m_LocalPosition: {x: 0.00090409035, y: 1.1856709, z: -0.07415412}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1790,8 +1795,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2798397689472267223}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0831607, y: 0, z: -0.098}
+  m_LocalRotation: {x: -0, y: -0, z: 8.858476e-10, w: 1}
+  m_LocalPosition: {x: 0.08316001, y: -0.000000033760447, z: -0.09799971}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2163,8 +2168,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2959121624146047728}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0831607, y: -0.00013917685, z: 0.12848663}
+  m_LocalRotation: {x: -0, y: -0, z: 8.858476e-10, w: 1}
+  m_LocalPosition: {x: 0.08316003, y: -0.00013921504, z: 0.12848659}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2562,15 +2567,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3920533034435768432}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.0038470076, y: -0.10755203, z: 0.17423365, w: 0.9788056}
+  m_LocalPosition: {x: -2.3266675e-10, y: 2.6227104e-11, z: 9.309944e-10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1283439439627237764}
   - {fileID: 2348553018957502326}
   m_Father: {fileID: 7966694054196060585}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 1.716, y: -12.238, z: 20.003}
 --- !u!114 &322027580640789521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2867,8 +2872,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4380630492691762397}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0831607, y: -0.00013917685, z: 0.12848663}
+  m_LocalRotation: {x: -0, y: -0, z: 8.858476e-10, w: 1}
+  m_LocalPosition: {x: -0.17369784, y: -0.00063403585, z: -0.062991485}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3483,7 +3488,7 @@ Transform:
   m_GameObject: {fileID: 5775457324261204208}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6607461, y: 1.0599287, z: -0.031149954}
+  m_LocalPosition: {x: 0.695, y: 0.151, z: 0.003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4315,8 +4320,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7754482849768347173}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0831607, y: 0, z: 0.229}
+  m_LocalRotation: {x: -0, y: -0, z: 8.858476e-10, w: 1}
+  m_LocalPosition: {x: -0.17369781, y: -0.000494457, z: 0.037521664}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4743,8 +4748,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8875277799315317481}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0831607, y: 0, z: -0.098}
+  m_LocalRotation: {x: -0, y: -0, z: 8.858476e-10, w: 1}
+  m_LocalPosition: {x: -0.17369834, y: -0.0004948909, z: -0.28947824}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
