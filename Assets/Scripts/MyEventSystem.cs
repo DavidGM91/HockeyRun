@@ -113,10 +113,9 @@ public class MyEventSystem : MonoBehaviour
     {
         uint index;
         MyEvent.checkResult result = MyEvent.checkResult.Success;
-        List<int> _toRemove = new List<int>();
-        for (int i = 0; i < tickingEvents.Count; i++)
+        List<MyEvent> _toRemove = new List<MyEvent>();
+        foreach (MyEvent next in tickingEvents)
         {
-            MyEvent next = tickingEvents[i];
             if (next is MyQTEEvent)
             {
                 MyQTEEvent qte = (MyQTEEvent)next;
@@ -125,12 +124,12 @@ public class MyEventSystem : MonoBehaviour
                 if (result == MyEvent.checkResult.Success)
                 {
                     qte.callBack(index, true);
-                    _toRemove.Add(i);
+                    _toRemove.Add(next);
                 }
                 else if (result == MyEvent.checkResult.Fail)
                 {
                     qte.callBack(index, false);
-                    _toRemove.Add(i);
+                    _toRemove.Add(next);
                 }
             }
             else if (next is MyQTEAreaEvent)
@@ -141,20 +140,19 @@ public class MyEventSystem : MonoBehaviour
                 if (result == MyEvent.checkResult.Success)
                 {
                     qte.callBack(index, true);
-                    _toRemove.Add(i);
+                    _toRemove.Add(next);
                 }
                 else if (result == MyEvent.checkResult.Fail)
                 {
                     qte.callBack(index, false);
-                    _toRemove.Add(i);
+                    _toRemove.Add(next);
                 }
             }
         }
         for (int i = _toRemove.Count - 1; i >= 0; i--)
         {
-            tickingEvents.RemoveAt(_toRemove[i]);
+            tickingEvents.Remove(_toRemove[i]);
         }
-
         while (result != MyEvent.checkResult.NotYet && events.Count > 0)
         {
             MyEvent next = events.Min;

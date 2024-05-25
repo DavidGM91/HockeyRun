@@ -147,6 +147,11 @@ public class LevelGenerator : MonoBehaviour
         distance = 0;
         gracePeriodNoRots = minStraightSectionsBetweenRotations;
         bifurcateCopy = false;
+        justRotatedLeft = 0;
+        justRotatedRight = 0;
+        rightRotations.Clear();
+        leftRotations.Clear();
+        bifur.Clear();
         for (int i = 0; i < sectionsCount; i++)
         {
             GenerateNewSection();
