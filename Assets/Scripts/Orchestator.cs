@@ -162,6 +162,13 @@ public class Orchestrator : MonoBehaviour
      
     }
 
+    public void stopGame()
+    {
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        # endif
+    }
+
 }
 public class MyMonoBehaviour : MonoBehaviour
 {
