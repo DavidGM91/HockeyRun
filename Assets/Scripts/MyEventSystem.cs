@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Timeline;
 
 public class MyEventSystem : MonoBehaviour
 {
@@ -27,15 +28,41 @@ public class MyEventSystem : MonoBehaviour
             events.Remove(eventToRemove);
         }
     }
-
     public uint AddEvent(MyEvent e)
     {
+        if ( e.ID != 0)
+        {
+            if (e is MyQTEEvent)
+            {
+                MyQTEEvent copy = new(e as MyQTEEvent);
+                e = copy;
+            }
+            else if (e is MyQTEAreaEvent)
+            {
+                MyQTEEvent copy = new(e as MyQTEEvent);
+                e = copy;
+            }
+            else if (e is MyAreaEvent)
+            {
+                MyQTEEvent copy = new(e as MyQTEEvent);
+                e = copy;
+            }
+            else
+            {
+                MyEvent copy = new(e);
+                e = copy;
+            }
+            e.ID = nextId();
+        }
         e.ID = nextId();
-
+        float oldDistance = e.Distance;
         while (!events.Add(e))
         {
-            e.Distance += 0.01f;
-            e.ID = nextId();
+            e.Distance += 0.05f;
+            if(e.Distance == oldDistance)
+            {
+                e.Distance += 0.1f;
+            }
         }
         if (debug)
         {
@@ -71,7 +98,6 @@ public class MyEventSystem : MonoBehaviour
         tickingEvents.Clear();
         nextID = 1;
     }
-
     public void UpdateTimes(float deltaTime, float distance)
     {
         foreach (MyEvent e in events)
@@ -102,7 +128,6 @@ public class MyEventSystem : MonoBehaviour
             }
         }
     }
-
     private uint nextId()
     {
         uint ID = nextID;
@@ -113,7 +138,6 @@ public class MyEventSystem : MonoBehaviour
         }
         return ID;
     }
-
     public void checkEvents(float distance, float pos)
     {
         uint index;
@@ -238,8 +262,6 @@ public class MyEventSystem : MonoBehaviour
         }
     }
 }
-
-
 public class MyEvent
 {
     public string Name;
@@ -260,6 +282,12 @@ public class MyEvent
         callBack = callback;
 
     }
+    public MyEvent(MyEvent e)
+    {
+        Name = e.Name;
+        Distance = e.Distance;
+        callBack = e.callBack;
+    }
     public checkResult checkEvent(float distance)
     {
         if (distance >= Distance)
@@ -267,6 +295,12 @@ public class MyEvent
             return checkResult.Success;
         }
         return checkResult.NotYet;
+    }
+    public void copyFrom(MyEvent e)
+    {
+        Name = e.Name;
+        Distance = e.Distance;
+        callBack = e.callBack;
     }
 }
 public class MyAreaEvent : MyEvent
@@ -277,6 +311,11 @@ public class MyAreaEvent : MyEvent
     {
         this.initialAreaPos = initialAreaPos;
         this.finalAreaPos = finalAreaPos;
+    }
+    public MyAreaEvent(MyAreaEvent e) : base(e)
+    {
+        initialAreaPos = e.initialAreaPos;
+        finalAreaPos = e.finalAreaPos;
     }
     public new checkResult checkEvent(float distance, float areaPos)
     {
@@ -290,6 +329,12 @@ public class MyAreaEvent : MyEvent
         }
         return checkResult.NotYet;
     }
+    public void copyFrom(MyAreaEvent e)
+    {
+        base.copyFrom(e);
+        initialAreaPos = e.initialAreaPos;
+        finalAreaPos = e.finalAreaPos;
+    }
 }
 public class MyQTEEvent : MyEvent
 {
@@ -299,6 +344,11 @@ public class MyQTEEvent : MyEvent
     {
         this.key = key;
         this.remainingTime = timeGrace;
+    }
+    public MyQTEEvent(MyQTEEvent e) : base(e)
+    {
+        key = e.key;
+        remainingTime = e.remainingTime;
     }
     public void updateRemainingTime(float deltaTime, float distance)
     {
@@ -324,6 +374,12 @@ public class MyQTEEvent : MyEvent
         }
         return checkResult.NotYet;
     }
+    public void copyFrom(MyQTEEvent e)
+    {
+        base.copyFrom(e);
+        key = e.key;
+        remainingTime = e.remainingTime;
+    }
 }
 public class MyQTEAreaEvent : MyEvent
 {
@@ -337,6 +393,13 @@ public class MyQTEAreaEvent : MyEvent
         this.remainingTime = remainingTime;
         this.initialAreaPos = initialAreaPos;
         this.finalAreaPos = finalAreaPos;
+    }
+    public MyQTEAreaEvent(MyQTEAreaEvent e) : base(e)
+    {
+        key = e.key;
+        remainingTime = e.remainingTime;
+        initialAreaPos = e.initialAreaPos;
+        finalAreaPos = e.finalAreaPos;
     }
     public void updateRemainingTime(float deltaTime, float distance)
     {
@@ -366,6 +429,14 @@ public class MyQTEAreaEvent : MyEvent
                 return checkResult.Ticking;
         }
         return checkResult.NotYet;
+    }
+    public void copyFrom(MyQTEAreaEvent e)
+    {
+        base.copyFrom(e);
+        key = e.key;
+        remainingTime = e.remainingTime;
+        initialAreaPos = e.initialAreaPos;
+        finalAreaPos = e.finalAreaPos;
     }
 }
 

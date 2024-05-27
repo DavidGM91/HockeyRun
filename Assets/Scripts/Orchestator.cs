@@ -42,7 +42,6 @@ public class Orchestrator : MonoBehaviour
         cam.GetComponent<FollowCamera>().AdjustCamera(playerOffset, 0.5f);
         HideMenu();
     }
-
     public void ShowCustomization()
     {
         if (playerMovement == null)
@@ -64,7 +63,6 @@ public class Orchestrator : MonoBehaviour
         menu.SetActive(true);
         customizationMenu.SetActive(false);
     }
-
     public void ShowMenu()
     {
         Time.timeScale = 0;
@@ -73,7 +71,6 @@ public class Orchestrator : MonoBehaviour
         ismenu = true;
         menu.SetActive(true);
     }
-
     public void HideMenu()
     {
         cam.GetComponent<FollowCamera>().Focus(player.GetComponent<Transform>());
@@ -97,7 +94,6 @@ public class Orchestrator : MonoBehaviour
         playerMovement.setIdle(true);
         ShowMenu();
     }
-
     public void IncrementScoreWithCoins(int score)
     {
         puntos += score;
@@ -162,15 +158,6 @@ public class Orchestrator : MonoBehaviour
         }
      
     }
-
-    public void stopGame()
-    {
-        #if UNITY_EDITOR
-        EditorApplication.isPlaying = false;
-        #endif
-
-    }
-
 }
 public class MyMonoBehaviour : MonoBehaviour
 {
