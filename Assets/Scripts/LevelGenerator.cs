@@ -10,7 +10,6 @@ public class LevelGenerator : MonoBehaviour
 {
     public GameObject player;
     public GameObject levelCamera;
-    public Section firstSection;
     public CoinPool coinPool;
     public MyEventSystem eventSystem;
     public int sectionsCount = 10;
@@ -147,6 +146,11 @@ public class LevelGenerator : MonoBehaviour
         distance = 0;
         gracePeriodNoRots = minStraightSectionsBetweenRotations;
         bifurcateCopy = false;
+        justRotatedLeft = 0;
+        justRotatedRight = 0;
+        rightRotations.Clear();
+        leftRotations.Clear();
+        bifur.Clear();
         for (int i = 0; i < sectionsCount; i++)
         {
             GenerateNewSection();
@@ -261,6 +265,7 @@ public class LevelGenerator : MonoBehaviour
 
         if (bifurcateCopy)
         {
+            myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * newSection.lenght, SectionEvent);
             id2 = eventSystem.AddEvent(myEvent);
             levelSections.Add(id2, Instantiate(newSection.obj));
             SpawnSection section2 = levelSections[id2].GetComponent<SpawnSection>();
@@ -294,7 +299,7 @@ public class LevelGenerator : MonoBehaviour
             AddLevelRotation(90);
             bifurcateCopy = true;
             gracePeriodNoRots = minStraightSectionsBetweenRotations;
-            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght*2, TurnRightSectionEvent, KeyCode.W, timeToQTE);
+            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght*2, TurnRightSectionEvent, KeyCode.A, timeToQTE);
             uint rEventId = eventSystem.AddEvent(myRQTEEvent);
             MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.lenght*2, TurnLeftSectionEvent, KeyCode.D, timeToQTE);
             bifur.Add(new Tuple<uint,uint>(rEventId,eventSystem.AddEvent(myLQTEEvent)));
@@ -306,14 +311,14 @@ public class LevelGenerator : MonoBehaviour
          {
             AddLevelRotation(90);
             gracePeriodNoRots = minStraightSectionsBetweenRotations;
-            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght, TurnRightSectionEvent, KeyCode.W, timeToQTE);
+            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght, TurnRightSectionEvent, KeyCode.D, timeToQTE);
             justRotatedRight = eventSystem.AddEvent(myRQTEEvent);
         }
         else if (newSection.type == SectionType.esquerra)
         {
             AddLevelRotation(-90);
             gracePeriodNoRots = minStraightSectionsBetweenRotations;
-            MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.lenght, TurnLeftSectionEvent, KeyCode.D, timeToQTE);
+            MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.lenght, TurnLeftSectionEvent, KeyCode.A, timeToQTE);
             justRotatedLeft = eventSystem.AddEvent(myLQTEEvent);
         }
 
@@ -349,6 +354,7 @@ public class LevelGenerator : MonoBehaviour
                     rightRotations.Remove(id);
                     leftRotations.Remove(bifur[i].Item2);
                     bifurcateCopy = false;
+                    //TODO: Remove the other section
                 }
                 else
                 {
@@ -385,6 +391,7 @@ public class LevelGenerator : MonoBehaviour
                     rightRotations.Remove(bifur[i].Item1);
                     leftRotations.Remove(id);
                     bifurcateCopy = false;
+                    //TODO: Remove the other section
                 }
                 else
                 {
@@ -421,6 +428,7 @@ public class LevelGenerator : MonoBehaviour
 
     private int GenerateObstacles(int sectionId, BoxCollider section)
     {
+        //TODO This
         //TODO Set nextCoinPos
         return 0b111111;
     }
