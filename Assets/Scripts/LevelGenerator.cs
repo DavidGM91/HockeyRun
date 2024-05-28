@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI.Table;
+using static UnityEngine.UI.Image;
 using Random = UnityEngine.Random;
 
 [ExecuteAlways]
@@ -329,7 +330,7 @@ public class LevelGenerator : MonoBehaviour
         if (sectionsWithCoins > 0)
         {
             sectionsWithCoins--;
-            GenerateCoins(coinsNext, levelSections[id].GetComponent<BoxCollider>());
+            GenerateCoins(coinsNext, nextSectionPos);
         }
         else
         {
@@ -433,7 +434,7 @@ public class LevelGenerator : MonoBehaviour
         return 0b111111;
     }
     
-    private void GenerateCoins(int coinsNext, BoxCollider section)
+    private void GenerateCoins(int coinsNext, Vector3 section)
     {   
         int finalCoinSide = 0;
         List<int> possibleCoinSide = new List<int>();
@@ -449,7 +450,6 @@ public class LevelGenerator : MonoBehaviour
         }
 
         nextCoinPos = -2;
-        Transform sectionPos = section.transform;
 
         // 5 monedes per seccio
         for (int i = 0; i < 5; ++i)
@@ -492,7 +492,8 @@ public class LevelGenerator : MonoBehaviour
 
                         break;
                 }
-                coin.transform.position = sectionPos.position + sectionPos.rotation * coinPosition + new Vector3(0,1,0);
+                coin.transform.position = section + coinPosition;
+                transform.RotateAround(section, Vector3.up, levelRot.eulerAngles.y);
                 //coin.transform.SetParent(sectionPos, true);
                 nextCoinPos += 1f; // distancia entre monedas
             }
