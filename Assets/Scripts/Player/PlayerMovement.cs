@@ -7,14 +7,14 @@ using UnityEngine;
 public class PlayerMovement : MyMonoBehaviour
 {
     [SerializeField]
-    public int lateralSpace = 7;
+    public int lateralSpace = 10;
     public float forwardSpeed = 3; // velocitat a la que anirà cap endavant
     public float lateralSpeed = 4; // velocitat a la que anirà cap els costats
     public float speedIncreasePerSecond = 0.1f; // augment de velocitat per cada segon
     public Transform OGanchor;
     public Transform anchor;
 
-    public float distance = 0;
+    public float distance = 5.5f;
     public float lateralDistance = 0;
     private float forwardDistance = 0;
 
@@ -127,11 +127,18 @@ public class PlayerMovement : MyMonoBehaviour
         _lateralSpeed = lateralSpeed;
     }
 
-    public void ChangeAnchor(Vector3 newPos, Quaternion newRot)
+    public void ChangeAnchor(Vector3 newAnchor, Quaternion rot)
+    { 
+        anchor.position = newAnchor;
+        anchor.rotation = rot;
+        ChangeAnchor(anchor);
+    }
+
+    public void ChangeAnchor(Transform newAnchor)
     {
         //TODO: Make the player lerp from the positions
-        anchor.position = newPos;
-        anchor.rotation = newRot;
+        anchor.position = newAnchor.position;
+        anchor.rotation = newAnchor.rotation;
         forwardDistance = 0;
         transform.rotation = anchor.rotation;
         myUpdate();

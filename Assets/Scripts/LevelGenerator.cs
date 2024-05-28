@@ -40,9 +40,12 @@ public class LevelGenerator : MonoBehaviour
         public Quaternion rot;
         public namedValue<Vector2Int>[] allowedSectionsAfter;
         public int[] allowedObstacles;
-        public float lenght;
         public Vector3 levelPos;
         public int coinSides = 0b111111; // 000 -> no coin, 001 -> right, 010 -> middle, 100 -> left if(coinSides & 0b001) -> right
+        [HideInInspector]
+        public uint associatedID = 0;
+        [HideInInspector]
+        public float lenght = 0;
 
         public SectionType type;
 
@@ -85,9 +88,11 @@ public class LevelGenerator : MonoBehaviour
     private Dictionary<uint, GameObject> levelSections = new();
     private List<Tuple<uint, uint>> bifur = new();
 
-
     private Dictionary<uint, Transform> rightRotations = new();
     private Dictionary<uint, Transform> leftRotations = new();
+
+    private List<uint> rightBifurSects = new();
+    private List<uint> leftBifurSects = new();
 
     private PlayerMovement playerMovement = null;
 
@@ -116,19 +121,12 @@ public class LevelGenerator : MonoBehaviour
     private Quaternion levelRot = Quaternion.Euler(0, 0, 0);
 
     private int currentSection = -1;
-
     private int sectionsWithCoins = 0;
-
     private float nextCoinPos = 0;
-
-
     private float distance = 0;
-
     private uint justRotatedRight = 0;
     private uint justRotatedLeft = 0;
-
     private int gracePeriodNoRots = 10;
-
     private bool bifurcateCopy = false;
 
 
@@ -158,7 +156,6 @@ public class LevelGenerator : MonoBehaviour
             GenerateNewSection();
         }
     }
-
     /// <summary>
     /// Retorna un element aleatori d'una llista tenint en compte el pes.
     /// </summary>
@@ -188,14 +185,11 @@ public class LevelGenerator : MonoBehaviour
         }
         return possibleSections[0].value.x;
     }
-
     public void AddLevelRotation(float rot)
     {
         Quaternion rotation = Quaternion.Euler(0, rot, 0);
         levelRot *= rotation;
     }
-
-
     /// <summary>
     /// Crea una nova secció amb els seus obstacles i monedes.
     /// </summary>
@@ -241,33 +235,45 @@ public class LevelGenerator : MonoBehaviour
         allowedSectionsNext = newSection.allowedSectionsAfter;
         allowedSectionsNextMaxWeight = newSection.getSectionWeights();
 
+        
+
         currentSection++;
-
-        //Event de neteja
-        MyEvent myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * newSection.lenght, SectionEvent);
-        uint id = eventSystem.AddEvent(myEvent);
-        uint id2 = 0;
-
-        //Creació i snapping de la secció
+        GameObject _newSec = null;
+        //Creació de la secció
         if (newSection.obj != null)
-            levelSections.Add(id,Instantiate(newSection.obj));
+            _newSec = Instantiate(newSection.obj);
 
-        SpawnSection section = levelSections[id].GetComponent<SpawnSection>();
+        //Snapping a les ancores
+        SpawnSection section = _newSec.GetComponent<SpawnSection>();
         section.positionYourselfPlease(nextSectionPos);
         section.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
         nextSectionPos = section.GetSpawn(0);
 
-        distance += Vector3.Distance(section.origin.position, section.spawns[0].position);
+        //Càlcul de la distància
+        newSection.lenght = Vector3.Distance(section.origin.position, section.spawns[0].position);
+        distance += newSection.lenght;
+
+        //Creació d'event de neteja
+        MyEvent myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * newSection.lenght, SectionEvent);
+        uint id = eventSystem.AddEvent(myEvent);
+        uint id2 = 0;
+        levelSections.Add(id, _newSec);
+
+        //Moviment de les marques //TODO: DEBUG REMOVE
+        eventSystem.DebugLevelMarker(new Vector3(-distance, 0, 0));
 
         if(isFirst)
         {
             playerMovement.ChangeAnchor(section.GetSpawn(0), section.transform.rotation);
         }
 
+        //Copia de seccions durant la bifurcació
         if (bifurcateCopy)
         {
+            rightBifurSects.Add(id);
             myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * newSection.lenght, SectionEvent);
             id2 = eventSystem.AddEvent(myEvent);
+            leftBifurSects.Add(id2);
             levelSections.Add(id2, Instantiate(newSection.obj));
             SpawnSection section2 = levelSections[id2].GetComponent<SpawnSection>();
             section2.positionYourselfPlease(nextSectionPos2);
@@ -275,6 +281,7 @@ public class LevelGenerator : MonoBehaviour
             nextSectionPos2 = section2.GetSpawn(0);
         }
 
+        //Guardem les ancles de les seccions després de rotar
         if(justRotatedRight != 0 && justRotatedLeft == 0)
         {
             rightRotations.Add(justRotatedRight, levelSections[id].transform);
@@ -293,10 +300,9 @@ public class LevelGenerator : MonoBehaviour
             justRotatedLeft = 0;
         }
 
-        //Events de girs
+        //Gestió de girs i events
         if (newSection.type == SectionType.bifurcacio)
         {
-            //Assumim que gira a la esquerra per generar el nivell
             AddLevelRotation(90);
             bifurcateCopy = true;
             gracePeriodNoRots = minStraightSectionsBetweenRotations;
@@ -351,15 +357,23 @@ public class LevelGenerator : MonoBehaviour
                 isBifur = true;
                 if (success)
                 {
-                    playerMovement.ChangeAnchor(rightRotations[id].position, rightRotations[id].rotation);
+                    playerMovement.ChangeAnchor(rightRotations[id]);
                     rightRotations.Remove(id);
                     leftRotations.Remove(bifur[i].Item2);
                     bifurcateCopy = false;
-                    //TODO: Remove the other section
+                    foreach (var sect in leftBifurSects)
+                    {
+                        Destroy(levelSections[sect]);
+                        levelSections.Remove(sect);
+                        eventSystem.IgnoreEvent(sect);
+                    }
+                    leftBifurSects.Clear();
+                    rightBifurSects.Clear();
                 }
                 else
                 {
                     //Això indica que el jugador ha fallat la bifurcació cap a la dreta, que es truca sempre abans que la de l'esquerra.(crec)
+                    //Per tant indico amb un 0 que ha fallat la bifurcació cap a la dreta.
                     bifur[i] = new Tuple<uint, uint>(0, bifur[i].Item2);
                 }
                 break;
@@ -369,7 +383,7 @@ public class LevelGenerator : MonoBehaviour
         {
             if (success)
             {
-                playerMovement.ChangeAnchor(rightRotations[id].position, rightRotations[id].rotation);
+                playerMovement.ChangeAnchor(rightRotations[id]);
             }
             else
             {
@@ -388,18 +402,26 @@ public class LevelGenerator : MonoBehaviour
                 isBifur = true;
                 if (success)
                 {
-                    playerMovement.ChangeAnchor(leftRotations[id].position, leftRotations[id].rotation);
+                    playerMovement.ChangeAnchor(leftRotations[id]);
                     rightRotations.Remove(bifur[i].Item1);
                     leftRotations.Remove(id);
                     bifurcateCopy = false;
-                    //TODO: Remove the other section
+                    foreach (var sect in rightBifurSects)
+                    {
+                        Destroy(levelSections[sect]);
+                        levelSections.Remove(sect);
+                        eventSystem.IgnoreEvent(sect);
+                    }
+                    rightBifurSects.Clear();
+                    leftBifurSects.Clear();
+                    nextSectionPos = nextSectionPos2;
                 }
                 else
                 {
                     if (bifur[i].Item1 == 0)
                     {
                         //Això indica que el jugador ha fallat ambdues bifurcacions, per tant ha de caure.
-                        //TODO: OH NO EL JUGADOR CAU!
+                        //TODO: OH NO EL JUGADOR CAU! (Pantalla de fí?)
                     }
                 }
                 break;
@@ -409,7 +431,7 @@ public class LevelGenerator : MonoBehaviour
         {
             if (success)
             {
-                playerMovement.ChangeAnchor(leftRotations[id].position, leftRotations[id].rotation);
+                playerMovement.ChangeAnchor(leftRotations[id]);
             }
             else
             {
@@ -426,14 +448,12 @@ public class LevelGenerator : MonoBehaviour
             levelSections.Remove(id);
         }
     }
-
     private int GenerateObstacles(int sectionId, BoxCollider section)
     {
         //TODO This
         //TODO Set nextCoinPos
         return 0b111111;
     }
-    
     private void GenerateCoins(int coinsNext, Vector3 section)
     {   
         int finalCoinSide = 0;
@@ -499,7 +519,6 @@ public class LevelGenerator : MonoBehaviour
             }
         }
     }
-    
     private void OnValidate()
     {
         if (!Application.IsPlaying(gameObject))
@@ -520,7 +539,6 @@ public class LevelGenerator : MonoBehaviour
             }
         }
     }
-
     // Start is called before the first frame update
     void Start()
     {

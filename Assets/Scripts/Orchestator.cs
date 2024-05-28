@@ -118,10 +118,10 @@ public class Orchestrator : MonoBehaviour
         }
         if (player.transform.position.y < deathHeight)
         {
-            playerMovement.Restart();
-            levelGenerator.Regenerate();
             eS.Restart();
+            levelGenerator.Regenerate();
             coinPool.Restart();
+            playerMovement.Restart();
             puntos = 0;
         }
         else

@@ -19,7 +19,28 @@ public class MyEventSystem : MonoBehaviour
     SortedSet<MyEvent> events = new SortedSet<MyEvent>(new EventDistanceComparer());
     private uint nextID = 1;
     private List<MyEvent> tickingEvents = new List<MyEvent>();
+    private GameObject playerMarker;
+    private GameObject levelMarker;
 
+    private void Start()
+    {
+        if (debug)
+        {
+            playerMarker = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            playerMarker.name = "Player";
+            playerMarker.GetComponent<Renderer>().material.color = Color.black;
+            levelMarker = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            levelMarker.name = "Level";
+            levelMarker.GetComponent<Renderer>().material.color = Color.white;
+        }
+    }
+    public void DebugLevelMarker(Vector3 pos)
+    {
+        if (debug && levelMarker != null)
+        {
+            levelMarker.transform.position = pos;
+        }
+    }
     public void IgnoreEvent(uint ID)
     {
         MyEvent eventToRemove = events.FirstOrDefault(e => e.ID == ID);
@@ -30,7 +51,7 @@ public class MyEventSystem : MonoBehaviour
     }
     public uint AddEvent(MyEvent e)
     {
-        if ( e.ID != 0)
+        if (e.ID != 0)
         {
             if (e is MyQTEEvent)
             {
@@ -69,7 +90,7 @@ public class MyEventSystem : MonoBehaviour
             // Create a 3D marker at the distance marked by the event
             GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             marker.transform.position = new Vector3(-e.Distance, 2f, 0f);
-            marker.name = "Event " + e.Name;
+            marker.name = e.ID+"#Event: " + e.Name +" at "+e.Distance;
             if (e is MyQTEEvent)
             {
                 marker.GetComponent<Renderer>().material.color = Color.red;
@@ -138,8 +159,13 @@ public class MyEventSystem : MonoBehaviour
         }
         return ID;
     }
-    public void checkEvents(float distance, float pos, float altura)
+    public void checkEvents(float distance, float lateral, float altura)
     {
+        if (debug)
+        {
+            playerMarker.transform.position = new Vector3(-distance, -lateral, altura);
+        }
+
         uint index;
         MyEvent.checkResult result = MyEvent.checkResult.Success;
         List<MyEvent> _toRemove = new List<MyEvent>();
@@ -164,7 +190,7 @@ public class MyEventSystem : MonoBehaviour
             else if (next is MyQTEAreaEvent)
             {
                 MyQTEAreaEvent qte = (MyQTEAreaEvent)next;
-                result = qte.checkEvent(distance, pos);
+                result = qte.checkEvent(distance, lateral);
                 index = qte.ID;
                 if (result == MyEvent.checkResult.Success)
                 {
@@ -189,7 +215,7 @@ public class MyEventSystem : MonoBehaviour
             if (next is MyAreaEvent)
             {
                 MyAreaEvent area = (MyAreaEvent)next;
-                result = area.checkEvent(distance, pos);
+                result = area.checkEvent(distance, lateral);
                 index = area.ID;
                 if (result == MyEvent.checkResult.Success)
                 {
@@ -226,7 +252,7 @@ public class MyEventSystem : MonoBehaviour
             else if (next is MyQTEAreaEvent)
             {
                 MyQTEAreaEvent qte = (MyQTEAreaEvent)next;
-                result = qte.checkEvent(distance, pos);
+                result = qte.checkEvent(distance, lateral);
                 index = qte.ID;
                 if (result == MyEvent.checkResult.Success)
                 {
@@ -247,7 +273,7 @@ public class MyEventSystem : MonoBehaviour
             else if (next is MyHeightAreaEvent)
             {
                 MyHeightAreaEvent area = (MyHeightAreaEvent)next;
-                result = area.checkEvent(distance, pos, altura);
+                result = area.checkEvent(distance, lateral, altura);
                 index = area.ID;
                 if (result == MyEvent.checkResult.Success)
                 {

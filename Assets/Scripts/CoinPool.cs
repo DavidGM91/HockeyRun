@@ -49,15 +49,6 @@ public class CoinPool : MonoBehaviour
         }, true, minPoolSize, maxPoolSize);
 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        activeCoins = coinPool.CountActive;
-        unactiveCoins = coinPool.CountInactive;
-        totalCoins = coinPool.CountAll;
-        checkPositionCoins();
-    }
     public void ReturnCoin(GameObject coin)
     {
         coinPool.Release(coin);
