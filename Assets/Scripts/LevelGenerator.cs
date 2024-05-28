@@ -256,7 +256,7 @@ public class LevelGenerator : MonoBehaviour
         section.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
         nextSectionPos = section.GetSpawn(0);
 
-        distance = Vector3.Distance(section.origin.position, section.spawns[0].position);
+        distance += Vector3.Distance(section.origin.position, section.spawns[0].position);
 
         if(isFirst)
         {
