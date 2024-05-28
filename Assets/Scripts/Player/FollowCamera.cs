@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 //using static UnityEditor.PlayerSettings; //What is this for?
 
-public class FollowCamera : MyMonoBehaviour {
+public class FollowCamera : MonoBehaviour {
 
     [SerializeField]
     private Transform transCamera;
@@ -39,14 +39,14 @@ public class FollowCamera : MyMonoBehaviour {
     }
 
     // Start is called before the first frame update
-    override public void myStart()
+    void Start()
     {     
         AdjustCamera(offset, dist);
         Focus(this.objective);
     }
 
     // Update is called once per frame
-    override public void myUpdate()
+    void Update()
     {
         Vector3 Pos = offset + objective.position;
         Pos.x = 2;

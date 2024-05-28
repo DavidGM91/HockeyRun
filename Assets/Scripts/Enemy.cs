@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy : MyMonoBehaviour
+public class Enemy : MonoBehaviour
 {
     public Transform player; // Referencia al transform del jugador
     [SerializeField]
@@ -12,7 +12,7 @@ public class Enemy : MyMonoBehaviour
     [SerializeField]
     private Customization customization;
 
-    override public void myUpdate()
+    void Update()
     {
         if (player != null)
         {
@@ -26,7 +26,7 @@ public class Enemy : MyMonoBehaviour
         }
     }
 
-    override public void myStart()
+    void Start()
     {
         orchestrator = FindObjectOfType<Orchestrator>();
         customization = GetComponentInChildren<Customization>();

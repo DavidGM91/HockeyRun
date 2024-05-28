@@ -169,7 +169,7 @@ public class MyEventSystem : MonoBehaviour
     {
         if (debug)
         {
-            playerMarker.transform.position = new Vector3(-distance, -lateral, altura);
+            playerMarker.transform.position = new Vector3(-distance, altura, -lateral);
         }
 
         uint index;

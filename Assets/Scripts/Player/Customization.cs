@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Customization : MyMonoBehaviour
+public class Customization : MonoBehaviour
 {
     [SerializeField]
     private GameObject BodyParent;
@@ -194,7 +194,7 @@ public class Customization : MyMonoBehaviour
     {
         return hairColorIn;
     }
-    override public void myStart()
+    void Start()
     {
         if (Hairs.Length == 0)
         {

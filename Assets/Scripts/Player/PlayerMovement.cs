@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class PlayerMovement : MyMonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
     public int lateralSpace = 10;
@@ -64,7 +64,7 @@ public class PlayerMovement : MyMonoBehaviour
     private float coyoteTimeCounter = 0;
     private bool isJumping = false;
 
-    override public void myStart()
+    void Start()
     {
         PlayerStart();
         rb = GetComponent<Rigidbody>();
@@ -117,7 +117,7 @@ public class PlayerMovement : MyMonoBehaviour
         lateralSpeed = _lateralSpeed;
         forwardDistance = 0;
         lateralDistance = 0;
-        distance = 0;
+        distance = 5.5f;
         anchor = OGanchor;
         transform.position = new Vector3(0, 4, 3);
     }
@@ -141,11 +141,14 @@ public class PlayerMovement : MyMonoBehaviour
         anchor.rotation = newAnchor.rotation;
         forwardDistance = 0;
         transform.rotation = anchor.rotation;
-        myUpdate();
+
+        Vector3 newPos = anchor.position - anchor.right * forwardDistance - anchor.forward * lateralDistance;
+        newPos.y = transform.position.y;
+        transform.position = newPos;
     }
 
     // Update is called once per frame
-    override public void myUpdate()
+    void Update()
     {
         // Adjust lateral distance based on input
         if (Input.GetKey(rightKey))

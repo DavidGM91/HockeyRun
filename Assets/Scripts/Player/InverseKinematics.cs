@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-[ExecuteInEditMode]
+[ExecuteAlways]
 [RequireComponent(typeof(Animator))]
 public class IKControl : MonoBehaviour
 {

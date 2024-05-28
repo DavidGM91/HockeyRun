@@ -19,8 +19,6 @@ public class Orchestrator : MonoBehaviour
     //public GameObject creditsPanel;
     //public GameObject instructionsPanel;
 
-    public MyMonoBehaviour[] scripts;
-
 
     public KeyCode OpenMenu;
 
@@ -82,20 +80,6 @@ public class Orchestrator : MonoBehaviour
         ismenu = false;
         menu.SetActive(false);
     }
-    private void Start()
-    {
-        foreach (MyMonoBehaviour script in scripts)
-        {
-            script.myStart();
-        }
-        cam.GetComponent<FollowCamera>().Focus(inici);
-        Time.timeScale = 0;
-        if (playerMovement == null)
-            playerMovement = player.GetComponent<PlayerMovement>();
-        playerMovement.PlayerStart();
-        playerMovement.setIdle(true);
-        ShowMenu();
-    }
     public void IncrementScoreWithCoins(int score)
     {
         puntos += score;
@@ -106,18 +90,6 @@ public class Orchestrator : MonoBehaviour
     {
         eS.UpdateTimes(Time.deltaTime, playerMovement.distance);
         eS.checkEvents(playerMovement.distance, playerMovement.lateralDistance, playerMovement.transform.position.y);
-        foreach (MyMonoBehaviour script in scripts)
-        {
-            if(script.pausable)
-            {
-                if (!ismenu)
-                    script.myUpdate();
-            }
-            else
-            {
-                script.myUpdate();
-            }
-        }
         if (player.transform.position.y < deathHeight)
         {
             eS.Restart();
@@ -160,16 +132,20 @@ public class Orchestrator : MonoBehaviour
         }
      
     }
+    void Start()
+    {
+        cam.GetComponent<FollowCamera>().Focus(inici);
+        Time.timeScale = 0;
+        if (playerMovement == null)
+            playerMovement = player.GetComponent<PlayerMovement>();
+        playerMovement.PlayerStart();
+        playerMovement.setIdle(true);
+        ShowMenu();
+    }
     public void stopGame()
     {
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         # endif
     }
-}
-public class MyMonoBehaviour : MonoBehaviour
-{
-    public bool pausable = true;
-    public virtual void myStart() { }
-    public virtual void myUpdate() { }
 }
