@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -28,18 +29,16 @@ public class Coin : MonoBehaviour
         transform.Rotate(0, rotationSpeed, 0, Space.World);
     }
 
-    void OnTriggerEnter(Collider other)
+    
+    public void coinCollectorEvent(uint coinId, bool success)
     {
-        // Comprobar si la colisión es con el jugador
-        if (other.CompareTag("Player"))
+        if (success)
         {
             coinFX.Play();
-            // Aumentar la puntuación
-            orchestrator?.IncrementScoreWithCoins(scoreValue);
-
-            // Desactivar la moneda
+            orchestrator.IncrementScoreWithCoins(scoreValue);
             coinPool.ReturnCoin(gameObject);
         }
+        //else contador i eliminar la moneda
     }
 
 }

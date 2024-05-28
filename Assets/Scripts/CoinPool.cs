@@ -56,7 +56,7 @@ public class CoinPool : MonoBehaviour
         activeCoins = coinPool.CountActive;
         unactiveCoins = coinPool.CountInactive;
         totalCoins = coinPool.CountAll;
-        checkPositionCoins();
+        //checkPositionCoins();
     }
     public void ReturnCoin(GameObject coin)
     {
@@ -74,7 +74,7 @@ public class CoinPool : MonoBehaviour
             coinPool.Release(coin);
         }
     }
-    public void checkPositionCoins()
+   /* public void checkPositionCoins()
     {
         List<GameObject> coinsToRemove = new List<GameObject>();
         foreach (GameObject coin in CoinList)
@@ -91,7 +91,7 @@ public class CoinPool : MonoBehaviour
         {
             coinPool.Release(coin);
         }
-    }
+    }*/
     public GameObject RequestCoin()
     {
         return coinPool.Get();
