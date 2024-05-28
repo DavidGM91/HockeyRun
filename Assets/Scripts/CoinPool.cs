@@ -65,7 +65,7 @@ public class CoinPool : MonoBehaviour
             coinPool.Release(coin);
         }
     }
-    public void checkPositionCoins()
+   /* public void checkPositionCoins()
     {
         List<GameObject> coinsToRemove = new List<GameObject>();
         foreach (GameObject coin in CoinList)
@@ -82,7 +82,7 @@ public class CoinPool : MonoBehaviour
         {
             coinPool.Release(coin);
         }
-    }
+    }*/
     public GameObject RequestCoin()
     {
         return coinPool.Get();

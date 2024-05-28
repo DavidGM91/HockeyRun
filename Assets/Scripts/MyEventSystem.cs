@@ -106,6 +106,12 @@ public class MyEventSystem : MonoBehaviour
                 marker.GetComponent<Renderer>().material.color = Color.green;
                 marker.transform.position = new Vector3(-e.Distance, 3.5f, 1f);
             }
+            else if (e is MyHeightAreaEvent)
+            {
+                MyHeightAreaEvent myHeightAreaEvent = (MyHeightAreaEvent)e;
+                marker.GetComponent<Renderer>().material.color = Color.magenta;
+                marker.transform.position = new Vector3(-e.Distance, myHeightAreaEvent.initialHeight, -myHeightAreaEvent.initialAreaPos);
+            }
             else
             {
                 marker.GetComponent<Renderer>().material.color = Color.yellow;
@@ -347,8 +353,8 @@ public class MyEvent
 }
 public class MyAreaEvent : MyEvent
 {
-    private float initialAreaPos;
-    private float finalAreaPos;
+    public float initialAreaPos;
+    public float finalAreaPos;
     public MyAreaEvent(string name, float distance, Action<uint, bool> callback, float initialAreaPos, float finalAreaPos) : base(name, distance, callback)
     {
         this.initialAreaPos = initialAreaPos;
@@ -380,10 +386,10 @@ public class MyAreaEvent : MyEvent
 }
 public class MyHeightAreaEvent : MyEvent
 {
-    private float initialAreaPos;
-    private float finalAreaPos;
-    private float initialHeight;
-    private float finalHeight;
+    public float initialAreaPos;
+    public float finalAreaPos;
+    public float initialHeight;
+    public float finalHeight;
     public MyHeightAreaEvent(string name, float distance, Action<uint, bool> callback, float initialAreaPos, float finalAreaPos,float initialHeight, float finalHeight) : base(name, distance, callback)
     {
         this.initialAreaPos = initialAreaPos;

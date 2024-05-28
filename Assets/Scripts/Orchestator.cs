@@ -16,6 +16,8 @@ public class Orchestrator : MonoBehaviour
 
     public GameObject menu;
     public GameObject customizationMenu;
+    //public GameObject creditsPanel;
+    //public GameObject instructionsPanel;
 
     public MyMonoBehaviour[] scripts;
 
