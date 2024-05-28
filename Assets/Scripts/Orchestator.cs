@@ -103,7 +103,7 @@ public class Orchestrator : MonoBehaviour
     void Update()
     {
         eS.UpdateTimes(Time.deltaTime, playerMovement.distance);
-        eS.checkEvents(playerMovement.distance, playerMovement.lateralDistance);
+        eS.checkEvents(playerMovement.distance, playerMovement.lateralDistance, playerMovement.transform.position.y);
         foreach (MyMonoBehaviour script in scripts)
         {
             if(script.pausable)

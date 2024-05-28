@@ -138,7 +138,7 @@ public class MyEventSystem : MonoBehaviour
         }
         return ID;
     }
-    public void checkEvents(float distance, float pos)
+    public void checkEvents(float distance, float pos, float altura)
     {
         uint index;
         MyEvent.checkResult result = MyEvent.checkResult.Success;
@@ -244,6 +244,22 @@ public class MyEventSystem : MonoBehaviour
                     events.Remove(next);
                 }
             }
+            else if (next is MyHeightAreaEvent)
+            {
+                MyHeightAreaEvent area = (MyHeightAreaEvent)next;
+                result = area.checkEvent(distance, pos, altura);
+                index = area.ID;
+                if (result == MyEvent.checkResult.Success)
+                {
+                    area.callBack(index, true);
+                    events.Remove(next);
+                }
+                else if (result == MyEvent.checkResult.Fail)
+                {
+                    area.callBack(index, false);
+                    events.Remove(next);
+                }
+            }   
             else if (next is MyEvent)
             {
                 result = next.checkEvent(distance);
@@ -330,6 +346,45 @@ public class MyAreaEvent : MyEvent
         return checkResult.NotYet;
     }
     public void copyFrom(MyAreaEvent e)
+    {
+        base.copyFrom(e);
+        initialAreaPos = e.initialAreaPos;
+        finalAreaPos = e.finalAreaPos;
+    }
+}
+public class MyHeightAreaEvent : MyEvent
+{
+    private float initialAreaPos;
+    private float finalAreaPos;
+    private float initialHeight;
+    private float finalHeight;
+    public MyHeightAreaEvent(string name, float distance, Action<uint, bool> callback, float initialAreaPos, float finalAreaPos,float initialHeight, float finalHeight) : base(name, distance, callback)
+    {
+        this.initialAreaPos = initialAreaPos;
+        this.finalAreaPos = finalAreaPos;
+        this.initialHeight = initialHeight;
+        this.finalHeight = finalHeight;
+    }
+    public MyHeightAreaEvent(MyHeightAreaEvent e) : base(e)
+    {
+        initialAreaPos = e.initialAreaPos;
+        finalAreaPos = e.finalAreaPos;
+        initialHeight = e.initialHeight;
+        finalHeight = e.finalHeight;
+    }
+    public new checkResult checkEvent(float distance, float areaPos, float altura)
+    {
+        if (distance >= Distance)
+        {
+            if (areaPos >= initialAreaPos && areaPos <= finalAreaPos && altura >= initialHeight && altura <= finalHeight)
+            {
+                return checkResult.Success;
+            }
+            return checkResult.Fail;
+        }
+        return checkResult.NotYet;
+    }
+    public void copyFrom(MyHeightAreaEvent e)
     {
         base.copyFrom(e);
         initialAreaPos = e.initialAreaPos;

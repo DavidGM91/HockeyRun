@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI.Table;
 using Random = UnityEngine.Random;
@@ -239,10 +240,7 @@ public class LevelGenerator : MonoBehaviour
         allowedSectionsNext = newSection.allowedSectionsAfter;
         allowedSectionsNextMaxWeight = newSection.getSectionWeights();
 
-
         currentSection++;
-
-        distance += newSection.lenght;
 
         //Event de neteja
         MyEvent myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * newSection.lenght, SectionEvent);
@@ -257,6 +255,8 @@ public class LevelGenerator : MonoBehaviour
         section.positionYourselfPlease(nextSectionPos);
         section.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
         nextSectionPos = section.GetSpawn(0);
+
+        distance = Vector3.Distance(section.origin.position, section.spawns[0].position);
 
         if(isFirst)
         {
@@ -540,8 +540,6 @@ public class LevelGenerator : MonoBehaviour
             {
                 GenerateNewSection();
             }
-            //Les monedes s'han de generar per secció totes a l'hora, 
-            //ja s'encarrega la resta del codi de garantir que es truca quan cal.
         }
         else
         {
