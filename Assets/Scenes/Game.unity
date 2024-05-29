@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 4d8c0e380adb1f24da69e98a2c903dcc, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -37,8 +37,8 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_Sun: {fileID: 1806105836}
+  m_IndirectSpecularColor: {r: 0.37656993, g: 0.27839148, b: 0.14397353, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,8 +97,10 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 0daa4efcbb739e649a8d5a9fba153f59,
+    type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 1d5312fb94de4514f8d26996827ba64d,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -134,6 +136,10 @@ PrefabInstance:
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_Name
       value: SM_Prop_Window_01 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 448338, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -174,6 +180,10 @@ PrefabInstance:
     - target: {fileID: 448338, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2381346, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2381346, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_Materials.Array.size
@@ -409,6 +419,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7635826562936255635, guid: f8b6e68192ac24c4a815cc585ddd1822,
         type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: f8b6e68192ac24c4a815cc585ddd1822,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: a2fd8ad16c40fa1488b510360bf39cf3, type: 2}
@@ -416,6 +431,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Porta
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: f8b6e68192ac24c4a815cc585ddd1822,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -470,7 +490,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -533,6 +553,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Apartment_Stack_03
       objectReference: {fileID: 0}
+    - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 493086, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.37
@@ -572,6 +596,10 @@ PrefabInstance:
     - target: {fileID: 493086, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2305222, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2305222, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_Materials.Array.size
@@ -1033,6 +1061,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7635826562936255635, guid: 8004af787ae96854d95804807e61540f,
         type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 8004af787ae96854d95804807e61540f,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: a2fd8ad16c40fa1488b510360bf39cf3, type: 2}
@@ -1040,6 +1073,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Sortida Terrat
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 8004af787ae96854d95804807e61540f,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1284,6 +1322,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Prop_Window_01
       objectReference: {fileID: 0}
+    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 448338, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.12
@@ -1323,6 +1365,10 @@ PrefabInstance:
     - target: {fileID: 448338, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2381346, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2381346, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_Materials.Array.size
@@ -1926,6 +1972,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Shop_Cover_04
       objectReference: {fileID: 0}
+    - target: {fileID: 153730, guid: a5e568db0b228c24589c17f5b015934d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 449414, guid: a5e568db0b228c24589c17f5b015934d, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.6479101
@@ -1977,6 +2027,10 @@ PrefabInstance:
     - target: {fileID: 449414, guid: a5e568db0b228c24589c17f5b015934d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2358958, guid: a5e568db0b228c24589c17f5b015934d, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 64388135655235706, guid: a5e568db0b228c24589c17f5b015934d, type: 3}
@@ -2311,6 +2365,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Prop_Window_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 448338, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.12
@@ -2350,6 +2408,10 @@ PrefabInstance:
     - target: {fileID: 448338, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2381346, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2381346, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_Materials.Array.size
@@ -2544,7 +2606,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1715247945}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 44535e950b9b89a4292ba2e292acc7d6,
         type: 3}
@@ -2559,17 +2621,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 44535e950b9b89a4292ba2e292acc7d6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.0825484
+      value: -2.4999995
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44535e950b9b89a4292ba2e292acc7d6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.50300205
+      value: -0.00013303757
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44535e950b9b89a4292ba2e292acc7d6,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.5001779
+      value: 2.0879693
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44535e950b9b89a4292ba2e292acc7d6,
         type: 3}
@@ -2579,7 +2641,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 44535e950b9b89a4292ba2e292acc7d6,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 44535e950b9b89a4292ba2e292acc7d6,
         type: 3}
@@ -2606,6 +2668,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 44535e950b9b89a4292ba2e292acc7d6,
+        type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 44535e950b9b89a4292ba2e292acc7d6,
         type: 3}
       propertyPath: m_Name
@@ -2626,11 +2693,22 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.0073307753
       objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 44535e950b9b89a4292ba2e292acc7d6,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44535e950b9b89a4292ba2e292acc7d6, type: 3}
+--- !u!4 &1278629934 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 44535e950b9b89a4292ba2e292acc7d6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1278629933}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1284158850
 GameObject:
   m_ObjectHideFlags: 0
@@ -2675,7 +2753,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -2758,7 +2836,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -3104,6 +3182,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Apartment_Stack_03 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 493086, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3143,6 +3225,10 @@ PrefabInstance:
     - target: {fileID: 493086, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2305222, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2305222, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_Materials.Array.size
@@ -3421,7 +3507,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -3591,7 +3677,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -3642,6 +3728,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Prop_Window_01 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 448338, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.12
@@ -3681,6 +3771,10 @@ PrefabInstance:
     - target: {fileID: 448338, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2381346, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2381346, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_Materials.Array.size
@@ -3908,6 +4002,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1278629934}
   - {fileID: 63843031}
   - {fileID: 2042745587}
   - {fileID: 1627282891}
@@ -3970,7 +4065,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 0.9176471, g: 0.8470589, b: 0.6313726, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -4029,13 +4124,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1806105834}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 1.574, y: 4.252, z: 0}
+  m_LocalRotation: {x: 0.0215787, y: -0.9802587, z: 0.19469276, w: 0.02687076}
+  m_LocalPosition: {x: -2.63, y: 4.252, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 22.511, y: -177.253, z: -1.975}
 --- !u!1 &1858300239
 GameObject:
   m_ObjectHideFlags: 0
@@ -4226,7 +4321,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -4277,6 +4372,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Prop_Window_01 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 448338, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.12
@@ -4316,6 +4415,10 @@ PrefabInstance:
     - target: {fileID: 448338, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2381346, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2381346, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_Materials.Array.size
@@ -4486,7 +4589,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73b7ad30f53af874bb817a24ad1d5021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  running: 1
   transCamera: {fileID: 2128433367}
   objective: {fileID: 1479997210}
   offset: {x: 0, y: 1, z: -6}
@@ -8940,7 +9042,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58e6aa3448bd9c34393c14c716fe368c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  running: 1
   BodyParent: {fileID: 5826512331734614150}
   HairsParent: {fileID: 2341558974034954747}
   Skins:
@@ -11954,5 +12055,4 @@ SceneRoots:
   - {fileID: 137485681}
   - {fileID: 978548798}
   - {fileID: 57140522}
-  - {fileID: 1278629933}
   - {fileID: 429158079}

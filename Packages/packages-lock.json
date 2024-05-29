@@ -7,6 +7,15 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.hfarhan37.simple-toony-urp": {
+      "version": "https://github.com/hfarhan37/Simple-Toony-URP.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.render-pipelines.universal": "14.0.8"
+      },
+      "hash": "7153066c4394de5cbf0f16cb36032bec9c1709c7"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
