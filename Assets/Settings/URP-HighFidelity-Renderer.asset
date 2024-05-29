@@ -19,12 +19,12 @@ MonoBehaviour:
     AfterOpaque: 0
     Source: 1
     NormalSamples: 1
-    Intensity: 0.5
+    Intensity: 1
     DirectLightingStrength: 0.25
-    Radius: 0.25
+    Radius: 0.5
     Samples: 0
     BlurQuality: 0
-    Falloff: 100
+    Falloff: 50
     SampleCount: -1
   m_BlueNoise256Textures:
   - {fileID: 2800000, guid: 36f118343fc974119bee3d09e2111500, type: 3}
@@ -113,8 +113,7 @@ MonoBehaviour:
   injectionPoint: 550
   fetchColorBuffer: 1
   requirements: 7
-  passMaterial: {fileID: -876546973899608171, guid: bf3d84b71653d6e49a82a0d6985c0839,
-    type: 3}
+  passMaterial: {fileID: 2100000, guid: c0b9c505518d3694e8589cc810911220, type: 2}
   passIndex: 0
   bindDepthStencilAttachment: 0
   m_Version: 1

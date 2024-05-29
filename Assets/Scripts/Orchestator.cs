@@ -73,7 +73,6 @@ public class Orchestrator : MonoBehaviour
     }
     public void HideMenu()
     {
-        cam.GetComponent<FollowCamera>().Focus(player.GetComponent<Transform>());
         Time.timeScale = 1;
         scoreText.enabled = true;
         playerMovement.enabled = true;
@@ -93,8 +92,8 @@ public class Orchestrator : MonoBehaviour
         if (player.transform.position.y < deathHeight)
         {
             eS.Restart();
-            levelGenerator.Regenerate();
             coinPool.Restart();
+            levelGenerator.Regenerate();
             playerMovement.Restart();
             puntos = 0;
         }

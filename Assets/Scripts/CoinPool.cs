@@ -65,24 +65,6 @@ public class CoinPool : MonoBehaviour
             coinPool.Release(coin);
         }
     }
-   /* public void checkPositionCoins()
-    {
-        List<GameObject> coinsToRemove = new List<GameObject>();
-        foreach (GameObject coin in CoinList)
-        {
-            Vector3 playerForward = playerTransform.forward;
-            Vector3 playerPosition = playerTransform.position;
-
-            if (Vector3.Dot(coin.transform.position - playerPosition, playerForward) < 0)
-            {
-                coinsToRemove.Add(coin);
-            }
-        }
-        foreach (GameObject coin in coinsToRemove)
-        {
-            coinPool.Release(coin);
-        }
-    }*/
     public GameObject RequestCoin()
     {
         return coinPool.Get();
