@@ -695,6 +695,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 243317243}
+  - component: {fileID: 243317245}
+  - component: {fileID: 243317244}
   m_Layer: 0
   m_Name: OldLevelAnchor
   m_TagString: Untagged
@@ -717,6 +719,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &243317244
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243317242}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &243317245
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243317242}
+  m_Enabled: 0
+  m_CastShadows: 0
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d85b0c991d7ab78488a309346114f2f4, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &253101778
 GameObject:
   m_ObjectHideFlags: 0
@@ -1186,6 +1238,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 431269928}
+  - component: {fileID: 431269930}
+  - component: {fileID: 431269929}
   m_Layer: 0
   m_Name: LevelAnchor
   m_TagString: Untagged
@@ -1208,6 +1262,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &431269929
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431269927}
+  m_Enabled: 0
+  m_CastShadows: 0
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 287f5c5596df8d94594c370c2a16aac8, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &431269930
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431269927}
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &505677649
 GameObject:
   m_ObjectHideFlags: 0
@@ -3153,7 +3257,7 @@ MonoBehaviour:
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 0
     associatedID: 0
-    lenght: 5
+    length: -1
     type: 0
   - name: 1 Straight Roof
     obj: {fileID: 595669403144326773, guid: 35cf5d134a0f06045b4da9ec45035ee7, type: 3}
@@ -3174,7 +3278,7 @@ MonoBehaviour:
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 0
     associatedID: 0
-    lenght: 5
+    length: -1
     type: 0
   - name: 2 EndRoof
     obj: {fileID: 5903670605623951284, guid: db1538627398969489aaea58ebf6cdb0, type: 3}
@@ -3182,12 +3286,16 @@ MonoBehaviour:
     rot: {x: 0, y: 0, z: 0, w: 1}
     allowedSectionsAfter:
     - name: 3 Void
-      value: {x: 3, y: 1}
+      value: {x: 3, y: 2}
+    - name: 7 Cartell R
+      value: {x: 7, y: 1}
+    - name: 8 Cartell L
+      value: {x: 8, y: 1}
     allowedObstacles: 
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 0
     associatedID: 0
-    lenght: 5
+    length: -1
     type: 1
   - name: 3 Void
     obj: {fileID: 192617452447761226, guid: 4d3b79eb239963841aa7cb62e6dcd35a, type: 3}
@@ -3200,7 +3308,7 @@ MonoBehaviour:
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 0
     associatedID: 0
-    lenght: 7
+    length: -1
     type: 0
   - name: 4 Rturn
     obj: {fileID: 3116529689570988212, guid: df1acb5825c25e24b82a10a996e78072, type: 3}
@@ -3215,7 +3323,7 @@ MonoBehaviour:
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 0
     associatedID: 0
-    lenght: 7
+    length: -1
     type: 2
   - name: 5 Lturn
     obj: {fileID: 3854902001279634877, guid: c2200a2016d3eab4a9818d4969f21810, type: 3}
@@ -3230,7 +3338,7 @@ MonoBehaviour:
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 0
     associatedID: 0
-    lenght: 7
+    length: -1
     type: 3
   - name: 6 TSplit
     obj: {fileID: 7120036636223300838, guid: 4e824261584e4574c9d595874e0386ad, type: 3}
@@ -3245,8 +3353,34 @@ MonoBehaviour:
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 0
     associatedID: 0
-    lenght: 7
+    length: -1
     type: 4
+  - name: 7 Cartell R
+    obj: {fileID: 192617452447761226, guid: 6b64d90627529db4ca2915c2bd540cdb, type: 3}
+    pos: {x: -0.5, y: 0, z: 0}
+    rot: {x: 0, y: 0, z: 0, w: 1}
+    allowedSectionsAfter:
+    - name: 0 StartRoof
+      value: {x: 0, y: 1}
+    allowedObstacles: 
+    levelPos: {x: 0, y: 0, z: 0}
+    coinSides: 0
+    associatedID: 0
+    length: -1
+    type: 0
+  - name: 8 Cartell L
+    obj: {fileID: 192617452447761226, guid: 76a7a531185c2854792e345c2dad780f, type: 3}
+    pos: {x: -0.5, y: 0, z: 0}
+    rot: {x: 0, y: 0, z: 0, w: 1}
+    allowedSectionsAfter:
+    - name: 0 StartRoof
+      value: {x: 0, y: 1}
+    allowedObstacles: 
+    levelPos: {x: 0, y: 0, z: 0}
+    coinSides: 0
+    associatedID: 0
+    length: -1
+    type: 0
   obstacles: []
 --- !u!4 &1386186829
 Transform:
@@ -3774,7 +3908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b19a470c511453541aa451ba1c5c949a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
 --- !u!1 &1627282890
 GameObject:
   m_ObjectHideFlags: 0
@@ -4290,7 +4424,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1858300240
 Transform:
   m_ObjectHideFlags: 0
@@ -4596,7 +4730,7 @@ GameObject:
   - component: {fileID: 2128433368}
   m_Layer: 0
   m_Name: Main Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4843,14 +4977,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc03671cc8a80e4468c36f19144a3b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lateralSpace: 5
+  debug: 0
+  lateralSpace: 7
   forwardSpeed: 9
   lateralSpeed: 4
   speedIncreasePerSecond: 0.01
   firstAnchor: {fileID: 431269928}
   secondAnchor: {fileID: 243317243}
   startPos: {fileID: 190979193}
-  distance: 3.61
+  prevDistance: 0
   lateralDistance: 0
   animator: {fileID: 999096304}
   upKey: 32
@@ -4863,6 +4998,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 65
+  anim: 0
   coyoteTime: 0.25
   lerpDuration: 1
 --- !u!1001 &1513214840887413708

@@ -47,12 +47,12 @@ public class FollowCamera : MonoBehaviour {
     {
         Vector3 Pos = offset + objective.position;
         Pos.x = 2;
-        transCamera.position = Pos;
+        transform.position = Pos;
                
         if(rotating) { 
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / rotationTime); // valor normalitzat
-            transCamera.rotation = Quaternion.Slerp(originalRot, toRotate, t);
+            transform.rotation = Quaternion.Slerp(originalRot, toRotate, t);
             if(elapsed >= rotationTime)
             {
                 rotating = false;
