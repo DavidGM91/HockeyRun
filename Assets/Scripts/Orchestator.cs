@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,11 +14,15 @@ public class Orchestrator : MonoBehaviour
     public MyEventSystem eS;
 
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI instructionsText;
+    public TextMeshProUGUI creditsText;
+
+
 
     public GameObject menu;
     public GameObject customizationMenu;
-    //public GameObject creditsPanel;
-    //public GameObject instructionsPanel;
+    public GameObject creditsPanel;
+    public GameObject instructionsPanel;
 
 
     public KeyCode OpenMenu;
@@ -70,6 +75,8 @@ public class Orchestrator : MonoBehaviour
         scoreText.enabled = false;
         ismenu = true;
         menu.SetActive(true);
+        instructionsPanel.SetActive(false);
+        creditsPanel.SetActive(false);
     }
     public void HideMenu()
     {
@@ -85,6 +92,40 @@ public class Orchestrator : MonoBehaviour
         //scoreText.text = "Score: " + puntos;
     }
     // Update is called once per frame
+
+    public void ShowInstructions()
+    {
+        menu.SetActive(false);
+        instructionsPanel.SetActive(true);
+        instructionsText.gameObject.SetActive(true);
+    }
+
+    public void HideInstructions()
+    {
+        instructionsPanel.SetActive(false);
+        menu.SetActive(true);
+        instructionsText.gameObject.SetActive(false);
+    }
+
+    public void ShowCredits()
+    {
+        menu.SetActive(false);
+        creditsPanel.SetActive(true);
+    }
+
+    public void HideCredits()
+    {
+        creditsPanel.SetActive(false);
+        menu.SetActive(true);
+    }
+
+    public void BackMenu()
+    {
+        menu.SetActive(true);
+        creditsPanel.SetActive(false) ;
+        instructionsPanel.SetActive(false);
+
+    }
     void Update()
     {
         eS.UpdateTimes(Time.deltaTime, playerMovement.distance);
