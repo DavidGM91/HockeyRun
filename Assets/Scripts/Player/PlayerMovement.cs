@@ -15,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform secondAnchor;
     public Transform startPos;
 
-    private Transform anchor = null;
+    public Transform anchor = null;
     private Transform oldAnchor = null;
     private Vector3 oldPos;
 
@@ -94,7 +94,23 @@ public class PlayerMovement : MonoBehaviour
         
         return new Tuple<Vector3, Quaternion>(result, Quaternion.Lerp(oldAnchor.rotation, anchor.rotation, t));
     }
-
+    private void Awake()
+    {
+        PlayerStart();
+        rb = GetComponent<Rigidbody>();
+        if (anchor == null)
+        {
+            anchor = new GameObject().transform;
+            oldAnchor = new GameObject().transform;
+            anchor.position = firstAnchor.position;
+            anchor.rotation = firstAnchor.rotation;
+            oldAnchor.position = secondAnchor.position;
+            oldAnchor.rotation = secondAnchor.rotation;
+        }
+        lateralDistance = lateralSpace / 2;
+        forwardDistance = -startPos.position.x;
+        transform.position = startPos.position;
+    }
     void Start()
     {
         PlayerStart();

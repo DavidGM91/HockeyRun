@@ -6,7 +6,7 @@ using UnityEngine;
 public class Orchestrator : MonoBehaviour
 {
     public GameObject player;
-    public Transform inici;
+    
     public GameObject cam;
     public LevelGenerator levelGenerator;
     public CoinPool coinPool;
@@ -24,6 +24,13 @@ public class Orchestrator : MonoBehaviour
     public GameObject creditsPanel;
     public GameObject instructionsPanel;
 
+    public Vector3 playerCamOffset = new Vector3(6, 3, 0);
+
+    public Transform inici;
+    public Vector3 iniciCamOffset = new Vector3(0, 6, -12);
+
+    public Vector3 customizeCamOffset = new Vector3(-3, 0.5f, 3);
+
 
     public KeyCode OpenMenu;
 
@@ -36,15 +43,13 @@ public class Orchestrator : MonoBehaviour
     private int puntos = 0;
     private float acumulatedTime = 0;
 
-    private Vector3 playerOffset = new Vector3(0, 6, -12);
-
     public void Play()
     {
         if (playerMovement == null)
             playerMovement = player.GetComponent<PlayerMovement>();
         playerMovement.setIdle(false);
-        cam.GetComponent<FollowCamera>().Focus(player.transform);
-        cam.GetComponent<FollowCamera>().AdjustCamera(playerOffset, 0.5f);
+        cam.GetComponent<FollowCamera>().Focus(player.transform, true);
+        cam.GetComponent<FollowCamera>().AdjustCamera(playerCamOffset, 0.5f);
         HideMenu();
     }
     public void ShowCustomization()
@@ -53,7 +58,7 @@ public class Orchestrator : MonoBehaviour
             playerMovement = player.GetComponent<PlayerMovement>();
         playerMovement.setIdle(true);
         cam.GetComponent<FollowCamera>().Focus(player.transform);
-        cam.GetComponent<FollowCamera>().AdjustCamera(new Vector3(0, 0.5f, 3), 1);
+        cam.GetComponent<FollowCamera>().AdjustCamera(customizeCamOffset, 1);
         //TODO Camera shows player front
         menu.SetActive(false);
         customizationMenu.SetActive(true);
@@ -63,14 +68,14 @@ public class Orchestrator : MonoBehaviour
         if (playerMovement == null)
             playerMovement = player.GetComponent<PlayerMovement>();
         playerMovement.setIdle(false);
-        cam.GetComponent<FollowCamera>().AdjustCamera(playerOffset, 1);
+        cam.GetComponent<FollowCamera>().AdjustCamera(playerCamOffset, 1);
         //TODO Camera shows player front
         menu.SetActive(true);
         customizationMenu.SetActive(false);
     }
     public void ShowMenu()
     {
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
         playerMovement.enabled = false;
         scoreText.enabled = false;
         ismenu = true;
@@ -80,7 +85,7 @@ public class Orchestrator : MonoBehaviour
     }
     public void HideMenu()
     {
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
         scoreText.enabled = true;
         playerMovement.enabled = true;
         ismenu = false;
@@ -174,7 +179,7 @@ public class Orchestrator : MonoBehaviour
     void Start()
     {
         cam.GetComponent<FollowCamera>().Focus(inici);
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
         if (playerMovement == null)
             playerMovement = player.GetComponent<PlayerMovement>();
         playerMovement.PlayerStart();

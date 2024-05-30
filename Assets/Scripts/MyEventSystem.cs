@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Timeline;
+using UnityEngine.UI;
 
 public class MyEventSystem : MonoBehaviour
 {
-
     public bool debug = true;
     public class EventDistanceComparer : IComparer<MyEvent>
     {
@@ -16,11 +15,15 @@ public class MyEventSystem : MonoBehaviour
         }
     }
 
+    [SerializeField]
+    private GameObject eventMapCam;
+
     SortedSet<MyEvent> events = new SortedSet<MyEvent>(new EventDistanceComparer());
     private uint nextID = 1;
     private List<MyEvent> tickingEvents = new List<MyEvent>();
     private GameObject playerMarker;
     private GameObject levelMarker;
+    
 
     private Dictionary<uint, GameObject> pilotesQueSonDeBones = new Dictionary<uint, GameObject>();
 
@@ -34,6 +37,11 @@ public class MyEventSystem : MonoBehaviour
             levelMarker = GameObject.CreatePrimitive(PrimitiveType.Cube);
             levelMarker.name = "Level";
             levelMarker.GetComponent<Renderer>().material.color = Color.white;
+
+            eventMapCam.transform.parent = playerMarker.transform;
+            eventMapCam.transform.localPosition = new Vector3(0, 10, 0);
+            eventMapCam.transform.LookAt(playerMarker.transform);
+            eventMapCam.transform.localPosition = new Vector3(-10, 10, 0);
         }
     }
     public void DebugLevelMarker(Vector3 pos)

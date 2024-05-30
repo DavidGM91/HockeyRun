@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6144831377925653288}
   - component: {fileID: 3637052468196713362}
   - component: {fileID: 8025044155972739301}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CornerRoof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 5031258157173165561}
   - component: {fileID: 7855880834945250483}
   - component: {fileID: 6638318900231983143}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CornerRoofInverse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -287,7 +287,7 @@ GameObject:
   - component: {fileID: 8309048186400334661}
   - component: {fileID: 3256369572333019416}
   - component: {fileID: 3342382600957467527}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LeftRoof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -370,7 +370,7 @@ GameObject:
   - component: {fileID: 7805819875698074479}
   - component: {fileID: 1141296004760678190}
   - component: {fileID: 3602652179936623451}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RightRoof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -484,7 +484,7 @@ GameObject:
   - component: {fileID: 4941043982695095273}
   - component: {fileID: 1029395207022511406}
   - component: {fileID: 6091193434976304066}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -567,7 +567,7 @@ GameObject:
   - component: {fileID: 5575334017342919729}
   - component: {fileID: 4951263015267861358}
   - component: {fileID: 3408106371286968373}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LeftRoof (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -650,7 +650,7 @@ GameObject:
   - component: {fileID: 8100536079241833927}
   - component: {fileID: 583390759517559325}
   - component: {fileID: 983771399592375239}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -733,7 +733,7 @@ GameObject:
   - component: {fileID: 4169770448828326051}
   - component: {fileID: 643267701879225553}
   - component: {fileID: 8673168845303564365}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RightRoof (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

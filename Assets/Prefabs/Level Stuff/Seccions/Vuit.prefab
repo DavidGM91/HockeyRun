@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4475408516265517570}
   - component: {fileID: 1480483816845592359}
   - component: {fileID: 2682271831632906447}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Vuit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
