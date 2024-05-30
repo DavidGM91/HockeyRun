@@ -5,9 +5,6 @@ using UnityEngine.Rendering;
 //using static UnityEditor.PlayerSettings; //What is this for?
 
 public class FollowCamera : MonoBehaviour {
-
-    [SerializeField]
-    private Transform transCamera;
     [SerializeField]
     private Transform objective;
     [SerializeField]
@@ -25,8 +22,8 @@ public class FollowCamera : MonoBehaviour {
     public void Focus(Transform obj)
     {
         this.objective = obj;
-        toRotate = Quaternion.LookRotation(objective.position - transCamera.position);
-        originalRot = transCamera.rotation;
+        toRotate = Quaternion.LookRotation(objective.position - transform.position);
+        originalRot = transform.rotation;
         rotating = true;
     }
 
@@ -34,7 +31,7 @@ public class FollowCamera : MonoBehaviour {
         this.offset = offset * dist;
         Vector3 Pos = (offset + objective.position);
         Pos.x = 0;
-        transCamera.position = Pos;
+        transform.position = Pos;
         Focus(this.objective);
     }
 

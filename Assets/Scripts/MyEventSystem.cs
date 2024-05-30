@@ -22,6 +22,8 @@ public class MyEventSystem : MonoBehaviour
     private GameObject playerMarker;
     private GameObject levelMarker;
 
+    private Dictionary<uint, GameObject> pilotesQueSonDeBones = new Dictionary<uint, GameObject>();
+
     private void Start()
     {
         if (debug)
@@ -89,6 +91,7 @@ public class MyEventSystem : MonoBehaviour
         {
             // Create a 3D marker at the distance marked by the event
             GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            pilotesQueSonDeBones.Add(e.ID, marker);
             marker.transform.position = new Vector3(-e.Distance, 2f, 0f);
             marker.name = e.ID+"#Event: " + e.Name +" at "+e.Distance;
             if (e is MyQTEEvent)
@@ -170,6 +173,37 @@ public class MyEventSystem : MonoBehaviour
         if (debug)
         {
             playerMarker.transform.position = new Vector3(-distance, altura, -lateral);
+            List<uint> mandonguilles = new List<uint>();
+            foreach (var pilota in pilotesQueSonDeBones)
+            {
+                bool found = false;
+                foreach (MyEvent nextEvent in tickingEvents)
+                {
+                    if (nextEvent.ID == pilota.Key)
+                    {
+                        found = true;
+                    }
+                }
+                if (!found)
+                {
+                    foreach (MyEvent eventItem in events)
+                    {
+                        if (eventItem.ID == pilota.Key)
+                        {
+                            found = true;
+                        }
+                    }
+                }
+                if (!found)
+                {
+                    Destroy(pilota.Value);
+                    mandonguilles.Add(pilota.Key);
+                }
+            }
+            foreach(uint mandonguilla in mandonguilles)
+            {
+                pilotesQueSonDeBones.Remove(mandonguilla);
+            }
         }
 
         uint index;
@@ -526,5 +560,6 @@ public class MyQTEAreaEvent : MyEvent
         finalAreaPos = e.finalAreaPos;
     }
 }
+
 
 

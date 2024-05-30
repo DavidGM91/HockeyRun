@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +7,7 @@ public class Coin : MonoBehaviour
 {
     public int scoreValue = 10; // Valor de la puntuación que añadirá al colisionar
     public float rotationSpeed = 1; // Velocidad de rotación de la moneda
+    public float timeAfterFail = 1; // Temps que trigarà en desaparèixer la moneda si no s'agafa
     public AudioSource coinFX;
 
     public CoinPool coinPool;
@@ -29,6 +31,16 @@ public class Coin : MonoBehaviour
         transform.Rotate(0, rotationSpeed, 0, Space.World);
     }
 
+    IEnumerator ReturnCoinWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ReturnCoin();
+    }
+
+    public void ReturnCoin()
+    {
+        coinPool.ReturnCoin(gameObject);
+    }
     
     public void coinCollectorEvent(uint coinId, bool success)
     {
@@ -36,9 +48,12 @@ public class Coin : MonoBehaviour
         {
             coinFX.Play();
             orchestrator.IncrementScoreWithCoins(scoreValue);
-            coinPool.ReturnCoin(gameObject);
+            ReturnCoin();
         }
-        //else contador i eliminar la moneda
+        else
+        {
+            ReturnCoinWithDelay(timeAfterFail);
+        }
     }
 
 }

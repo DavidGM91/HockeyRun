@@ -129,7 +129,6 @@ public class Orchestrator : MonoBehaviour
         {
             player.GetComponent<Rigidbody>().useGravity = !player.GetComponent<Rigidbody>().useGravity;
         }
-     
     }
     void Start()
     {

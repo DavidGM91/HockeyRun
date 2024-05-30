@@ -1,25 +1,29 @@
-using JetBrains.Annotations;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
+    public bool debug = false;
+
     public int lateralSpace = 10;
     public float forwardSpeed = 3; // velocitat a la que anirà cap endavant
     public float lateralSpeed = 4; // velocitat a la que anirà cap els costats
     public float speedIncreasePerSecond = 0.1f; // augment de velocitat per cada segon
+
     public Transform firstAnchor;
     public Transform secondAnchor;
     public Transform startPos;
 
     private Transform anchor = null;
     private Transform oldAnchor = null;
+    private Vector3 oldPos;
 
-    public float distance = 5.5f;
+    public float distance
+    {
+        get { return prevDistance + forwardDistance; }
+    }
+    public float prevDistance = 0;
     public float lateralDistance = 0;
     private float forwardDistance = 0;
 
@@ -42,10 +46,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     LayerMask groundMask;
 
-    private enum EAnims
+    public enum EAnims
     {
-        JumpStart ,
+        JumpStart,
         JumpEnd,
+        Forward,
         PushLeft,
         PushRight,
         RotateLeft,
@@ -54,6 +59,8 @@ public class PlayerMovement : MonoBehaviour
         Hit,
         GameOver
     }
+    [HideInInspector]
+    public EAnims anim;
 
     private float _forwardSpeed = -1; // Copia de la velocitat a la que anirà cap endavant
     private float _lateralSpeed = -1; // Copia de la velocitat a la que anirà cap els costats
@@ -69,19 +76,16 @@ public class PlayerMovement : MonoBehaviour
     private bool isJumping = false;
 
     private float lerpTime = 0;
-    public float lerpDuration = 1;
-
-    private Quaternion originRot;
-    private Quaternion targetRot;
+    public float lerpDuration = 1;  
 
     private Tuple<Vector3,Quaternion> RotationBezier(float t)
     {
         // Per si de cas ens assegurem que t estigui entre 0 i 1
         t = Mathf.Clamp01(t);
 
-        Vector3 p0 = oldAnchor.position - oldAnchor.forward * lateralDistance;
-        Vector3 p1 = oldAnchor.position + oldAnchor.right * 2;
+        Vector3 p0 = oldPos;
         Vector3 p2 = anchor.position - anchor.forward * lateralDistance;
+        Vector3 p1 = Vector3.Lerp(p0, p2, 0.5f) - oldAnchor.right * 2;
 
         // Fem un càlcul de Bezier amb els punts i el t
         Vector3 result = Mathf.Pow(1 - t, 2) * p0 +
@@ -97,13 +101,16 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         if (anchor == null)
         {
-            anchor = firstAnchor;
-            oldAnchor = firstAnchor;
+            anchor = new GameObject().transform;
+            oldAnchor = new GameObject().transform;
+            anchor.position = firstAnchor.position;
+            anchor.rotation = firstAnchor.rotation;
+            oldAnchor.position = secondAnchor.position;
+            oldAnchor.rotation = secondAnchor.rotation;
         }
         lateralDistance = lateralSpace / 2;
-        distance = -startPos.position.x;
+        forwardDistance = -startPos.position.x;
         transform.position = startPos.position;
-        forwardDistance = distance;
     }
     void Update()
     {
@@ -121,9 +128,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (lerpTime <= 0)
         {
-            distance += forwardSpeed * Time.deltaTime;
             forwardDistance += forwardSpeed * Time.deltaTime;
-
             Vector3 newPos = anchor.position - anchor.right * forwardDistance - anchor.forward * lateralDistance;
             newPos.y = transform.position.y;
             transform.position = newPos;
@@ -137,6 +142,7 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = result.Item2;
             if (lerpTime <= 0)
             {
+                prevDistance += forwardDistance;
                 forwardDistance = 0;
             }
         }
@@ -170,13 +176,15 @@ public class PlayerMovement : MonoBehaviour
             coyoteTimeCounter = coyoteTime;
         }
     }
-    private void PlayAnim(EAnims anim)
+    private void PlayAnim(EAnims _anim)
     {
-        animator.SetTrigger(EAnims.GetName(typeof(EAnims), anim));
+        anim = _anim;
+        animator.SetTrigger(EAnims.GetName(typeof(EAnims), _anim));
     }
-    private void StopAnim(EAnims anim)
+    private void StopAnim(EAnims _anim)
     {
-        animator.ResetTrigger(Enum.GetName(typeof(EAnims), anim));
+        anim = EAnims.Forward;
+        animator.ResetTrigger(Enum.GetName(typeof(EAnims), _anim));
     }
     public void setIdle(bool idle)
     {
@@ -205,15 +213,17 @@ public class PlayerMovement : MonoBehaviour
             this.enabled = true;
         }
     }
-    
     public void Restart()
     {
         forwardSpeed = _forwardSpeed;
         lateralSpeed = _lateralSpeed;
         forwardDistance = -startPos.position.x;
+        prevDistance = 0;
         lateralDistance = lateralSpace / 2;
-        distance = -startPos.position.x;
-        anchor = firstAnchor;
+        anchor.position = firstAnchor.position;
+        anchor.rotation = firstAnchor.rotation;
+        oldAnchor.position = secondAnchor.position;
+        oldAnchor.rotation = secondAnchor.rotation;
         transform.position = startPos.position;
         transform.rotation = startPos.rotation;
     }
@@ -226,11 +236,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_lerpDuration != -1)
         {
-            lerpTime = _lerpDuration;
-        }
-        else
-        {
-            lerpTime = lerpDuration;
+            lerpDuration = _lerpDuration;
         }
 
         oldAnchor.position = anchor.position;
@@ -238,23 +244,13 @@ public class PlayerMovement : MonoBehaviour
 
         anchor.position = newAnchor;
         anchor.rotation = rot;
+
+        oldPos = transform.position;
+        lerpTime = lerpDuration * (Vector3.Distance(oldPos, anchor.position - anchor.forward * lateralDistance)/forwardSpeed);
     }
     public void ChangeAnchor(Transform newAnchor, float _lerpDuration = -1)
     {
-        if(_lerpDuration != -1)
-        {
-            lerpTime = _lerpDuration;
-        }
-        else
-        {
-            lerpTime = lerpDuration;
-        }
-
-        oldAnchor.position = anchor.position;
-        oldAnchor.rotation = anchor.rotation;
-
-        anchor.position = newAnchor.position;
-        anchor.rotation = newAnchor.rotation;
+        ChangeAnchor(newAnchor.position, newAnchor.rotation, _lerpDuration);
     }
     // Update is called once per frame
     bool checkGround()

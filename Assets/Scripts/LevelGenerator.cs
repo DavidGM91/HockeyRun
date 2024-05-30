@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -45,7 +46,7 @@ public class LevelGenerator : MonoBehaviour
         [HideInInspector]
         public uint associatedID = 0;
         [HideInInspector]
-        public float lenght = 0;
+        public float length = -1;
 
         public SectionType type;
 
@@ -150,7 +151,6 @@ public class LevelGenerator : MonoBehaviour
         leftRotations.Clear();
         bifur.Clear();
         coinEventList.Clear();
-        coinPool.Restart();
         for (int i = 0; i < sectionsCount; i++)
         {
             GenerateNewSection();
@@ -247,14 +247,22 @@ public class LevelGenerator : MonoBehaviour
         nextSectionPos = section.GetSpawn(0);
 
         //Càlcul de la distància
-        newSection.lenght = Vector3.Distance(section.origin.position, section.spawns[0].position);
-        distance += newSection.lenght;
+        if (newSection.length == -1 && (newSection.type == SectionType.recte || newSection.type == SectionType.final))
+        {
+            newSection.length = Vector3.Distance(section.origin.position, section.spawns[0].position);
+        }
+        else if (newSection.length == -1)
+        {
+            newSection.length = 0;
+        }
+        distance += newSection.length;
 
         //Creació d'event de neteja
-        MyEvent myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * newSection.lenght, SectionEvent);
+        MyEvent myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * ((newSection.length > 0)? newSection.length :2), SectionEvent);
         uint id = eventSystem.AddEvent(myEvent);
         uint id2 = 0;
         levelSections.Add(id, _newSec);
+        _newSec.name = "#" + id + _newSec.name;
 
         //Moviment de les marques //TODO: DEBUG REMOVE
         eventSystem.DebugLevelMarker(new Vector3(-distance, 0, 0));
@@ -263,11 +271,12 @@ public class LevelGenerator : MonoBehaviour
         if (bifurcateCopy)
         {
             rightBifurSects.Add(id);
-            myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * newSection.lenght, SectionEvent);
+            myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * newSection.length, SectionEvent);
             id2 = eventSystem.AddEvent(myEvent);
             leftBifurSects.Add(id2);
             levelSections.Add(id2, Instantiate(newSection.obj));
             section2 = levelSections[id2].GetComponent<SpawnSection>();
+            levelSections[id2].name = "#" + id2 + levelSections[id2].name;
             section2.positionYourselfPlease(nextSectionPos2);
             section2.rotateYourselfAroundYourOriginPlease((levelRot* Quaternion.Euler(0, 180, 0)).eulerAngles);
             nextSectionPos2 = section2.GetSpawn(0);
@@ -298,9 +307,9 @@ public class LevelGenerator : MonoBehaviour
             AddLevelRotation(90);
             bifurcateCopy = true;
             gracePeriodNoRots = minStraightSectionsBetweenRotations;
-            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght*2, TurnRightSectionEvent, KeyCode.A, timeToQTE);
+            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.length*2, TurnRightSectionEvent, KeyCode.D, timeToQTE);
             uint rEventId = eventSystem.AddEvent(myRQTEEvent);
-            MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.lenght*2, TurnLeftSectionEvent, KeyCode.D, timeToQTE);
+            MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.length*2, TurnLeftSectionEvent, KeyCode.A, timeToQTE);
             bifur.Add(new Tuple<uint,uint>(rEventId,eventSystem.AddEvent(myLQTEEvent)));
             justRotatedRight = bifur.Last().Item1;
             justRotatedLeft = bifur.Last().Item2;
@@ -310,14 +319,14 @@ public class LevelGenerator : MonoBehaviour
          {
             AddLevelRotation(90);
             gracePeriodNoRots = minStraightSectionsBetweenRotations;
-            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.lenght, TurnRightSectionEvent, KeyCode.D, timeToQTE);
+            MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.length, TurnRightSectionEvent, KeyCode.D, timeToQTE);
             justRotatedRight = eventSystem.AddEvent(myRQTEEvent);
         }
         else if (newSection.type == SectionType.esquerra)
         {
             AddLevelRotation(-90);
             gracePeriodNoRots = minStraightSectionsBetweenRotations;
-            MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.lenght, TurnLeftSectionEvent, KeyCode.A, timeToQTE);
+            MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.length, TurnLeftSectionEvent, KeyCode.A, timeToQTE);
             justRotatedLeft = eventSystem.AddEvent(myLQTEEvent);
         }
 
@@ -338,6 +347,17 @@ public class LevelGenerator : MonoBehaviour
             }
         }
     }
+
+    IEnumerator waitAndDelete(List<uint> _secs,float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        foreach (var sect in _secs)
+        {
+            Destroy(levelSections[sect]);
+            levelSections.Remove(sect);
+            eventSystem.IgnoreEvent(sect);
+        }
+    }
     public void TurnRightSectionEvent(uint id, bool success)
     {
         Debug.Log("TurnRightSectionEvent "+id+" "+success);
@@ -353,12 +373,7 @@ public class LevelGenerator : MonoBehaviour
                     rightRotations.Remove(id);
                     leftRotations.Remove(bifur[i].Item2);
                     bifurcateCopy = false;
-                    foreach (var sect in leftBifurSects)
-                    {
-                        Destroy(levelSections[sect]);
-                        levelSections.Remove(sect);
-                        eventSystem.IgnoreEvent(sect);
-                    }
+                    waitAndDelete(leftBifurSects, 1.0f);
                     leftBifurSects.Clear();
                     rightBifurSects.Clear();
                     bifur.RemoveAt(i);
@@ -377,6 +392,7 @@ public class LevelGenerator : MonoBehaviour
             if (success)
             {
                 playerMovement.ChangeAnchor(rightRotations[id]);
+                rightRotations.Remove(id);
             }
         }
     }
@@ -395,12 +411,7 @@ public class LevelGenerator : MonoBehaviour
                     rightRotations.Remove(bifur[i].Item1);
                     leftRotations.Remove(id);
                     bifurcateCopy = false;
-                    foreach (var sect in rightBifurSects)
-                    {
-                        Destroy(levelSections[sect]);
-                        levelSections.Remove(sect);
-                        eventSystem.IgnoreEvent(sect);
-                    }
+                    waitAndDelete(rightBifurSects, 1.0f);
                     rightBifurSects.Clear();
                     leftBifurSects.Clear();
                     nextSectionPos = nextSectionPos2;
@@ -422,6 +433,7 @@ public class LevelGenerator : MonoBehaviour
             if (success)
             {
                 playerMovement.ChangeAnchor(leftRotations[id]);
+                leftRotations.Remove(id);
             }
         }
     }
