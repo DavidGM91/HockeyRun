@@ -7,7 +7,7 @@ using System.Collections;
 public class IKControl : MonoBehaviour
 {
 
-    protected Animator animator;
+    public Animator animator;
 
     public Transform rightHandObj = null;
     public Transform leftHandObj = null;
@@ -17,7 +17,8 @@ public class IKControl : MonoBehaviour
 
     void Start()
     {
-        animator = GetComponent<Animator>();
+        if(animator == null)
+            animator = GetComponent<Animator>();
     }
 
     //a callback for calculating IK
