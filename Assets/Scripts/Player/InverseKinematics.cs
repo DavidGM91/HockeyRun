@@ -20,6 +20,11 @@ public class IKControl : MonoBehaviour
         if(animator == null)
             animator = GetComponent<Animator>();
     }
+    void Update()
+    {
+        // Update is called once per frame
+        animator.Update(0);
+    }
 
     //a callback for calculating IK
     void OnAnimatorIK()

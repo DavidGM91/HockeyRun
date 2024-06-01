@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,8 @@ public class MyEventSystem : MonoBehaviour
 
     [SerializeField]
     private GameObject eventMapCam;
+    [SerializeField]
+    private GameObject eventMap;
 
     SortedSet<MyEvent> events = new SortedSet<MyEvent>(new EventDistanceComparer());
     private uint nextID = 1;
@@ -31,6 +34,8 @@ public class MyEventSystem : MonoBehaviour
     {
         if (debug)
         {
+            eventMap.SetActive(true);
+            eventMapCam.SetActive(true);
             playerMarker = GameObject.CreatePrimitive(PrimitiveType.Cube);
             playerMarker.name = "Player";
             playerMarker.GetComponent<Renderer>().material.color = Color.black;
@@ -42,6 +47,11 @@ public class MyEventSystem : MonoBehaviour
             eventMapCam.transform.localPosition = new Vector3(0, 10, 0);
             eventMapCam.transform.LookAt(playerMarker.transform);
             eventMapCam.transform.localPosition = new Vector3(-10, 10, 0);
+        }
+        else
+        {
+            eventMap.SetActive(false);
+            eventMapCam.SetActive(false);
         }
     }
     public void DebugLevelMarker(Vector3 pos)
@@ -105,17 +115,18 @@ public class MyEventSystem : MonoBehaviour
             if (e is MyQTEEvent)
             {
                 marker.GetComponent<Renderer>().material.color = Color.red;
-                marker.transform.position = new Vector3(-e.Distance, 2.5f, 1f);
+                marker.transform.position = new Vector3(-e.Distance, 2.5f,-0.5f);
             }
             else if (e is MyQTEAreaEvent)
             {
                 marker.GetComponent<Renderer>().material.color = Color.blue;
-                marker.transform.position = new Vector3(-e.Distance, 3f, 1f);
+                marker.transform.position = new Vector3(-e.Distance, 3f, -1.0f);
             }
             else if (e is MyAreaEvent)
             {
+                MyAreaEvent myAreaEvent = (MyAreaEvent)e;
                 marker.GetComponent<Renderer>().material.color = Color.green;
-                marker.transform.position = new Vector3(-e.Distance, 3.5f, 1f);
+                marker.transform.position = new Vector3(-e.Distance, 3.5f, -myAreaEvent.initialAreaPos);
             }
             else if (e is MyHeightAreaEvent)
             {
@@ -181,6 +192,7 @@ public class MyEventSystem : MonoBehaviour
         if (debug)
         {
             playerMarker.transform.position = new Vector3(-distance, altura, -lateral);
+            eventMapCam.transform.position = new Vector3(eventMapCam.transform.position.x, eventMapCam.transform.position.y, -3);
             List<uint> mandonguilles = new List<uint>();
             foreach (var pilota in pilotesQueSonDeBones)
             {

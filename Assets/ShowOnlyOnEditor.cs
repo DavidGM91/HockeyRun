@@ -7,17 +7,19 @@ public class ShowOnlyOnEditor : MonoBehaviour
 {
     [SerializeField]
     private Color gizmoColor = Color.yellow;
+    [SerializeField]
+    private Renderer meshRenderer;
     // Start is called before the first frame update
     void Start()
     {
         if(Application.isEditor)
         {
-            gameObject.GetComponent<MeshRenderer>().enabled = true;
-            gameObject.GetComponent<MeshRenderer>().material.color = gizmoColor;
+            meshRenderer.enabled = true;
+            meshRenderer.material.SetColor("_BaseColor",gizmoColor);
         }
         else
         {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            meshRenderer.enabled = false;
         }
     }
 
@@ -26,12 +28,12 @@ public class ShowOnlyOnEditor : MonoBehaviour
     {
         if (Application.isEditor)
         {
-            gameObject.GetComponent<MeshRenderer>().enabled = true;
-            gameObject.GetComponent<MeshRenderer>().material.color = gizmoColor;
+            meshRenderer.enabled = true;
+            meshRenderer.material.SetColor("_BaseColor", gizmoColor);
         }
         else
         {
-            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            meshRenderer.enabled = false;
         }
     }
 }

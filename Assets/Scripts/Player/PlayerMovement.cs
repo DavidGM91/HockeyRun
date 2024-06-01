@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     }
     public float prevDistance = 0;
     public float lateralDistance = 0;
-    private float forwardDistance = 0;
+    public float forwardDistance = 0;
 
     [SerializeField]
     public Animator animator;

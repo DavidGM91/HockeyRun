@@ -258,7 +258,7 @@ public class LevelGenerator : MonoBehaviour
         distance += newSection.length;
 
         //Creació d'event de neteja
-        MyEvent myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * ((newSection.length > 0)? newSection.length :2), SectionEvent);
+        MyEvent myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * ((newSection.length > 0)? newSection.length :10), SectionEvent);
         uint id = eventSystem.AddEvent(myEvent);
         uint id2 = 0;
         levelSections.Add(id, _newSec);
@@ -511,9 +511,9 @@ public class LevelGenerator : MonoBehaviour
                         break;
                 }
                 coin.transform.position = section + coinPosition;
-                transform.RotateAround(section, Vector3.up, levelRot.eulerAngles.y);
+                coin.transform.RotateAround(section, Vector3.up, levelRot.eulerAngles.y);
                 //coin.transform.SetParent(sectionPos, true);
-                MyHeightAreaEvent coinEve = new MyHeightAreaEvent("coinevent", distance - nextCoinPos, coinCollectorEv, -coinPosition.z - 0.5f, -coinPosition.z + 0.5f, coinPosition.y - 1.25f, coinPosition.y + 1.25f);
+                MyHeightAreaEvent coinEve = new MyHeightAreaEvent("coinevent", distance - nextCoinPos, coinCollectorEv, -coinPosition.z - 0.8f, -coinPosition.z + 0.8f, coinPosition.y - 1.5f, coinPosition.y + 1.5f);
                 uint eventID = eventSystem.AddEvent(coinEve);
                 coinEventList.Add(eventID, coin.GetComponent<Coin>());
                 nextCoinPos += 1f; // distancia entre monedas

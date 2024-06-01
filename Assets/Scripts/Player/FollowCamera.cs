@@ -54,16 +54,17 @@ public class FollowCamera : MonoBehaviour {
     {     
         if(isPlayer)
         {
-            transform.localPosition = offset + anchor.forward * (playerMovement.lateralSpace/2 - playerMovement.lateralDistance);
+            transform.localPosition = offset + new Vector3(0,0,-playerMovement.lateralSpace/2 + playerMovement.lateralDistance);
+            transform.LookAt((anchor.position - anchor.right * playerMovement.forwardDistance - anchor.forward * playerMovement.lateralSpace/2));
         }
         if(elapsed < rotationTime) { 
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / rotationTime); // valor normalitzat
             transform.rotation = Quaternion.Slerp(originalRot, toRotate, t);
-        }
-        else
-        {
-            transform.LookAt(objective.position);
+            if (elapsed >= rotationTime)
+            {
+                transform.LookAt(objective.position);
+            }
         }
     }
 }
