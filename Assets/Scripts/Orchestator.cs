@@ -102,14 +102,13 @@ public class Orchestrator : MonoBehaviour
     {
         menu.SetActive(false);
         instructionsPanel.SetActive(true);
-        instructionsText.gameObject.SetActive(true);
     }
 
     public void HideInstructions()
     {
         instructionsPanel.SetActive(false);
         menu.SetActive(true);
-        instructionsText.gameObject.SetActive(false);
+       
     }
 
     public void ShowCredits()
