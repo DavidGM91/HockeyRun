@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MyEventSystem : MonoBehaviour
 {
@@ -27,7 +25,6 @@ public class MyEventSystem : MonoBehaviour
     private GameObject playerMarker;
     private GameObject levelMarker;
     
-
     private Dictionary<uint, GameObject> pilotesQueSonDeBones = new Dictionary<uint, GameObject>();
 
     private void Start()

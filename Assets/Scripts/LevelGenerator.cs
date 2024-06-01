@@ -2,10 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI.Table;
-using static UnityEngine.UI.Image;
 using Random = UnityEngine.Random;
 
 [ExecuteAlways]
@@ -40,7 +37,7 @@ public class LevelGenerator : MonoBehaviour
         public Vector3 pos;
         public Quaternion rot;
         public namedValue<Vector2Int>[] allowedSectionsAfter;
-        public int[] allowedObstacles;
+        public namedValue<Vector2Int>[] allowedObstacles;
         public Vector3 levelPos;
         public int coinSides = 0b111111; // 000 -> no coin, 001 -> right, 010 -> middle, 100 -> left if(coinSides & 0b001) -> right
         [HideInInspector]
@@ -60,35 +57,38 @@ public class LevelGenerator : MonoBehaviour
         {
             sectionWeights = weights;
         }
+
+        [HideInInspector]
+        private int obstaclesWeights = 0;
+        public int getObstaclesWeights()
+        {
+            if(obstaclesWeights == 0)
+            {
+                foreach (var obstacle in allowedObstacles)
+                {
+                    obstaclesWeights += obstacle.value.y;
+                }
+            }
+            return obstaclesWeights;
+        }
     }
     [SerializeField]
     public Section[] sections;
 
     [System.Serializable]
-    public enum ObstacleType
-    {
-        lowerObstacle,
-        upperObstacle,
-        middleObstacle,
-        rightObstacle,
-        leftObstacle
-    }
-    [System.Serializable]
     public class obstacle
     {
-        public GameObject obj;
-        public Vector3 scale;
-        public Vector3 pos;
-        public Quaternion rot;
         public string name;
-        public ObstacleType type;
+        public GameObject obj;
+        public int coinsBloqued; // 0 = izquierda 1 = medio 2 = derecha 3 = izquierda flotante , 4 centr..
         public bool isDeadly = false;
     }
     [SerializeField]
-    public List<obstacle> obstacles = new();
+    public obstacle[] obstacles;
     private Dictionary<uint, GameObject> levelSections = new();
     private List<Tuple<uint, uint>> bifur = new();
     private Dictionary<uint, Coin> coinEventList = new();
+    private Dictionary<uint, GameObject> obsEventList = new();
     private Dictionary<uint, Transform> rightRotations = new();
     private Dictionary<uint, Transform> leftRotations = new();
     private List<uint> rightBifurSects = new();
@@ -172,6 +172,8 @@ public class LevelGenerator : MonoBehaviour
                 maxWeight += section.value.y;
             }
         }
+        if (maxWeight == 0)
+            return -1;
         int randomWeight = Random.Range(0, maxWeight+1);
         if(randomWeight >= maxWeight)
             return possibleSections[possibleSections.Length-1].value.x;
@@ -321,6 +323,7 @@ public class LevelGenerator : MonoBehaviour
             gracePeriodNoRots = minStraightSectionsBetweenRotations;
             MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.length, TurnRightSectionEvent, KeyCode.D, timeToQTE);
             justRotatedRight = eventSystem.AddEvent(myRQTEEvent);
+            distance += 0.3f;
         }
         else if (newSection.type == SectionType.esquerra)
         {
@@ -331,13 +334,13 @@ public class LevelGenerator : MonoBehaviour
         }
 
         //OBSTACLES
-        int coinsNext = GenerateObstacles(sectionId, levelSections[id].GetComponent<BoxCollider>());
+        int coinsNext = GenerateObstacles(sectionId, section.origin.position);
 
         //MONEDES
         if (sectionsWithCoins > 0)
         {
             sectionsWithCoins--;
-            GenerateCoins(coinsNext, nextSectionPos);
+            GenerateCoins(coinsNext, section.origin.position);
         }
         else
         {
@@ -347,7 +350,6 @@ public class LevelGenerator : MonoBehaviour
             }
         }
     }
-
     IEnumerator waitAndDelete(List<uint> _secs,float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -446,9 +448,80 @@ public class LevelGenerator : MonoBehaviour
             levelSections.Remove(id);
         }
     }
-    private int GenerateObstacles(int sectionId, BoxCollider section)
+    public void QTEEvent(uint id, bool success)
     {
-        //TODO This
+        if (success)
+        {
+            obsEventList.Remove(id);
+        }
+    }
+
+    public void AreaQTEEvent(uint id, bool success)
+    {
+        if (success)
+        {
+            obsEventList.Remove(id);
+        }
+    }
+
+    public void AreaAlturaEvent(uint id, bool success)
+    {
+        if (success)
+        {
+            obsEventList.Remove(id);
+        }
+    }
+
+    public void AreaEvent(uint id, bool success)
+    {
+        if (success)
+        {
+            obsEventList.Remove(id);
+        }
+    }
+    private int GenerateObstacles(int sectionId, Vector3 anchor)
+    {
+        int obstacleId = GetRandomSelection(sections[sectionId].allowedObstacles, sections[sectionId].getObstaclesWeights());
+        if(obstacleId != -1)
+        {
+            //Crear obstacle
+            GameObject obstacle = Instantiate(obstacles[obstacleId].obj);
+            SpawnObstacle obs = obstacle.GetComponent<SpawnObstacle>();
+            obs.positionYourselfPlease(anchor);
+            obs.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
+
+            //Event
+
+            //TODO Generar events per tipus
+            if(obs.obstacleType == SpawnObstacle.ObstacleType.QTE)
+            {
+                MyQTEEvent myEvent = new MyQTEEvent("QTE", distance - 1, QTEEvent, obs.keyQTE, timeToQTE);
+                uint eventID = eventSystem.AddEvent(myEvent);
+                obsEventList.Add(eventID, obstacle);
+            }
+            else if(obs.obstacleType == SpawnObstacle.ObstacleType.AreaQTE)
+            {
+                //TODO Use GetCollider() to make the event
+                MyQTEAreaEvent myEvent = new MyQTEAreaEvent("AreaQTE", distance - 1, AreaQTEEvent, obs.keyQTE, timeToQTE, 1 ,1);
+                uint eventID = eventSystem.AddEvent(myEvent);
+                obsEventList.Add(eventID, obstacle);
+            }
+            else if(obs.obstacleType == SpawnObstacle.ObstacleType.AreaAltura)
+            {
+                //TODO Use GetCollider() to make the event
+                MyHeightAreaEvent myEvent = new MyHeightAreaEvent("AreaAltura", distance - 1, AreaAlturaEvent,1,1,1,1);
+                uint eventID = eventSystem.AddEvent(myEvent);
+                obsEventList.Add(eventID, obstacle);
+            }
+            else if(obs.obstacleType == SpawnObstacle.ObstacleType.Area)
+            {
+                //TODO Use obs.GetCollider() to make the event
+                MyAreaEvent myEvent = new MyAreaEvent("Area", distance - 1, AreaEvent, 1,1);
+                uint eventID = eventSystem.AddEvent(myEvent);
+                obsEventList.Add(eventID, obstacle);
+            }   
+        }
+
         //TODO Set nextCoinPos
         return 0b111111;
     }
@@ -467,7 +540,7 @@ public class LevelGenerator : MonoBehaviour
             finalCoinSide = possibleCoinSide[randomIndex]; // 0 = izquierda 1 = medio 2 = derecha 3 = izquierda flotante...
         }
 
-        nextCoinPos = -2;
+        nextCoinPos = 0;
 
         // 5 monedes per seccio
         for (int i = 0; i < 5; ++i)
@@ -479,34 +552,34 @@ public class LevelGenerator : MonoBehaviour
                 switch (finalCoinSide)
                 {
                     case 0: // izquierda
-                        coinPosition = new Vector3(nextCoinPos, 1, -5.5f);
+                        coinPosition = new Vector3(-nextCoinPos, 1, -5.5f);
                         break;
                     case 1: // medio
-                        coinPosition = new Vector3(nextCoinPos, 1, -3.5f);
+                        coinPosition = new Vector3(-nextCoinPos, 1, -3.5f);
                         break;
                     case 2: // derecha
-                        coinPosition = new Vector3(nextCoinPos, 1, -1.5f);
+                        coinPosition = new Vector3(-nextCoinPos, 1, -1.5f);
                         break;
                     case 3: // izquierda flotante
-                        if (i == 0) coinPosition = new Vector3(nextCoinPos, 2, -5.5f);
-                        else if (i == 1) coinPosition = new Vector3(nextCoinPos, 2.8f, -5.5f);
-                        else if (i == 2) coinPosition = new Vector3(nextCoinPos, 3, -5.5f);
-                        else if (i == 3) coinPosition = new Vector3(nextCoinPos, 2.8f, -5.5f);
-                        else coinPosition = new Vector3(nextCoinPos, 2, -5.5f);
+                        if (i == 0) coinPosition = new Vector3(-nextCoinPos, 2, -5.5f);
+                        else if (i == 1) coinPosition = new Vector3(-nextCoinPos, 2.8f, -5.5f);
+                        else if (i == 2) coinPosition = new Vector3(-nextCoinPos, 3, -5.5f);
+                        else if (i == 3) coinPosition = new Vector3(-nextCoinPos, 2.8f, -5.5f);
+                        else coinPosition = new Vector3(-nextCoinPos, 2, -5.5f);
                         break;
                     case 4: // medio flotante
-                        if (i == 0) coinPosition = new Vector3(nextCoinPos, 2, -3.5f);
-                        else if (i == 1) coinPosition = new Vector3(nextCoinPos, 2.8f, -3.5f);
-                        else if (i == 2) coinPosition = new Vector3(nextCoinPos, 3, -3.5f);
-                        else if (i == 3) coinPosition = new Vector3(nextCoinPos, 2.8f, -3.5f);
-                        else coinPosition = new Vector3(nextCoinPos, 2, -3.5f);
+                        if (i == 0) coinPosition = new Vector3(-nextCoinPos, 2, -3.5f);
+                        else if (i == 1) coinPosition = new Vector3(-nextCoinPos, 2.8f, -3.5f);
+                        else if (i == 2) coinPosition = new Vector3(-nextCoinPos, 3, -3.5f);
+                        else if (i == 3) coinPosition = new Vector3(-nextCoinPos, 2.8f, -3.5f);
+                        else coinPosition = new Vector3(-nextCoinPos, 2, -3.5f);
                         break;
                     case 5: // derecha flotante
-                        if (i == 0) coinPosition = new Vector3(nextCoinPos, 2, -1.5f);
-                        else if (i == 1) coinPosition = new Vector3(nextCoinPos, 2.8f, -1.5f);
-                        else if (i == 2) coinPosition = new Vector3(nextCoinPos, 3, -1.5f);
-                        else if (i == 3) coinPosition = new Vector3(nextCoinPos, 2.8f, -1.5f);
-                        else coinPosition = new Vector3(nextCoinPos, 2, -1.5f);
+                        if (i == 0) coinPosition = new Vector3(-nextCoinPos, 2, -1.5f);
+                        else if (i == 1) coinPosition = new Vector3(-nextCoinPos, 2.8f, -1.5f);
+                        else if (i == 2) coinPosition = new Vector3(-nextCoinPos, 3, -1.5f);
+                        else if (i == 3) coinPosition = new Vector3(-nextCoinPos, 2.8f, -1.5f);
+                        else coinPosition = new Vector3(-nextCoinPos, 2, -1.5f);
 
                         break;
                 }
@@ -532,16 +605,22 @@ public class LevelGenerator : MonoBehaviour
             // Editor logic
             foreach(var section in sections)
             {
-                foreach(var nextSection in section.allowedSectionsAfter)
+                foreach (var nextSection in section.allowedSectionsAfter)
                 {
-                    if(nextSection.value.x >= sections.Length)
+                    if (nextSection.value.x >= sections.Length)
                     {
-                        //Debug.LogError("Value of "+section.name+ " for "+nextSection.ToString()+" is out of range.");
                         break;
                     }
                     nextSection.name = sections[nextSection.value.x].name;
                 }
-
+                foreach (var nextSection in section.allowedObstacles)
+                {
+                    if (nextSection.value.x >= obstacles.Length)
+                    {
+                        break;
+                    }
+                    nextSection.name = obstacles[nextSection.value.x].name;
+                }
             }
         }
     }
