@@ -4348,7 +4348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b19a470c511453541aa451ba1c5c949a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
   eventMapCam: {fileID: 1858300239}
   eventMap: {fileID: 2107963740}
   nextID: 1
