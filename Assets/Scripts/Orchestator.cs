@@ -153,6 +153,21 @@ public class Orchestrator : MonoBehaviour
         levelGenerator.enabled = true;
         playerMovement.enabled = true;
     }
+
+    public void Kill()
+    {  
+        playerMovement.enabled = false;
+        levelGenerator.enabled = false;
+        coinPool.enabled = false;
+        eS.enabled = false;
+
+
+    }
+
+    public void Hit()
+    {
+
+    }
     void Update()
     {
         eS.UpdateTimes(Time.deltaTime, playerMovement.distance);
