@@ -2,34 +2,15 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public Transform player; // Referencia al transform del jugador
     [SerializeField]
-    private float speed = 15f; // Velocidad de movimiento del enemigo
-
-    [SerializeField]
-    private Orchestrator orchestrator;
-
+    public Customization player;
     [SerializeField]
     private Customization customization;
 
-    void Update()
+    public void myStart()
     {
-        if (player != null)
-        {
-            // Calcula la direcció fins al jugador
-            Vector3 direction = player.position - transform.position;
-            direction.Normalize(); 
-            direction.y = 0;
-            direction.x = 0;
-
-            transform.Translate(direction * speed * Time.deltaTime);
-        }
-    }
-
-    void Start()
-    {
-        orchestrator = FindObjectOfType<Orchestrator>();
-        customization = GetComponentInChildren<Customization>();
+        if (customization == null)
+            customization = GetComponent<Customization>();
         if (customization != null)
         {
             int rand = Random.Range(0, customization.Hairs.Length);
@@ -41,16 +22,10 @@ public class Enemy : MonoBehaviour
             rand = Random.Range(0, customization.Skins.Length);
             customization.SetSkin(rand);
 
-            customization.SetClothesColor(player.GetComponentInChildren<Customization>().GetUniformIndex() + 1); //TODO: Mirar si està sobre el màxim
-        }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            //TODO: fer funcio endgame
-            orchestrator.ShowMenu();
+            int indx = player.GetUniformIndex() + 1;
+            if (indx >= customization.Uniforms.Length)
+                indx = 0;
+            customization.SetClothesColor(indx);
         }
     }
 }

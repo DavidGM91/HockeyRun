@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -39,6 +40,8 @@ public class Orchestrator : MonoBehaviour
     public float deathHeight = -10;
 
     private bool ismenu = true;
+
+    public bool isHit = false;
 
     private PlayerMovement playerMovement = null;
 
@@ -179,7 +182,20 @@ public class Orchestrator : MonoBehaviour
 
         GameOver.SetActive(true);
 
+
+
+        if (_enems == null)
+        {
+            _enems = enem.GetComponent<Enemics>();
+        }
+        _enems.GetKill();
     }
+
+
+    public GameObject enem;
+    private Enemics _enems;
+
+    private float lastHit = 0;
 
     public void HideGameOver()
     {
@@ -188,7 +204,26 @@ public class Orchestrator : MonoBehaviour
 
     public void Hit()
     {
+        if(isHit && Time.time-lastHit > 2)
+        {
+            Kill();
+        }
+        lastHit = Time.time;
+        isHit = true;
+        if (_enems == null)
+        {
+            _enems = enem.GetComponent<Enemics>();
+        }
+        _enems.GetClose();
+    }
 
+    public void UnHit()
+    {
+        if (isHit)
+        {
+            isHit = false;
+            _enems.RetreatClose();
+        }
     }
     void Update()
     {

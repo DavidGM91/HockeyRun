@@ -36,6 +36,7 @@ public class LevelGenerator : MonoBehaviour
     {
         Kill,
         Hit,
+        UnHit,
         None
     }
 
@@ -486,14 +487,14 @@ public class LevelGenerator : MonoBehaviour
         {
             case ObjectActionOnPlayer.Kill:
                 orchestrator.Kill();
-                Debug.Log("Killed");
-                //TODO: playerMovement.KillPlayer();
                 break;
             case ObjectActionOnPlayer.Hit:
-                Debug.Log("Hit");
-                //TODO playerMovement.HitPlayer();
+                orchestrator.Hit();
                 break;
             case ObjectActionOnPlayer.None:
+                break;
+            case ObjectActionOnPlayer.UnHit:
+                orchestrator.UnHit();
                 break;
         }
     }

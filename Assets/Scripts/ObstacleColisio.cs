@@ -17,8 +17,10 @@ public class ObstacleColisio : SpawnObstacle
                 return LevelGenerator.ObjectActionOnPlayer.Kill;
                 break;
             case MyEvent.checkResult.Fail:
+                return LevelGenerator.ObjectActionOnPlayer.UnHit;
                 break;
             case MyEvent.checkResult.OutSide:
+                return LevelGenerator.ObjectActionOnPlayer.UnHit;
                 break;
         }
         StartCoroutine(DestroyAfterTime(2));

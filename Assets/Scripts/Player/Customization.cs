@@ -94,7 +94,7 @@ public class Customization : MonoBehaviour
                 {
                     part.gameObject.GetComponent<Renderer>().material.SetColor("_Color_4_Out", hairPiece_2);
                 }
-                else if (part.gameObject.GetComponent<Renderer>().material.name == "Wheels (Instance)")
+                else if (part.gameObject.GetComponent<Renderer>().material.name == "Rodes (Instance)")
                 {
                     part.gameObject.GetComponent<Renderer>().material.SetColor("_Color", wheels);
                 }

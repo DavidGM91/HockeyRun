@@ -12,7 +12,6 @@ public class ObstacleColisioHit : SpawnObstacle
                 if (animator != null)
                 {
                     animator.enabled = true;
-                    animator.StartPlayback();
                 }
                 return LevelGenerator.ObjectActionOnPlayer.Hit;
                 break;
