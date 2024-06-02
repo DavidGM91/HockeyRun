@@ -423,16 +423,16 @@ public class LevelGenerator : MonoBehaviour
                 isBifur = true;
                 if (success)
                 {
-                    playerMovement.ChangeAnchor(leftRotations[id]);
+                    playerMovement.ChangeAnchor(rightRotations[id]);
                     rightRotations.Remove(bifur[i].Item1);
                     leftRotations.Remove(id);
                     bifurcateCopy = false;
-                    waitAndDelete(rightBifurSects, 1.0f);
+                    waitAndDelete(rightBifurSects, 5.0f);
                     rightBifurSects.Clear();
                     leftBifurSects.Clear();
                     nextSectionPos = nextSectionPos2;
                     
-                    levelRot *= Quaternion.Euler(0, 180, 0);
+                    //levelRot *= Quaternion.Euler(0, 180, 0);
                     if (bifur[i].Item1 != 0)
                     {
                         eventSystem.IgnoreEvent(bifur[i].Item1);
@@ -478,9 +478,11 @@ public class LevelGenerator : MonoBehaviour
         switch (action)
         {
             case ObjectActionOnPlayer.Kill:
+                Debug.Log("Killed");
                 //TODO: playerMovement.KillPlayer();
                 break;
             case ObjectActionOnPlayer.Hit:
+                Debug.Log("Hit");
                 //TODO playerMovement.HitPlayer();
                 break;
             case ObjectActionOnPlayer.None:
@@ -496,8 +498,7 @@ public class LevelGenerator : MonoBehaviour
             GameObject obstacle = Instantiate(obstacles[obstacleId].obj);
             SpawnObstacle obs = obstacle.GetComponent<SpawnObstacle>();
             obs.Init();
-            obs.positionYourselfPlease(anchor);
-            obs.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
+            
             uint eventID = 0;
             //Event
             if (obs.obstacleType == SpawnObstacle.ObstacleType.QTE)
@@ -526,10 +527,12 @@ public class LevelGenerator : MonoBehaviour
             }
             obstacle.transform.name = "#" + eventID + " Obstacle "+obs.obstacleType + obstacle.transform.name;
 
-
+            obs.positionYourselfPlease(anchor);
+            obs.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
             //Retornem les monedes que poden aparèixer a la següent secció com a les permeses per la secció i l'inversa de les que bloqueja l'obstacle.
             return sections[sectionId].coinSides & ~obstacles[obstacleId].coinsBloqued;
         }
+
 
         //Retornem les monedes que poden aparèixer a la següent secció com a les permeses per la secció ja que no hi ha obstacle.
         return sections[sectionId].coinSides;

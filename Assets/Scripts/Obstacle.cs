@@ -20,18 +20,18 @@ public class SpawnObstacle : MonoBehaviour
     }
 
     [SerializeField]
-    private Transform btmR = null;
+    protected Transform btmR = null;
     [SerializeField]
-    private Transform btmL = null;
+    protected Transform btmL = null;
     [SerializeField]
-    private Transform topR = null;
+    protected Transform topR = null;
 
     [SerializeField]
-    private Animator animator = null;
+    protected Animator animator = null;
 
     public ObstacleType obstacleType;
 
-    private void EnsureTransformsAssigned()
+    protected void EnsureTransformsAssigned()
     {
         if (origin == null)
         {
@@ -156,7 +156,7 @@ public class SpawnObstacle : MonoBehaviour
     {
         transform.position = position - origin.position + offset;
     }
-    IEnumerator DestroyAfterTime(float time)
+    public IEnumerator DestroyAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
         Destroy(gameObject);
@@ -166,10 +166,10 @@ public class SpawnObstacle : MonoBehaviour
         switch(checkResult)
         {
             case MyEvent.checkResult.Success:
-                Debug.Log("Correct");
+                //Debug.Log("Correct");
                 break;
             case MyEvent.checkResult.Fail:
-                Debug.Log("Wrong");
+                //Debug.Log("Wrong");
                 if(animator != null)
                 {
                     animator.enabled = true;
@@ -177,7 +177,7 @@ public class SpawnObstacle : MonoBehaviour
                 }
                 break;
             case MyEvent.checkResult.OutSide:
-                Debug.Log("Missed");
+                //Debug.Log("Missed");
                 break;
         }
         StartCoroutine(DestroyAfterTime(2));
