@@ -129,6 +129,29 @@ public class Orchestrator : MonoBehaviour
         creditsPanel.SetActive(false) ;
         instructionsPanel.SetActive(false);
 
+
+    }
+
+    public void Restart()
+    {
+        //Desactivem primer els scripts a reiniciar
+        playerMovement.enabled = false;
+        levelGenerator.enabled = false;
+        coinPool.enabled = false;
+        eS.enabled = false;
+
+        //Els reiniciem
+        eS.Restart();
+        coinPool.Restart();
+        levelGenerator.Regenerate();
+        playerMovement.Restart();
+        puntos = 0;
+
+        //Reactivem els scripts
+        eS.enabled = true;
+        coinPool.enabled = true;
+        levelGenerator.enabled = true;
+        playerMovement.enabled = true;
     }
     void Update()
     {
@@ -136,24 +159,7 @@ public class Orchestrator : MonoBehaviour
         eS.checkEvents(playerMovement.distance, playerMovement.lateralDistance, playerMovement.transform.position.y);
         if (player.transform.position.y < deathHeight)
         {
-            //Desactivem primer els scripts a reiniciar
-            playerMovement.enabled = false;
-            levelGenerator.enabled = false;
-            coinPool.enabled = false;
-            eS.enabled = false;
-
-            //Els reiniciem
-            eS.Restart();
-            coinPool.Restart();
-            levelGenerator.Regenerate();
-            playerMovement.Restart();
-            puntos = 0;
-
-            //Reactivem els scripts
-            eS.enabled = true;
-            coinPool.enabled = true;
-            levelGenerator.enabled = true;
-            playerMovement.enabled = true;
+            
         }
         else
         {
