@@ -166,10 +166,10 @@ public class SpawnObstacle : MonoBehaviour
         switch(checkResult)
         {
             case MyEvent.checkResult.Success:
-                Debug.Log("Correct");
+                //Debug.Log("Correct");
                 break;
             case MyEvent.checkResult.Fail:
-                Debug.Log("Wrong");
+                //Debug.Log("Wrong");
                 if(animator != null)
                 {
                     animator.enabled = true;
@@ -177,7 +177,7 @@ public class SpawnObstacle : MonoBehaviour
                 }
                 break;
             case MyEvent.checkResult.OutSide:
-                Debug.Log("Missed");
+                //Debug.Log("Missed");
                 break;
         }
         StartCoroutine(DestroyAfterTime(2));
