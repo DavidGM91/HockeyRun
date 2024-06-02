@@ -24,6 +24,8 @@ public class MyEventSystem : MonoBehaviour
     private List<MyEvent> tickingEvents = new List<MyEvent>();
     private GameObject playerMarker;
     private GameObject levelMarker;
+
+    private bool guard = false;
     
     private Dictionary<uint, GameObject> pilotesQueSonDeBones = new Dictionary<uint, GameObject>();
 
@@ -69,6 +71,10 @@ public class MyEventSystem : MonoBehaviour
     }
     public uint AddEvent(MyEvent e)
     {
+        while (guard)
+        {            
+            System.Threading.Thread.Sleep(1);
+        }
         if (e.ID != 0)
         {
             if (e is MyQTEEvent)
@@ -227,6 +233,7 @@ public class MyEventSystem : MonoBehaviour
 
         uint index;
         MyEvent.checkResult result = MyEvent.checkResult.Success;
+        guard = true;
         List<MyEvent> _toRemove = new List<MyEvent>();
         foreach (MyEvent next in tickingEvents)
         {
@@ -268,6 +275,7 @@ public class MyEventSystem : MonoBehaviour
                 }
             }
         }
+        guard = false;
         for (int i = _toRemove.Count - 1; i >= 0; i--)
         {
             tickingEvents.Remove(_toRemove[i]);

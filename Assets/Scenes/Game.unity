@@ -138,6 +138,10 @@ PrefabInstance:
       value: SM_Prop_Window_01 (4)
       objectReference: {fileID: 0}
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -586,6 +590,10 @@ PrefabInstance:
     - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Apartment_Stack_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -1322,37 +1330,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 526429}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &406540797
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 406540798}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &406540798
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 406540797}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.121, y: 0.927, z: -3.404}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &431269927
 GameObject:
   m_ObjectHideFlags: 0
@@ -1790,6 +1767,10 @@ PrefabInstance:
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_Name
       value: SM_Prop_Window_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -2752,6 +2733,10 @@ PrefabInstance:
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_Name
       value: SM_Prop_Window_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -3781,6 +3766,10 @@ PrefabInstance:
       value: SM_Bld_Apartment_Stack_03 (1)
       objectReference: {fileID: 0}
     - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -4279,7 +4268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b19a470c511453541aa451ba1c5c949a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
   eventMapCam: {fileID: 1858300239}
   eventMap: {fileID: 2107963740}
 --- !u!1001 &1616923975
@@ -5579,6 +5568,10 @@ PrefabInstance:
       value: SM_Prop_Window_01 (2)
       objectReference: {fileID: 0}
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -6429,6 +6422,10 @@ PrefabInstance:
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_Name
       value: SM_Prop_Window_01 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -8307,6 +8304,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Sortida Terrat
+      objectReference: {fileID: 0}
+    - target: {fileID: 1810451971541129019, guid: 72ca131ab18d7e2498aea235715d507c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2153029583900518149, guid: 72ca131ab18d7e2498aea235715d507c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2295870514164092482, guid: 72ca131ab18d7e2498aea235715d507c,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4715172794528256775, guid: 72ca131ab18d7e2498aea235715d507c,
         type: 3}
@@ -11242,4 +11254,3 @@ SceneRoots:
   - {fileID: 1715247945}
   - {fileID: 137485681}
   - {fileID: 3379705522055797770}
-  - {fileID: 406540798}

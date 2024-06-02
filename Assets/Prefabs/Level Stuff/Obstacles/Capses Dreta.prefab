@@ -51,9 +51,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   origin: {fileID: 4993679069090360550}
   keyQTE: 115
-  btmR: {fileID: 3762170993412881742}
-  btmL: {fileID: 1479402836673130038}
-  topR: {fileID: 4481436444113494694}
+  btmR: {fileID: 300242909719820287}
+  btmL: {fileID: 1716327522704091123}
+  topR: {fileID: 6314027517727899119}
+  animator: {fileID: 0}
   obstacleType: 2
 --- !u!1 &1454987425096107646
 GameObject:
@@ -257,7 +258,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4174272846548962087, guid: 6ea4b697ca4701b4ab83290fe00bd6fb, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

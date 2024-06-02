@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class SpawnObstacle : MonoBehaviour
 {
-    public Transform origin;
+    public Transform origin = null;
 
     public KeyCode keyQTE;
 
@@ -20,37 +20,46 @@ public class SpawnObstacle : MonoBehaviour
     }
 
     [SerializeField]
-    private GameObject btmR;
+    private Transform btmR = null;
     [SerializeField]
-    private GameObject btmL;
+    private Transform btmL = null;
     [SerializeField]
-    private GameObject topR;
+    private Transform topR = null;
+
+    [SerializeField]
+    private Animator animator = null;
 
     public ObstacleType obstacleType;
 
-    public float distance { get { return btmR.transform.position.x - origin.position.x; } }
-    public float initialArea { get { return btmR.transform.position.z - origin.position.z; } }
-    public float finalArea { get { return btmL.transform.position.z - origin.position.z; } }
-    public float initialHeight { get { return btmR.transform.position.y - origin.position.y; } }
-    public float finalHeight { get { return topR.transform.position.z - origin.position.z; ; } }  
+    public float distance { get { return btmR.position.x - origin.position.x; } }
+    public float initialArea { get { return btmR.position.z - origin.position.z; } }
+    public float finalArea { get { return btmL.position.z - origin.position.z; } }
+    public float initialHeight { get { return btmR.position.y - origin.position.y; } }
+    public float finalHeight { get { return topR.position.z - origin.position.z; ; } }  
 
     private void Start()
     {
         if (origin == null)
         {
-            origin = gameObject.transform.Find("Origin").GetComponent<Transform>();
+            origin = gameObject.transform.Find("Origin");
         }
         if(btmR == null)
         {
-            btmR = gameObject.transform.Find("EventBtmR").gameObject;
+            btmR = gameObject.transform.Find("EventBtmR");
         }
         if (btmL == null)
         {
-            btmL = gameObject.transform.Find("EventBtmL").gameObject;
+            btmL = gameObject.transform.Find("EventBtmL");
         }
         if (topR == null)
         {
-            topR = gameObject.transform.Find("EventTopR").gameObject;
+            topR = gameObject.transform.Find("EventTopR");
+        }
+        if (animator == null)
+        {
+            animator = gameObject.GetComponentInChildren<Animator>();
+            if(animator != null)
+                animator.enabled = false;
         }
     }
     public void positionYourselfPlease(Vector3 position)
@@ -68,11 +77,6 @@ public class SpawnObstacle : MonoBehaviour
         transform.position = position - origin.position + offset;
     }
 
-    public Vector4 GetPoints()
-    {
-        return new Vector4(transform.position.x, transform.position.z, transform.localScale.x, transform.localScale.z);
-    }
-
     IEnumerator DestroyAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
@@ -88,6 +92,11 @@ public class SpawnObstacle : MonoBehaviour
                 break;
             case MyEvent.checkResult.Fail:
                 Debug.Log("Wrong");
+                if(animator != null)
+                {
+                    animator.enabled = true;
+                    animator.StartPlayback();
+                }
                 break;
             case MyEvent.checkResult.OutSide:
                 Debug.Log("Missed");
