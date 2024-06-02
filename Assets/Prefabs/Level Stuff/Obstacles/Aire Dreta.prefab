@@ -51,9 +51,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   origin: {fileID: 4993679069090360550}
   keyQTE: 115
-  btmR: {fileID: 3762170993412881742}
-  btmL: {fileID: 1479402836673130038}
-  topR: {fileID: 4481436444113494694}
+  btmR: {fileID: 300242909719820287}
+  btmL: {fileID: 1716327522704091123}
+  topR: {fileID: 6314027517727899119}
+  animator: {fileID: 0}
   obstacleType: 2
 --- !u!1 &1454987425096107646
 GameObject:
