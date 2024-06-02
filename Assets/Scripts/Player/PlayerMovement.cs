@@ -193,12 +193,12 @@ public class PlayerMovement : MonoBehaviour
             coyoteTimeCounter = coyoteTime;
         }
     }
-    private void PlayAnim(EAnims _anim)
+    public void PlayAnim(EAnims _anim)
     {
         anim = _anim;
         animator.SetTrigger(EAnims.GetName(typeof(EAnims), _anim));
     }
-    private void StopAnim(EAnims _anim)
+    public void StopAnim(EAnims _anim)
     {
         anim = EAnims.Forward;
         animator.ResetTrigger(Enum.GetName(typeof(EAnims), _anim));

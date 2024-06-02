@@ -53,6 +53,8 @@ public class Orchestrator : MonoBehaviour
         cam.GetComponent<FollowCamera>().Focus(player.transform, true);
         cam.GetComponent<FollowCamera>().AdjustCamera(playerCamOffset, 0.5f);
         HideMenu();
+        playerMovement.PlayAnim(PlayerMovement.EAnims.Forward);
+
     }
     public void ShowCustomization()
     {
@@ -155,6 +157,9 @@ public class Orchestrator : MonoBehaviour
         coinPool.enabled = true;
         levelGenerator.enabled = true;
         playerMovement.enabled = true;
+
+        playerMovement.StopAnim(PlayerMovement.EAnims.GameOver);
+        playerMovement.PlayAnim(PlayerMovement.EAnims.Forward);
     }
 
     public void PlayAgain()
@@ -168,6 +173,9 @@ public class Orchestrator : MonoBehaviour
         coinPool.enabled = false;
         eS.enabled = false;
 
+        playerMovement.PlayAnim(PlayerMovement.EAnims.GameOver);
+
+       // playerMovement.StopAnim(PlayerMove)
 
         GameOver.SetActive(true);
 
