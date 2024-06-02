@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4475408516265517570}
   - component: {fileID: 6380859973027381551}
   m_Layer: 6
-  m_Name: Elecbox Esquerra
+  m_Name: Elecbox Dreta
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,7 +80,7 @@ Transform:
   m_GameObject: {fileID: 1454987425096107646}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.6516294, y: 0.499867, z: 5.0233755}
+  m_LocalPosition: {x: 2, y: 0.499867, z: 5.0233755}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -111,7 +111,7 @@ Transform:
   m_GameObject: {fileID: 1479402836673130038}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.53, y: 0.435, z: -1.69}
+  m_LocalPosition: {x: -0.53, y: 0.435, z: 2.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -142,7 +142,7 @@ Transform:
   m_GameObject: {fileID: 3762170993412881742}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.414, y: 0.427, z: 0.27}
+  m_LocalPosition: {x: -0.58, y: 0.427, z: 4.63}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -173,7 +173,7 @@ Transform:
   m_GameObject: {fileID: 4481436444113494694}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.55, y: 2.36, z: 0.26}
+  m_LocalPosition: {x: -0.55, y: 2.36, z: 4.61}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -190,7 +190,7 @@ PrefabInstance:
     - target: {fileID: 743341659898945428, guid: a21f49840e0a1a448a514b4bb6a4fa88,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.035224
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 743341659898945428, guid: a21f49840e0a1a448a514b4bb6a4fa88,
         type: 3}
@@ -200,7 +200,7 @@ PrefabInstance:
     - target: {fileID: 743341659898945428, guid: a21f49840e0a1a448a514b4bb6a4fa88,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.42255336
+      value: 0.42
       objectReference: {fileID: 0}
     - target: {fileID: 743341659898945428, guid: a21f49840e0a1a448a514b4bb6a4fa88,
         type: 3}
@@ -290,7 +290,7 @@ PrefabInstance:
     - target: {fileID: 38676744976605781, guid: 57f2fcc8987099642b084e85cd8e0434,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.71
+      value: 3.64
       objectReference: {fileID: 0}
     - target: {fileID: 38676744976605781, guid: 57f2fcc8987099642b084e85cd8e0434,
         type: 3}
