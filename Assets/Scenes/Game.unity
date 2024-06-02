@@ -3624,8 +3624,12 @@ MonoBehaviour:
     - name: 6 TSplit
       value: {x: 6, y: 1}
     allowedObstacles:
-    - name: Barrera Dreta
+    - name: 0 Barrera Dreta
       value: {x: 0, y: 1}
+    - name: 1 ElecBox Esquerra
+      value: {x: 1, y: 1}
+    - name: 2 Capses Dreta
+      value: {x: 2, y: 10}
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 7
     associatedID: 0
@@ -3714,8 +3718,10 @@ MonoBehaviour:
     - name: 0 StartRoof
       value: {x: 0, y: 1}
     allowedObstacles:
-    - name: Barrera Dreta
+    - name: 0 Barrera Dreta
       value: {x: 0, y: 1}
+    - name: 2 Capses Dreta
+      value: {x: 2, y: 1}
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 36
     associatedID: 0
@@ -3735,10 +3741,18 @@ MonoBehaviour:
     length: -1
     type: 0
   obstacles:
-  - name: Barrera Dreta
-    obj: {fileID: 192617452447761226, guid: 92a2d3fbb07693944ba6da572ebabcf7, type: 3}
+  - name: 0 Barrera Dreta
+    obj: {fileID: 192617452447761226, guid: d09ea94bee16ffa4e9ce1e66fab45343, type: 3}
     coinsBloqued: 4
     isDeadly: 1
+  - name: 1 ElecBox Esquerra
+    obj: {fileID: 192617452447761226, guid: 68c2d9ccab509a6469874ecc11b76067, type: 3}
+    coinsBloqued: 1
+    isDeadly: 1
+  - name: 2 Capses Dreta
+    obj: {fileID: 192617452447761226, guid: 92a2d3fbb07693944ba6da572ebabcf7, type: 3}
+    coinsBloqued: 4
+    isDeadly: 0
 --- !u!4 &1386186829
 Transform:
   m_ObjectHideFlags: 0

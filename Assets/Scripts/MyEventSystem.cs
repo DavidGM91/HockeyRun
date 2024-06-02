@@ -65,6 +65,7 @@ public class MyEventSystem : MonoBehaviour
         {
             events.Remove(eventToRemove);
         }
+        tickingEvents.RemoveAll(e => e.ID == ID);
     }
     public uint AddEvent(MyEvent e)
     {
@@ -260,6 +261,11 @@ public class MyEventSystem : MonoBehaviour
                     qte.callBack(index, false, result);
                     _toRemove.Add(next);
                 }
+                else if (result == MyEvent.checkResult.OutSide)
+                {
+                    qte.callBack(index, true, result);
+                    _toRemove.Add(next);
+                }
             }
         }
         for (int i = _toRemove.Count - 1; i >= 0; i--)
@@ -320,6 +326,11 @@ public class MyEventSystem : MonoBehaviour
                 else if (result == MyEvent.checkResult.Fail)
                 {
                     qte.callBack(index, false, result);
+                    events.Remove(next);
+                }
+                else if (result == MyEvent.checkResult.OutSide)
+                {
+                    qte.callBack(index, true, result);
                     events.Remove(next);
                 }
                 else if (result == MyEvent.checkResult.Ticking)

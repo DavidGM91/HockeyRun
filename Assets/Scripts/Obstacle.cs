@@ -19,19 +19,38 @@ public class SpawnObstacle : MonoBehaviour
         Area
     }
 
+    [SerializeField]
+    private GameObject btmR;
+    [SerializeField]
+    private GameObject btmL;
+    [SerializeField]
+    private GameObject topR;
+
     public ObstacleType obstacleType;
 
-    public float distance { get { return 0; } }
-    public float initialArea { get { return 0; } }
-    public float finalArea { get { return 0; } }
-    public float initialHeight { get { return 0; } }
-    public float finalHeight { get { return 0; } }  
+    public float distance { get { return btmR.transform.position.x - origin.position.x; } }
+    public float initialArea { get { return btmR.transform.position.z - origin.position.z; } }
+    public float finalArea { get { return btmL.transform.position.z - origin.position.z; } }
+    public float initialHeight { get { return btmR.transform.position.y - origin.position.y; } }
+    public float finalHeight { get { return topR.transform.position.z - origin.position.z; ; } }  
 
     private void Start()
     {
         if (origin == null)
         {
             origin = gameObject.transform.Find("Origin").GetComponent<Transform>();
+        }
+        if(btmR == null)
+        {
+            btmR = gameObject.transform.Find("EventBtmR").gameObject;
+        }
+        if (btmL == null)
+        {
+            btmL = gameObject.transform.Find("EventBtmL").gameObject;
+        }
+        if (topR == null)
+        {
+            topR = gameObject.transform.Find("EventTopR").gameObject;
         }
     }
     public void positionYourselfPlease(Vector3 position)
@@ -54,6 +73,12 @@ public class SpawnObstacle : MonoBehaviour
         return new Vector4(transform.position.x, transform.position.z, transform.localScale.x, transform.localScale.z);
     }
 
+    IEnumerator DestroyAfterTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Destroy(gameObject);
+    }
+
     public virtual LevelGenerator.ObjectActionOnPlayer OnEvent(uint id, bool succes, MyEvent.checkResult checkResult)
     {
         switch(checkResult)
@@ -68,6 +93,7 @@ public class SpawnObstacle : MonoBehaviour
                 Debug.Log("Missed");
                 break;
         }
+        StartCoroutine(DestroyAfterTime(2));
         return LevelGenerator.ObjectActionOnPlayer.None;
     }
 

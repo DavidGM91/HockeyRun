@@ -388,6 +388,11 @@ public class LevelGenerator : MonoBehaviour
                     waitAndDelete(leftBifurSects, 1.0f);
                     leftBifurSects.Clear();
                     rightBifurSects.Clear();
+                    
+                    if (bifur[i].Item2 != 0)
+                    {
+                        eventSystem.IgnoreEvent(bifur[i].Item2);
+                    }
                     bifur.RemoveAt(i);
                 }
                 else
@@ -427,8 +432,13 @@ public class LevelGenerator : MonoBehaviour
                     rightBifurSects.Clear();
                     leftBifurSects.Clear();
                     nextSectionPos = nextSectionPos2;
-                    bifur.RemoveAt(i);
+                    
                     levelRot *= Quaternion.Euler(0, 180, 0);
+                    if (bifur[i].Item1 != 0)
+                    {
+                        eventSystem.IgnoreEvent(bifur[i].Item1);
+                    }
+                    bifur.RemoveAt(i);
                 }
                 else
                 {
@@ -461,10 +471,21 @@ public class LevelGenerator : MonoBehaviour
     public void ObjectEvent(uint id, bool success, MyEvent.checkResult result)
     {
         var obj = obsEventList[id];
-        
+        ObjectActionOnPlayer action = ObjectActionOnPlayer.None;
         if (obj != null)
         {
-            obj.OnEvent(id, success, result);
+            action = obj.OnEvent(id, success, result);
+        }
+        switch (action)
+        {
+            case ObjectActionOnPlayer.Kill:
+                //TODO: playerMovement.KillPlayer();
+                break;
+            case ObjectActionOnPlayer.Hit:
+                //TODO playerMovement.HitPlayer();
+                break;
+            case ObjectActionOnPlayer.None:
+                break;
         }
     }
     private int GenerateObstacles(int sectionId, Vector3 anchor)
@@ -481,25 +502,25 @@ public class LevelGenerator : MonoBehaviour
             //Event
             if(obs.obstacleType == SpawnObstacle.ObstacleType.QTE)
             {
-                MyQTEEvent myEvent = new MyQTEEvent("QTE", obs.distance, ObjectEvent, obs.keyQTE, timeToQTE);
+                MyQTEEvent myEvent = new MyQTEEvent("QTE",distance+ obs.distance, ObjectEvent, obs.keyQTE, timeToQTE);
                 uint eventID = eventSystem.AddEvent(myEvent);
                 obsEventList.Add(eventID, obs);
             }
             else if(obs.obstacleType == SpawnObstacle.ObstacleType.AreaQTE)
             {
-                MyQTEAreaEvent myEvent = new MyQTEAreaEvent("AreaQTE", obs.distance, ObjectEvent, obs.keyQTE, timeToQTE, obs.initialArea ,obs.finalArea,obs.initialHeight,obs.finalHeight);
+                MyQTEAreaEvent myEvent = new MyQTEAreaEvent("AreaQTE",distance + obs.distance, ObjectEvent, obs.keyQTE, timeToQTE, obs.initialArea ,obs.finalArea,obs.initialHeight,obs.finalHeight);
                 uint eventID = eventSystem.AddEvent(myEvent);
                 obsEventList.Add(eventID, obs);
             }
             else if(obs.obstacleType == SpawnObstacle.ObstacleType.AreaAltura)
             {
-                MyHeightAreaEvent myEvent = new MyHeightAreaEvent("AreaAltura", distance - 1, ObjectEvent, obs.initialArea, obs.finalArea, obs.initialHeight, obs.finalHeight);
+                MyHeightAreaEvent myEvent = new MyHeightAreaEvent("AreaAltura", distance +obs.distance, ObjectEvent, obs.initialArea, obs.finalArea, obs.initialHeight, obs.finalHeight);
                 uint eventID = eventSystem.AddEvent(myEvent);
                 obsEventList.Add(eventID, obs);
             }
             else if(obs.obstacleType == SpawnObstacle.ObstacleType.Area)
             {
-                MyAreaEvent myEvent = new MyAreaEvent("Area", distance - 1, ObjectEvent, obs.initialArea, obs.finalArea);
+                MyAreaEvent myEvent = new MyAreaEvent("Area", distance + obs.distance, ObjectEvent, obs.initialArea, obs.finalArea);
                 uint eventID = eventSystem.AddEvent(myEvent);
                 obsEventList.Add(eventID, obs);
             }
@@ -576,8 +597,9 @@ public class LevelGenerator : MonoBehaviour
                 coin.transform.position = section + coinPosition;
                 coin.transform.RotateAround(section, Vector3.up, levelRot.eulerAngles.y);
                 //coin.transform.SetParent(sectionPos, true);
-                MyHeightAreaEvent coinEve = new MyHeightAreaEvent("coinevent", distance - nextCoinPos, coinCollectorEv, -coinPosition.z - 0.8f, -coinPosition.z + 0.8f, coinPosition.y - 1.5f, coinPosition.y + 1.5f);
+                MyHeightAreaEvent coinEve = new MyHeightAreaEvent("coinevent", distance + nextCoinPos, coinCollectorEv, -coinPosition.z - 0.8f, -coinPosition.z + 0.8f, coinPosition.y - 1.5f, coinPosition.y + 1.5f);
                 uint eventID = eventSystem.AddEvent(coinEve);
+                coin.transform.name = "#" + eventID + "Coin";
                 coinEventList.Add(eventID, coin.GetComponent<Coin>());
                 nextCoinPos += 1f; // distancia entre monedas
             }
