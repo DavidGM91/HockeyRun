@@ -135,12 +135,6 @@ public class LevelGenerator : MonoBehaviour
     private int gracePeriodNoRots = 10;
     private bool bifurcateCopy = false;
 
-    private Dictionary<uint, GameObject> rightCoins;
-    private Dictionary<uint, GameObject> leftCoins;
-
-    private Dictionary<uint, GameObject> rightObstacles;
-    private Dictionary<uint, GameObject> leftObstacles;
-
 
     /// <summary>
     /// Elimina totes les seccions actuals, genera de noves i torna totes les posicions a l'inici.
@@ -262,36 +256,14 @@ public class LevelGenerator : MonoBehaviour
         section.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
         nextSectionPos = section.GetSpawn(0);
 
-        //Creació d'event de neteja
-        MyEvent myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * ((newSection.length > 0) ? newSection.length : 10), SectionEvent);
-        uint id = eventSystem.AddEvent(myEvent);
-        uint id2 = 0;
-        levelSections.Add(id, _newSec);
-        _newSec.name = "#" + id + _newSec.name;
-
-        //Copia de seccions durant la bifurcació
-        if (bifurcateCopy)
-        {
-            rightBifurSects.Add(id);
-            myEvent = new MyEvent("Section Destroy", distance + 10, SectionEvent);
-            id2 = eventSystem.AddEvent(myEvent);
-            leftBifurSects.Add(id2);
-            levelSections.Add(id2, Instantiate(newSection.obj));
-            section2 = levelSections[id2].GetComponent<SpawnSection>();
-            levelSections[id2].name = "#" + id2 + levelSections[id2].name;
-            section2.positionYourselfPlease(nextSectionPos2);
-            section2.rotateYourselfAroundYourOriginPlease((levelRot * Quaternion.Euler(0, 180, 0)).eulerAngles);
-            nextSectionPos2 = section2.GetSpawn(0);
-        }
-
         //OBSTACLES
-        int coinsNext = GenerateObstacles(sectionId, section.origin.position,bifurcateCopy?section2.origin.position:Vector3.zero);
+        int coinsNext = GenerateObstacles(sectionId, section.origin.position);
 
         //MONEDES
         if (sectionsWithCoins > 0)
         {
             sectionsWithCoins--;
-            GenerateCoins(coinsNext, section.origin.position, bifurcateCopy ? section2.origin.position:Vector3.zero);
+            GenerateCoins(coinsNext, section.origin.position);
         }
         else
         {
@@ -313,8 +285,31 @@ public class LevelGenerator : MonoBehaviour
             newSection.length = 0;
         }
         distance += newSection.length;
+
+        //Creació d'event de neteja
+        MyEvent myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * ((newSection.length > 0)? newSection.length :10), SectionEvent);
+        uint id = eventSystem.AddEvent(myEvent);
+        uint id2 = 0;
+        levelSections.Add(id, _newSec);
+        _newSec.name = "#" + id + _newSec.name;
+
         //Moviment de les marques //TODO: DEBUG REMOVE
         eventSystem.DebugLevelMarker(new Vector3(-distance, 0, 0));
+
+        //Copia de seccions durant la bifurcació
+        if (bifurcateCopy)
+        {
+            rightBifurSects.Add(id);
+            myEvent = new MyEvent("Section Destroy", distance -10, SectionEvent);
+            id2 = eventSystem.AddEvent(myEvent);
+            leftBifurSects.Add(id2);
+            levelSections.Add(id2, Instantiate(newSection.obj));
+            section2 = levelSections[id2].GetComponent<SpawnSection>();
+            levelSections[id2].name = "#" + id2 + levelSections[id2].name;
+            section2.positionYourselfPlease(nextSectionPos2);
+            section2.rotateYourselfAroundYourOriginPlease((levelRot* Quaternion.Euler(0, 180, 0)).eulerAngles);
+            nextSectionPos2 = section2.GetSpawn(0);
+        }
 
         //Guardem les ancles de les seccions després de rotar
         if(justRotatedRight != 0 && justRotatedLeft == 0)
@@ -492,7 +487,7 @@ public class LevelGenerator : MonoBehaviour
                 break;
         }
     }
-    private int GenerateObstacles(int sectionId, Vector3 anchor, Vector3 anchor2)
+    private int GenerateObstacles(int sectionId, Vector3 anchor)
     {
         int obstacleId = GetRandomSelection(sections[sectionId].allowedObstacles, sections[sectionId].getObstaclesWeights());
         if(obstacleId != -1)
@@ -503,7 +498,6 @@ public class LevelGenerator : MonoBehaviour
             obs.Init();
             obs.positionYourselfPlease(anchor);
             obs.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
-
             uint eventID = 0;
             //Event
             if (obs.obstacleType == SpawnObstacle.ObstacleType.QTE)
@@ -533,18 +527,6 @@ public class LevelGenerator : MonoBehaviour
             obstacle.transform.name = "#" + eventID + " Obstacle "+obs.obstacleType + obstacle.transform.name;
 
 
-            if (nextSectionPos2 != Vector3.zero)
-            {
-                GameObject obstacle2 = Instantiate(obstacles[obstacleId].obj);
-                obstacle2.transform.name = "CP#" + eventID + " Obstacle " + obs.obstacleType + obstacle2.transform.name;
-                SpawnObstacle obs2 = obstacle2.GetComponent<SpawnObstacle>();
-                obs2.Init();
-                obs2.positionYourselfPlease(anchor2, nextSectionPos2 - anchor2);
-                obs2.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles + new Vector3(0, 180, 0));
-                leftObstacles.Add(eventID, obstacle2);
-                rightObstacles.Add(eventID, obstacle);
-            }
-
             //Retornem les monedes que poden aparèixer a la següent secció com a les permeses per la secció i l'inversa de les que bloqueja l'obstacle.
             return sections[sectionId].coinSides & ~obstacles[obstacleId].coinsBloqued;
         }
@@ -552,7 +534,7 @@ public class LevelGenerator : MonoBehaviour
         //Retornem les monedes que poden aparèixer a la següent secció com a les permeses per la secció ja que no hi ha obstacle.
         return sections[sectionId].coinSides;
     }
-    private void GenerateCoins(int coinsNext, Vector3 section, Vector3 section2)
+    private void GenerateCoins(int coinsNext, Vector3 section)
     {   
         int finalCoinSide = 0;
         List<int> possibleCoinSide = new List<int>();

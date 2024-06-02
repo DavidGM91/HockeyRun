@@ -3583,7 +3583,7 @@ MonoBehaviour:
     rot: {x: 0, y: 0, z: 0, w: 1}
     allowedSectionsAfter:
     - name: 1 Straight Roof
-      value: {x: 1, y: 5}
+      value: {x: 1, y: 100}
     - name: 2 EndRoof
       value: {x: 2, y: 20}
     - name: 4 Rturn
@@ -3591,7 +3591,7 @@ MonoBehaviour:
     - name: 5 Lturn
       value: {x: 5, y: 1}
     - name: 6 TSplit
-      value: {x: 6, y: 100}
+      value: {x: 6, y: 1}
     allowedObstacles:
     - name: 0 Barrera Dreta
       value: {x: 0, y: 1}
