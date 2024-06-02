@@ -3627,7 +3627,7 @@ MonoBehaviour:
     - name: Barrera Dreta
       value: {x: 0, y: 1}
     levelPos: {x: 0, y: 0, z: 0}
-    coinSides: 0
+    coinSides: 7
     associatedID: 0
     length: -1
     type: 0
@@ -3657,7 +3657,7 @@ MonoBehaviour:
       value: {x: 0, y: 1}
     allowedObstacles: []
     levelPos: {x: 0, y: 0, z: 0}
-    coinSides: 0
+    coinSides: 56
     associatedID: 0
     length: -1
     type: 0
@@ -3717,7 +3717,7 @@ MonoBehaviour:
     - name: Barrera Dreta
       value: {x: 0, y: 1}
     levelPos: {x: 0, y: 0, z: 0}
-    coinSides: 0
+    coinSides: 36
     associatedID: 0
     length: -1
     type: 0
@@ -3730,14 +3730,14 @@ MonoBehaviour:
       value: {x: 0, y: 1}
     allowedObstacles: []
     levelPos: {x: 0, y: 0, z: 0}
-    coinSides: 0
+    coinSides: 9
     associatedID: 0
     length: -1
     type: 0
   obstacles:
   - name: Barrera Dreta
     obj: {fileID: 192617452447761226, guid: 92a2d3fbb07693944ba6da572ebabcf7, type: 3}
-    coinsBloqued: 2
+    coinsBloqued: 4
     isDeadly: 1
 --- !u!4 &1386186829
 Transform:

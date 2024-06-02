@@ -142,6 +142,7 @@ public class MyEventSystem : MonoBehaviour
     {
         events.Clear();
         tickingEvents.Clear();
+        pilotesQueSonDeBones.Clear();
         nextID = 1;
     }
     public void UpdateTimes(float deltaTime, float distance)
@@ -235,28 +236,28 @@ public class MyEventSystem : MonoBehaviour
                 index = qte.ID;
                 if (result == MyEvent.checkResult.Success)
                 {
-                    qte.callBack(index, true);
+                    qte.callBack(index, true,result);
                     _toRemove.Add(next);
                 }
                 else if (result == MyEvent.checkResult.Fail)
                 {
-                    qte.callBack(index, false);
+                    qte.callBack(index, false,result);
                     _toRemove.Add(next);
                 }
             }
             else if (next is MyQTEAreaEvent)
             {
                 MyQTEAreaEvent qte = (MyQTEAreaEvent)next;
-                result = qte.checkEvent(distance, lateral);
+                result = qte.checkEvent(distance, lateral,altura);
                 index = qte.ID;
                 if (result == MyEvent.checkResult.Success)
                 {
-                    qte.callBack(index, true);
+                    qte.callBack(index, true, result);
                     _toRemove.Add(next);
                 }
                 else if (result == MyEvent.checkResult.Fail)
                 {
-                    qte.callBack(index, false);
+                    qte.callBack(index, false, result);
                     _toRemove.Add(next);
                 }
             }
@@ -276,12 +277,12 @@ public class MyEventSystem : MonoBehaviour
                 index = area.ID;
                 if (result == MyEvent.checkResult.Success)
                 {
-                    area.callBack(index, true);
+                    area.callBack(index, true, result);
                     events.Remove(next);
                 }
                 else if (result == MyEvent.checkResult.Fail)
                 {
-                    area.callBack(index, false);
+                    area.callBack(index, false, result);
                     events.Remove(next);
                 }
             }
@@ -292,12 +293,12 @@ public class MyEventSystem : MonoBehaviour
                 index = qte.ID;
                 if (result == MyEvent.checkResult.Success)
                 {
-                    qte.callBack(index, true);
+                    qte.callBack(index, true, result);
                     events.Remove(next);
                 }
                 else if (result == MyEvent.checkResult.Fail)
                 {
-                    qte.callBack(index, false);
+                    qte.callBack(index, false, result);
                     events.Remove(next);
                 }
                 else if (result == MyEvent.checkResult.Ticking)
@@ -309,16 +310,16 @@ public class MyEventSystem : MonoBehaviour
             else if (next is MyQTEAreaEvent)
             {
                 MyQTEAreaEvent qte = (MyQTEAreaEvent)next;
-                result = qte.checkEvent(distance, lateral);
+                result = qte.checkEvent(distance, lateral,altura);
                 index = qte.ID;
                 if (result == MyEvent.checkResult.Success)
                 {
-                    qte.callBack(index, true);
+                    qte.callBack(index, true, result);
                     events.Remove(next);
                 }
                 else if (result == MyEvent.checkResult.Fail)
                 {
-                    qte.callBack(index, false);
+                    qte.callBack(index, false, result);
                     events.Remove(next);
                 }
                 else if (result == MyEvent.checkResult.Ticking)
@@ -334,12 +335,12 @@ public class MyEventSystem : MonoBehaviour
                 index = area.ID;
                 if (result == MyEvent.checkResult.Success)
                 {
-                    area.callBack(index, true);
+                    area.callBack(index, true, result);
                     events.Remove(next);
                 }
                 else if (result == MyEvent.checkResult.Fail)
                 {
-                    area.callBack(index, false);
+                    area.callBack(index, false, result);
                     events.Remove(next);
                 }
             }   
@@ -349,12 +350,12 @@ public class MyEventSystem : MonoBehaviour
                 index = next.ID;
                 if (result == MyEvent.checkResult.Success)
                 {
-                    next.callBack(index, true);
+                    next.callBack(index, true, result);
                     events.Remove(next);
                 }
                 else if (result == MyEvent.checkResult.Fail)
                 {
-                    next.callBack(index, false);
+                    next.callBack(index, false, result);
                     events.Remove(next);
                 }
             }
@@ -370,11 +371,12 @@ public class MyEvent
         NotYet,
         Ticking,
         Success,
+        OutSide,
         Fail
     };
     public float Distance;
-    public Action<uint, bool> callBack;
-    public MyEvent(string name, float distance, Action<uint, bool> callback)
+    public Action<uint, bool, checkResult> callBack;
+    public MyEvent(string name, float distance, Action<uint, bool,checkResult> callback)
     {
         Name = name;
         Distance = distance;
@@ -406,7 +408,7 @@ public class MyAreaEvent : MyEvent
 {
     public float initialAreaPos;
     public float finalAreaPos;
-    public MyAreaEvent(string name, float distance, Action<uint, bool> callback, float initialAreaPos, float finalAreaPos) : base(name, distance, callback)
+    public MyAreaEvent(string name, float distance, Action<uint, bool,MyEvent.checkResult> callback, float initialAreaPos, float finalAreaPos) : base(name, distance, callback)
     {
         this.initialAreaPos = initialAreaPos;
         this.finalAreaPos = finalAreaPos;
@@ -441,7 +443,7 @@ public class MyHeightAreaEvent : MyEvent
     public float finalAreaPos;
     public float initialHeight;
     public float finalHeight;
-    public MyHeightAreaEvent(string name, float distance, Action<uint, bool> callback, float initialAreaPos, float finalAreaPos,float initialHeight, float finalHeight) : base(name, distance, callback)
+    public MyHeightAreaEvent(string name, float distance, Action<uint, bool, MyEvent.checkResult> callback, float initialAreaPos, float finalAreaPos,float initialHeight, float finalHeight) : base(name, distance, callback)
     {
         this.initialAreaPos = initialAreaPos;
         this.finalAreaPos = finalAreaPos;
@@ -478,7 +480,7 @@ public class MyQTEEvent : MyEvent
 {
     private KeyCode key;
     private float remainingTime;
-    public MyQTEEvent(string name, float distance, Action<uint, bool> callback, KeyCode key, float timeGrace) : base(name, distance, callback)
+    public MyQTEEvent(string name, float distance, Action<uint, bool, MyEvent.checkResult> callback, KeyCode key, float timeGrace) : base(name, distance, callback)
     {
         this.key = key;
         this.remainingTime = timeGrace;
@@ -525,12 +527,16 @@ public class MyQTEAreaEvent : MyEvent
     private float remainingTime;
     private float initialAreaPos;
     private float finalAreaPos;
-    public MyQTEAreaEvent(string name, float distance, Action<uint, bool> callback, KeyCode key, float remainingTime, float initialAreaPos, float finalAreaPos) : base(name, distance, callback)
+    private float initialHeight;
+    private float finalHeight;
+    public MyQTEAreaEvent(string name, float distance, Action<uint, bool, MyEvent.checkResult> callback, KeyCode key, float remainingTime, float initialAreaPos, float finalAreaPos, float initialHeight, float finalHeight) : base(name, distance, callback)
     {
         this.key = key;
         this.remainingTime = remainingTime;
         this.initialAreaPos = initialAreaPos;
         this.finalAreaPos = finalAreaPos;
+        this.initialHeight = initialHeight;
+        this.finalHeight = finalHeight;
     }
     public MyQTEAreaEvent(MyQTEAreaEvent e) : base(e)
     {
@@ -546,11 +552,11 @@ public class MyQTEAreaEvent : MyEvent
             remainingTime -= deltaTime;
         }
     }
-    public new checkResult checkEvent(float distance, float areaPos)
+    public new checkResult checkEvent(float distance, float areaPos, float height)
     {
         if (distance >= Distance)
         {
-            if (areaPos >= initialAreaPos && areaPos <= finalAreaPos)
+            if (areaPos >= initialAreaPos && areaPos <= finalAreaPos && height >= initialHeight && height <= finalHeight)
             {
                 if (Input.GetKey(key) && remainingTime > 0)
                 {
@@ -562,7 +568,7 @@ public class MyQTEAreaEvent : MyEvent
                     return checkResult.Ticking;
             }
             if (remainingTime <= 0)
-                return checkResult.Fail;
+                return checkResult.OutSide;
             else
                 return checkResult.Ticking;
         }

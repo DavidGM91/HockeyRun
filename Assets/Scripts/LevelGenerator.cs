@@ -29,6 +29,13 @@ public class LevelGenerator : MonoBehaviour
         bifurcacio
     }
 
+    public enum ObjectActionOnPlayer
+    {
+        Kill,
+        Hit,
+        None
+    }
+
     [System.Serializable]
     public class Section
     {
@@ -88,7 +95,7 @@ public class LevelGenerator : MonoBehaviour
     private Dictionary<uint, GameObject> levelSections = new();
     private List<Tuple<uint, uint>> bifur = new();
     private Dictionary<uint, Coin> coinEventList = new();
-    private Dictionary<uint, GameObject> obsEventList = new();
+    private Dictionary<uint, SpawnObstacle> obsEventList = new();
     private Dictionary<uint, Transform> rightRotations = new();
     private Dictionary<uint, Transform> leftRotations = new();
     private List<uint> rightBifurSects = new();
@@ -151,6 +158,7 @@ public class LevelGenerator : MonoBehaviour
         leftRotations.Clear();
         bifur.Clear();
         coinEventList.Clear();
+        obsEventList.Clear();
         for (int i = 0; i < sectionsCount; i++)
         {
             GenerateNewSection();
@@ -344,8 +352,10 @@ public class LevelGenerator : MonoBehaviour
         }
         else
         {
+            //Probablilitat de que la següent secció tingui monedes
             if (Random.Range(0, 4) == 0)
             {
+                //Numero de seccions consecutives amb monedes
                 sectionsWithCoins = Random.Range(3, 4);
             }
         }
@@ -360,7 +370,7 @@ public class LevelGenerator : MonoBehaviour
             eventSystem.IgnoreEvent(sect);
         }
     }
-    public void TurnRightSectionEvent(uint id, bool success)
+    public void TurnRightSectionEvent(uint id, bool success, MyEvent.checkResult result)
     {
         Debug.Log("TurnRightSectionEvent "+id+" "+success);
         bool isBifur = false;
@@ -398,7 +408,7 @@ public class LevelGenerator : MonoBehaviour
             }
         }
     }
-    public void TurnLeftSectionEvent(uint id, bool success)
+    public void TurnLeftSectionEvent(uint id, bool success, MyEvent.checkResult result)
     {
         Debug.Log("TurnLeftSectionEvent "+id+" "+success);
         bool isBifur = false;
@@ -439,7 +449,7 @@ public class LevelGenerator : MonoBehaviour
             }
         }
     }
-    public void SectionEvent(uint id, bool success)
+    public void SectionEvent(uint id, bool success, MyEvent.checkResult result)
     {
         if (success)
         {
@@ -448,35 +458,13 @@ public class LevelGenerator : MonoBehaviour
             levelSections.Remove(id);
         }
     }
-    public void QTEEvent(uint id, bool success)
+    public void ObjectEvent(uint id, bool success, MyEvent.checkResult result)
     {
-        if (success)
+        var obj = obsEventList[id];
+        
+        if (obj != null)
         {
-            obsEventList.Remove(id);
-        }
-    }
-
-    public void AreaQTEEvent(uint id, bool success)
-    {
-        if (success)
-        {
-            obsEventList.Remove(id);
-        }
-    }
-
-    public void AreaAlturaEvent(uint id, bool success)
-    {
-        if (success)
-        {
-            obsEventList.Remove(id);
-        }
-    }
-
-    public void AreaEvent(uint id, bool success)
-    {
-        if (success)
-        {
-            obsEventList.Remove(id);
+            obj.OnEvent(id, success, result);
         }
     }
     private int GenerateObstacles(int sectionId, Vector3 anchor)
@@ -491,39 +479,37 @@ public class LevelGenerator : MonoBehaviour
             obs.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
 
             //Event
-
-            //TODO Generar events per tipus
             if(obs.obstacleType == SpawnObstacle.ObstacleType.QTE)
             {
-                MyQTEEvent myEvent = new MyQTEEvent("QTE", distance - 1, QTEEvent, obs.keyQTE, timeToQTE);
+                MyQTEEvent myEvent = new MyQTEEvent("QTE", obs.distance, ObjectEvent, obs.keyQTE, timeToQTE);
                 uint eventID = eventSystem.AddEvent(myEvent);
-                obsEventList.Add(eventID, obstacle);
+                obsEventList.Add(eventID, obs);
             }
             else if(obs.obstacleType == SpawnObstacle.ObstacleType.AreaQTE)
             {
-                //TODO Use GetCollider() to make the event
-                MyQTEAreaEvent myEvent = new MyQTEAreaEvent("AreaQTE", distance - 1, AreaQTEEvent, obs.keyQTE, timeToQTE, 1 ,1);
+                MyQTEAreaEvent myEvent = new MyQTEAreaEvent("AreaQTE", obs.distance, ObjectEvent, obs.keyQTE, timeToQTE, obs.initialArea ,obs.finalArea,obs.initialHeight,obs.finalHeight);
                 uint eventID = eventSystem.AddEvent(myEvent);
-                obsEventList.Add(eventID, obstacle);
+                obsEventList.Add(eventID, obs);
             }
             else if(obs.obstacleType == SpawnObstacle.ObstacleType.AreaAltura)
             {
-                //TODO Use GetCollider() to make the event
-                MyHeightAreaEvent myEvent = new MyHeightAreaEvent("AreaAltura", distance - 1, AreaAlturaEvent,1,1,1,1);
+                MyHeightAreaEvent myEvent = new MyHeightAreaEvent("AreaAltura", distance - 1, ObjectEvent, obs.initialArea, obs.finalArea, obs.initialHeight, obs.finalHeight);
                 uint eventID = eventSystem.AddEvent(myEvent);
-                obsEventList.Add(eventID, obstacle);
+                obsEventList.Add(eventID, obs);
             }
             else if(obs.obstacleType == SpawnObstacle.ObstacleType.Area)
             {
-                //TODO Use obs.GetCollider() to make the event
-                MyAreaEvent myEvent = new MyAreaEvent("Area", distance - 1, AreaEvent, 1,1);
+                MyAreaEvent myEvent = new MyAreaEvent("Area", distance - 1, ObjectEvent, obs.initialArea, obs.finalArea);
                 uint eventID = eventSystem.AddEvent(myEvent);
-                obsEventList.Add(eventID, obstacle);
-            }   
+                obsEventList.Add(eventID, obs);
+            }
+
+            //Retornem les monedes que poden aparèixer a la següent secció com a les permeses per la secció i l'inversa de les que bloqueja l'obstacle.
+            return sections[sectionId].coinSides & ~obstacles[obstacleId].coinsBloqued;
         }
 
-        //TODO Set nextCoinPos
-        return 0b111111;
+        //Retornem les monedes que poden aparèixer a la següent secció com a les permeses per la secció ja que no hi ha obstacle.
+        return sections[sectionId].coinSides;
     }
     private void GenerateCoins(int coinsNext, Vector3 section)
     {   
@@ -537,7 +523,11 @@ public class LevelGenerator : MonoBehaviour
         if (possibleCoinSide.Count > 0)
         {
             int randomIndex = Random.Range(0, possibleCoinSide.Count);
-            finalCoinSide = possibleCoinSide[randomIndex]; // 0 = izquierda 1 = medio 2 = derecha 3 = izquierda flotante...
+            finalCoinSide = possibleCoinSide[randomIndex]; // 1 = izquierda 2 = medio 2 = derecha 3 = izquierda flotante...
+        }
+        else
+        {
+            return;
         }
 
         nextCoinPos = 0;
@@ -593,7 +583,7 @@ public class LevelGenerator : MonoBehaviour
             }
         }
     }
-    public void coinCollectorEv(uint coinId, bool success)
+    public void coinCollectorEv(uint coinId, bool success, MyEvent.checkResult result)
     {
         coinEventList[coinId].coinCollectorEvent(coinId, success);
         coinEventList.Remove(coinId);
