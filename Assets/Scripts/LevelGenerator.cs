@@ -166,6 +166,10 @@ public class LevelGenerator : MonoBehaviour
         {
             GenerateNewSection();
         }
+        foreach (var section in obsEventList)
+        {
+            Destroy(section.Value.gameObject);
+        }
     }
     /// <summary>
     /// Retorna un element aleatori d'una llista tenint en compte el pes.
