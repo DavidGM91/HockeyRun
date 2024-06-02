@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -192,12 +193,12 @@ public class PlayerMovement : MonoBehaviour
             coyoteTimeCounter = coyoteTime;
         }
     }
-    private void PlayAnim(EAnims _anim)
+    public void PlayAnim(EAnims _anim)
     {
         anim = _anim;
         animator.SetTrigger(EAnims.GetName(typeof(EAnims), _anim));
     }
-    private void StopAnim(EAnims _anim)
+    public void StopAnim(EAnims _anim)
     {
         anim = EAnims.Forward;
         animator.ResetTrigger(Enum.GetName(typeof(EAnims), _anim));
@@ -228,6 +229,7 @@ public class PlayerMovement : MonoBehaviour
         oldAnchor.rotation = secondAnchor.rotation;
         transform.position = startPos.position;
         transform.rotation = startPos.rotation;
+        gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
     public void PlayerStart()
     {

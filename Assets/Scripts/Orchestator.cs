@@ -23,6 +23,8 @@ public class Orchestrator : MonoBehaviour
     public GameObject customizationMenu;
     public GameObject creditsPanel;
     public GameObject instructionsPanel;
+    public GameObject GameOver;
+
 
     public Vector3 playerCamOffset = new Vector3(6, 3, 0);
 
@@ -51,6 +53,8 @@ public class Orchestrator : MonoBehaviour
         cam.GetComponent<FollowCamera>().Focus(player.transform, true);
         cam.GetComponent<FollowCamera>().AdjustCamera(playerCamOffset, 0.5f);
         HideMenu();
+        playerMovement.PlayAnim(PlayerMovement.EAnims.Forward);
+
     }
     public void ShowCustomization()
     {
@@ -82,6 +86,7 @@ public class Orchestrator : MonoBehaviour
         menu.SetActive(true);
         instructionsPanel.SetActive(false);
         creditsPanel.SetActive(false);
+        GameOver.SetActive(false);
     }
     public void HideMenu()
     {
@@ -152,8 +157,15 @@ public class Orchestrator : MonoBehaviour
         coinPool.enabled = true;
         levelGenerator.enabled = true;
         playerMovement.enabled = true;
+
+        playerMovement.StopAnim(PlayerMovement.EAnims.GameOver);
+        playerMovement.PlayAnim(PlayerMovement.EAnims.Forward);
     }
 
+    public void PlayAgain()
+    {
+        levelGenerator.Regenerate();
+    }
     public void Kill()
     {  
         playerMovement.enabled = false;
@@ -161,7 +173,17 @@ public class Orchestrator : MonoBehaviour
         coinPool.enabled = false;
         eS.enabled = false;
 
+        playerMovement.PlayAnim(PlayerMovement.EAnims.GameOver);
 
+       // playerMovement.StopAnim(PlayerMove)
+
+        GameOver.SetActive(true);
+
+    }
+
+    public void HideGameOver()
+    {
+        GameOver.SetActive(false);
     }
 
     public void Hit()
@@ -174,7 +196,7 @@ public class Orchestrator : MonoBehaviour
         eS.checkEvents(playerMovement.distance, playerMovement.lateralDistance, playerMovement.transform.position.y);
         if (player.transform.position.y < deathHeight)
         {
-            
+            Kill();
         }
         else
         {
