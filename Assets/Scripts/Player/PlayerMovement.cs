@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -228,6 +229,7 @@ public class PlayerMovement : MonoBehaviour
         oldAnchor.rotation = secondAnchor.rotation;
         transform.position = startPos.position;
         transform.rotation = startPos.rotation;
+        gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
     public void PlayerStart()
     {

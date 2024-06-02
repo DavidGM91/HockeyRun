@@ -19,6 +19,9 @@ public class LevelGenerator : MonoBehaviour
 
     public float timeToQTE = 2.0f;
 
+    [SerializeField]
+    private Orchestrator orchestrator;
+
     [System.Serializable]
     public enum SectionType
     {
@@ -478,6 +481,7 @@ public class LevelGenerator : MonoBehaviour
         switch (action)
         {
             case ObjectActionOnPlayer.Kill:
+                orchestrator.Kill();
                 Debug.Log("Killed");
                 //TODO: playerMovement.KillPlayer();
                 break;
@@ -674,5 +678,6 @@ public class LevelGenerator : MonoBehaviour
                 section.setSectionWeights(weights);
             }
         }
+        orchestrator = FindObjectOfType<Orchestrator>();
     }
 }
