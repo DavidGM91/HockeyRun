@@ -193,6 +193,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Prop_CardboardBox_01
       objectReference: {fileID: 0}
+    - target: {fileID: 1705058868123429749, guid: 6ea4b697ca4701b4ab83290fe00bd6fb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2059104817464088263, guid: 6ea4b697ca4701b4ab83290fe00bd6fb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2081303687196586447, guid: 6ea4b697ca4701b4ab83290fe00bd6fb,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -257,6 +267,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3762959173518466723, guid: 6ea4b697ca4701b4ab83290fe00bd6fb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4174272846548962087, guid: 6ea4b697ca4701b4ab83290fe00bd6fb, type: 3}

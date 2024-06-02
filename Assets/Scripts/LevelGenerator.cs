@@ -501,25 +501,25 @@ public class LevelGenerator : MonoBehaviour
             //Event
             if (obs.obstacleType == SpawnObstacle.ObstacleType.QTE)
             {
-                MyQTEEvent myEvent = new MyQTEEvent("QTE",distance+ obs.distance, ObjectEvent, obs.keyQTE, timeToQTE);
+                MyQTEEvent myEvent = new MyQTEEvent("QTE",distance - obs.distance, ObjectEvent, obs.keyQTE, timeToQTE);
                 eventID = eventSystem.AddEvent(myEvent);
                 obsEventList.Add(eventID, obs);
             }
             else if(obs.obstacleType == SpawnObstacle.ObstacleType.AreaQTE)
             {
-                MyQTEAreaEvent myEvent = new MyQTEAreaEvent("AreaQTE",distance + obs.distance, ObjectEvent, obs.keyQTE, timeToQTE, obs.initialArea ,obs.finalArea,obs.initialHeight,obs.finalHeight);
+                MyQTEAreaEvent myEvent = new MyQTEAreaEvent("AreaQTE",distance - obs.distance, ObjectEvent, obs.keyQTE, timeToQTE, obs.initialArea ,obs.finalArea,obs.initialHeight,obs.finalHeight);
                 eventID = eventSystem.AddEvent(myEvent);
                 obsEventList.Add(eventID, obs);
             }
             else if(obs.obstacleType == SpawnObstacle.ObstacleType.AreaAltura)
             {
-                MyHeightAreaEvent myEvent = new MyHeightAreaEvent("AreaAltura", distance +obs.distance, ObjectEvent, obs.initialArea, obs.finalArea, obs.initialHeight, obs.finalHeight);
+                MyHeightAreaEvent myEvent = new MyHeightAreaEvent("AreaAltura", distance - obs.distance, ObjectEvent, obs.initialArea, obs.finalArea, obs.initialHeight, obs.finalHeight);
                 eventID = eventSystem.AddEvent(myEvent);
                 obsEventList.Add(eventID, obs);
             }
             else if(obs.obstacleType == SpawnObstacle.ObstacleType.Area)
             {
-                MyAreaEvent myEvent = new MyAreaEvent("Area", distance + obs.distance, ObjectEvent, obs.initialArea, obs.finalArea);
+                MyAreaEvent myEvent = new MyAreaEvent("Area", distance - obs.distance, ObjectEvent, obs.initialArea, obs.finalArea);
                 eventID = eventSystem.AddEvent(myEvent);
                 obsEventList.Add(eventID, obs);
             }

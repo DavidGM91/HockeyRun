@@ -207,24 +207,10 @@ public class PlayerMovement : MonoBehaviour
         if(idle)
         {
             animator.SetBool("Idle", true);
-            if (forwardSpeed != 0)
-            {
-                saveForwardSpeed = forwardSpeed;
-            }
-            else if(saveForwardSpeed != -1)
-            {
-                saveForwardSpeed = _forwardSpeed;
-            }
-            else
-            {
-                saveForwardSpeed = 3;
-            }
-            forwardSpeed = 0;
             this.enabled = false;
         }
         else
         {
-            forwardSpeed = saveForwardSpeed;
             animator.SetBool("Idle", false);
             this.enabled = true;
         }

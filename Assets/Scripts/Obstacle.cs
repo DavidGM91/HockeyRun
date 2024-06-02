@@ -31,11 +31,59 @@ public class SpawnObstacle : MonoBehaviour
 
     public ObstacleType obstacleType;
 
-    public float distance { get { return btmR.position.x - origin.position.x; } }
-    public float initialArea { get { return btmR.position.z - origin.position.z; } }
-    public float finalArea { get { return btmL.position.z - origin.position.z; } }
-    public float initialHeight { get { return btmR.position.y - origin.position.y; } }
-    public float finalHeight { get { return topR.position.z - origin.position.z; ; } }  
+    public float distance { get {
+            if(btmR == null || origin == null)
+            {
+                origin = gameObject.transform.Find("Origin");
+                btmR = gameObject.transform.Find("EventBtmR");
+                if (btmR == null || origin == null)
+                    throw new System.Exception("No btmR or origin found. This obstacle was likely not set up correctly.");
+            }
+            return btmR.position.x - origin.position.x; } }
+    public float initialArea {
+        get
+        {
+            if (btmR == null || origin == null)
+            {
+                origin = gameObject.transform.Find("Origin");
+                btmR = gameObject.transform.Find("EventBtmR");
+                if (btmR == null || origin == null)
+                    throw new System.Exception("No btmR or origin found. This obstacle was likely not set up correctly.");
+            }
+            return btmR.position.z - origin.position.z; } }
+    public float finalArea {
+        get
+        {
+            if (btmL == null || origin == null)
+            {
+                origin = gameObject.transform.Find("Origin");
+                btmL = gameObject.transform.Find("EventBtmL");
+                if (btmR == null || origin == null)
+                    throw new System.Exception("No btmL or origin found. This obstacle was likely not set up correctly.");
+            }
+            return btmL.position.z - origin.position.z; } }
+    public float initialHeight {
+        get
+        {
+            if (btmR == null || origin == null)
+            {
+                origin = gameObject.transform.Find("Origin");
+                btmR = gameObject.transform.Find("EventBtmR");
+                if (btmR == null || origin == null)
+                    throw new System.Exception("No btmR or origin found. This obstacle was likely not set up correctly.");
+            }
+            return btmR.position.y - origin.position.y; } }
+    public float finalHeight {
+        get
+        {
+            if (btmR == null || origin == null)
+            {
+                origin = gameObject.transform.Find("Origin");
+                btmR = gameObject.transform.Find("EventTopR");
+                if (btmR == null || origin == null)
+                    throw new System.Exception("No topR or origin found. This obstacle was likely not set up correctly.");
+            }
+            return topR.position.z - origin.position.z; ; } }  
 
     private void Start()
     {
@@ -66,23 +114,19 @@ public class SpawnObstacle : MonoBehaviour
     {
         transform.position = position - origin.localPosition;
     }
-
     public void rotateYourselfAroundYourOriginPlease(Vector3 rotation)
     {
         transform.RotateAround(origin.position, Vector3.up, rotation.y);
     }
-
     public void positionYourselfPlease(Vector3 position, Vector3 offset)
     {
         transform.position = position - origin.position + offset;
     }
-
     IEnumerator DestroyAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
         Destroy(gameObject);
     }
-
     public virtual LevelGenerator.ObjectActionOnPlayer OnEvent(uint id, bool succes, MyEvent.checkResult checkResult)
     {
         switch(checkResult)
@@ -105,5 +149,4 @@ public class SpawnObstacle : MonoBehaviour
         StartCoroutine(DestroyAfterTime(2));
         return LevelGenerator.ObjectActionOnPlayer.None;
     }
-
 }
