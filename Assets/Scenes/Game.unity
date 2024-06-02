@@ -3583,9 +3583,9 @@ MonoBehaviour:
     rot: {x: 0, y: 0, z: 0, w: 1}
     allowedSectionsAfter:
     - name: 1 Straight Roof
-      value: {x: 1, y: 10}
+      value: {x: 1, y: 100}
     - name: 2 EndRoof
-      value: {x: 2, y: 2}
+      value: {x: 2, y: 20}
     - name: 4 Rturn
       value: {x: 4, y: 1}
     - name: 5 Lturn
@@ -3620,11 +3620,13 @@ MonoBehaviour:
     - name: 12 Antena Esquerra
       value: {x: 12, y: 1}
     - name: 13 Aire Dreta
-      value: {x: 13, y: 20}
+      value: {x: 13, y: 1}
     - name: 14 Aire Esquerra
-      value: {x: 14, y: 20}
+      value: {x: 14, y: 1}
     - name: 15 Aire Mig
-      value: {x: 15, y: 20}
+      value: {x: 15, y: 1}
+    - name: 16 RES
+      value: {x: 16, y: 15}
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 7
     associatedID: 0
@@ -3795,6 +3797,10 @@ MonoBehaviour:
   - name: 15 Aire Mig
     obj: {fileID: 192617452447761226, guid: d32ca39b5c496b445ac26af097808d49, type: 3}
     coinsBloqued: 2
+    isDeadly: 1
+  - name: 16 RES
+    obj: {fileID: 192617452447761226, guid: 2c742ef303f8a0246b2e6214dfd0c156, type: 3}
+    coinsBloqued: 0
     isDeadly: 1
 --- !u!4 &1386186829
 Transform:
@@ -4325,6 +4331,10 @@ MonoBehaviour:
   debug: 1
   eventMapCam: {fileID: 1858300239}
   eventMap: {fileID: 2107963740}
+  nextID: 1
+  playerMarker: {fileID: 0}
+  levelMarker: {fileID: 0}
+  guard: 0
 --- !u!1001 &1616923975
 PrefabInstance:
   m_ObjectHideFlags: 0
