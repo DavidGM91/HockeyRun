@@ -25,6 +25,9 @@ public class Orchestrator : MonoBehaviour
     public GameObject instructionsPanel;
     public GameObject GameOver;
 
+    public AudioSource music;
+    public AudioSource gameOverAudio;
+
 
     public Vector3 playerCamOffset = new Vector3(6, 3, 0);
 
@@ -36,7 +39,7 @@ public class Orchestrator : MonoBehaviour
 
     public KeyCode OpenMenu;
 
-    public float deathHeight = -10;
+    public float deathHeight = -5;
 
     private bool ismenu = true;
 
@@ -54,6 +57,7 @@ public class Orchestrator : MonoBehaviour
         cam.GetComponent<FollowCamera>().AdjustCamera(playerCamOffset, 0.5f);
         HideMenu();
         playerMovement.PlayAnim(PlayerMovement.EAnims.Forward);
+        music.GetComponent<AudioSource>();
 
     }
     public void ShowCustomization()
@@ -160,12 +164,10 @@ public class Orchestrator : MonoBehaviour
 
         playerMovement.StopAnim(PlayerMovement.EAnims.GameOver);
         playerMovement.PlayAnim(PlayerMovement.EAnims.Forward);
+
+        music.Play();     
     }
 
-    public void PlayAgain()
-    {
-        levelGenerator.Regenerate();
-    }
     public void Kill()
     {  
         playerMovement.enabled = false;
@@ -175,10 +177,11 @@ public class Orchestrator : MonoBehaviour
 
         playerMovement.PlayAnim(PlayerMovement.EAnims.GameOver);
 
-       // playerMovement.StopAnim(PlayerMove)
+        playerMovement.StopAnim(PlayerMovement.EAnims.Forward);
 
+        gameOverAudio.Play();
         GameOver.SetActive(true);
-
+        music.Stop();
     }
 
     public void HideGameOver()

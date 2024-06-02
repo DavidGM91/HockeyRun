@@ -192,6 +192,11 @@ public class PlayerMovement : MonoBehaviour
             jumpTimeCounter = 0;
             coyoteTimeCounter = coyoteTime;
         }
+
+        if (Input.GetKey(bendKey))
+        {
+            PlayAnim(EAnims.Slide);
+        }
     }
     public void PlayAnim(EAnims _anim)
     {
