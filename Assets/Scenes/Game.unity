@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1806105836}
-  m_IndirectSpecularColor: {r: 0.5641877, g: 0.4662379, b: 0.29007122, a: 1}
+  m_IndirectSpecularColor: {r: 0.56427324, g: 0.4663475, b: 0.29016215, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -136,10 +136,6 @@ PrefabInstance:
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_Name
       value: SM_Prop_Window_01 (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -590,10 +586,6 @@ PrefabInstance:
     - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Apartment_Stack_03
-      objectReference: {fileID: 0}
-    - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -1330,6 +1322,37 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 526429}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &406540797
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 406540798}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &406540798
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406540797}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.121, y: 0.927, z: -3.404}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &431269927
 GameObject:
   m_ObjectHideFlags: 0
@@ -1767,10 +1790,6 @@ PrefabInstance:
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_Name
       value: SM_Prop_Window_01
-      objectReference: {fileID: 0}
-    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -2735,10 +2754,6 @@ PrefabInstance:
       value: SM_Prop_Window_01 (1)
       objectReference: {fileID: 0}
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -3614,7 +3629,33 @@ MonoBehaviour:
     - name: 1 ElecBox Esquerra
       value: {x: 1, y: 1}
     - name: 2 Capses Dreta
-      value: {x: 2, y: 10}
+      value: {x: 2, y: 1}
+    - name: 3 ElecBox Dreta
+      value: {x: 3, y: 1}
+    - name: 4 Elecbox Mig
+      value: {x: 4, y: 1}
+    - name: 5 Barrera Mig
+      value: {x: 5, y: 1}
+    - name: 6 Barrera Esquerra
+      value: {x: 6, y: 1}
+    - name: 7 Capses Mig
+      value: {x: 7, y: 1}
+    - name: 8 Capses Esquerra
+      value: {x: 8, y: 1}
+    - name: 9 Roba
+      value: {x: 9, y: 1}
+    - name: 10 Antena Dreta
+      value: {x: 10, y: 1}
+    - name: 11 Antena Mig
+      value: {x: 11, y: 1}
+    - name: 12 Antena Esquerra
+      value: {x: 12, y: 1}
+    - name: 13 Aire Dreta
+      value: {x: 13, y: 20}
+    - name: 14 Aire Esquerra
+      value: {x: 14, y: 20}
+    - name: 15 Aire Mig
+      value: {x: 15, y: 20}
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 7
     associatedID: 0
@@ -3702,11 +3743,7 @@ MonoBehaviour:
     allowedSectionsAfter:
     - name: 0 StartRoof
       value: {x: 0, y: 1}
-    allowedObstacles:
-    - name: 0 Barrera Dreta
-      value: {x: 0, y: 1}
-    - name: 2 Capses Dreta
-      value: {x: 2, y: 1}
+    allowedObstacles: []
     levelPos: {x: 0, y: 0, z: 0}
     coinSides: 36
     associatedID: 0
@@ -3727,7 +3764,7 @@ MonoBehaviour:
     type: 0
   obstacles:
   - name: 0 Barrera Dreta
-    obj: {fileID: 192617452447761226, guid: d09ea94bee16ffa4e9ce1e66fab45343, type: 3}
+    obj: {fileID: 192617452447761226, guid: 3c1c53ade1e30714bbef3e3f01f887a4, type: 3}
     coinsBloqued: 4
     isDeadly: 1
   - name: 1 ElecBox Esquerra
@@ -3738,6 +3775,58 @@ MonoBehaviour:
     obj: {fileID: 192617452447761226, guid: 92a2d3fbb07693944ba6da572ebabcf7, type: 3}
     coinsBloqued: 4
     isDeadly: 0
+  - name: 3 ElecBox Dreta
+    obj: {fileID: 192617452447761226, guid: 4a2cd712f3306104e820f91d2d6b93c5, type: 3}
+    coinsBloqued: 4
+    isDeadly: 1
+  - name: 4 Elecbox Mig
+    obj: {fileID: 192617452447761226, guid: 8117f0fdcf9e23e4b847c5639d8ad9ce, type: 3}
+    coinsBloqued: 2
+    isDeadly: 1
+  - name: 5 Barrera Mig
+    obj: {fileID: 192617452447761226, guid: ce1abbecb37238b49ae247ac54622936, type: 3}
+    coinsBloqued: 2
+    isDeadly: 1
+  - name: 6 Barrera Esquerra
+    obj: {fileID: 192617452447761226, guid: 3c1abffbdfc5e794fbf7ca1d37dc2830, type: 3}
+    coinsBloqued: 1
+    isDeadly: 1
+  - name: 7 Capses Mig
+    obj: {fileID: 192617452447761226, guid: 8f0b7a138164c144da44925511ef6675, type: 3}
+    coinsBloqued: 2
+    isDeadly: 0
+  - name: 8 Capses Esquerra
+    obj: {fileID: 192617452447761226, guid: ee89232ea72a677448592cd42a2aed4c, type: 3}
+    coinsBloqued: 1
+    isDeadly: 0
+  - name: 9 Roba
+    obj: {fileID: 192617452447761226, guid: c2e8bff2b57b26e46bacf81b50abd88f, type: 3}
+    coinsBloqued: 7
+    isDeadly: 1
+  - name: 10 Antena Dreta
+    obj: {fileID: 192617452447761226, guid: b606a972141215940a29b82b3233823c, type: 3}
+    coinsBloqued: 4
+    isDeadly: 1
+  - name: 11 Antena Mig
+    obj: {fileID: 192617452447761226, guid: 13a3c1297e7fe384e9e31cb8c1787ae3, type: 3}
+    coinsBloqued: 2
+    isDeadly: 1
+  - name: 12 Antena Esquerra
+    obj: {fileID: 192617452447761226, guid: 4bbf84702939b344f93b7c2a5341dec3, type: 3}
+    coinsBloqued: 2
+    isDeadly: 1
+  - name: 13 Aire Dreta
+    obj: {fileID: 192617452447761226, guid: 8103017931291d843a17aa06e0e633d7, type: 3}
+    coinsBloqued: 4
+    isDeadly: 1
+  - name: 14 Aire Esquerra
+    obj: {fileID: 192617452447761226, guid: 550f284b0d8db3e4cbe47e176acbcd3a, type: 3}
+    coinsBloqued: 1
+    isDeadly: 1
+  - name: 15 Aire Mig
+    obj: {fileID: 192617452447761226, guid: d32ca39b5c496b445ac26af097808d49, type: 3}
+    coinsBloqued: 2
+    isDeadly: 1
 --- !u!4 &1386186829
 Transform:
   m_ObjectHideFlags: 0
@@ -3764,10 +3853,6 @@ PrefabInstance:
     - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Apartment_Stack_03 (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 182348, guid: a2d22ce70dfdb254e9cf1a761853209a, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -5568,10 +5653,6 @@ PrefabInstance:
       value: SM_Prop_Window_01 (2)
       objectReference: {fileID: 0}
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -6422,10 +6503,6 @@ PrefabInstance:
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_Name
       value: SM_Prop_Window_01 (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 156756, guid: dbda624de6be8fc4391bb7008161cce8, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -8304,21 +8381,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Sortida Terrat
-      objectReference: {fileID: 0}
-    - target: {fileID: 1810451971541129019, guid: 72ca131ab18d7e2498aea235715d507c,
-        type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2153029583900518149, guid: 72ca131ab18d7e2498aea235715d507c,
-        type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2295870514164092482, guid: 72ca131ab18d7e2498aea235715d507c,
-        type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4715172794528256775, guid: 72ca131ab18d7e2498aea235715d507c,
         type: 3}
@@ -11254,3 +11316,4 @@ SceneRoots:
   - {fileID: 1715247945}
   - {fileID: 137485681}
   - {fileID: 3379705522055797770}
+  - {fileID: 406540798}
