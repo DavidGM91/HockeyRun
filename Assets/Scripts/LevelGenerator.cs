@@ -256,6 +256,25 @@ public class LevelGenerator : MonoBehaviour
         section.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
         nextSectionPos = section.GetSpawn(0);
 
+        //OBSTACLES
+        int coinsNext = GenerateObstacles(sectionId, section.origin.position);
+
+        //MONEDES
+        if (sectionsWithCoins > 0)
+        {
+            sectionsWithCoins--;
+            GenerateCoins(coinsNext, section.origin.position);
+        }
+        else
+        {
+            //Probablilitat de que la següent secció tingui monedes
+            if (Random.Range(0, 4) == 0)
+            {
+                //Numero de seccions consecutives amb monedes
+                sectionsWithCoins = Random.Range(3, 4);
+            }
+        }
+
         //Càlcul de la distància
         if (newSection.length == -1 && (newSection.type == SectionType.recte || newSection.type == SectionType.final))
         {
@@ -331,7 +350,6 @@ public class LevelGenerator : MonoBehaviour
             gracePeriodNoRots = minStraightSectionsBetweenRotations;
             MyQTEEvent myRQTEEvent = new MyQTEEvent("Turn Right", distance - newSection.length, TurnRightSectionEvent, KeyCode.D, timeToQTE);
             justRotatedRight = eventSystem.AddEvent(myRQTEEvent);
-            distance += 0.3f;
         }
         else if (newSection.type == SectionType.esquerra)
         {
@@ -339,25 +357,6 @@ public class LevelGenerator : MonoBehaviour
             gracePeriodNoRots = minStraightSectionsBetweenRotations;
             MyQTEEvent myLQTEEvent = new MyQTEEvent("Turn Left", distance - newSection.length, TurnLeftSectionEvent, KeyCode.A, timeToQTE);
             justRotatedLeft = eventSystem.AddEvent(myLQTEEvent);
-        }
-
-        //OBSTACLES
-        int coinsNext = GenerateObstacles(sectionId, section.origin.position);
-
-        //MONEDES
-        if (sectionsWithCoins > 0)
-        {
-            sectionsWithCoins--;
-            GenerateCoins(coinsNext, section.origin.position);
-        }
-        else
-        {
-            //Probablilitat de que la següent secció tingui monedes
-            if (Random.Range(0, 4) == 0)
-            {
-                //Numero de seccions consecutives amb monedes
-                sectionsWithCoins = Random.Range(3, 4);
-            }
         }
     }
     IEnumerator waitAndDelete(List<uint> _secs,float delay)
@@ -498,32 +497,34 @@ public class LevelGenerator : MonoBehaviour
             SpawnObstacle obs = obstacle.GetComponent<SpawnObstacle>();
             obs.positionYourselfPlease(anchor);
             obs.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
-
+            uint eventID = 0;
             //Event
-            if(obs.obstacleType == SpawnObstacle.ObstacleType.QTE)
+            if (obs.obstacleType == SpawnObstacle.ObstacleType.QTE)
             {
                 MyQTEEvent myEvent = new MyQTEEvent("QTE",distance+ obs.distance, ObjectEvent, obs.keyQTE, timeToQTE);
-                uint eventID = eventSystem.AddEvent(myEvent);
+                eventID = eventSystem.AddEvent(myEvent);
                 obsEventList.Add(eventID, obs);
             }
             else if(obs.obstacleType == SpawnObstacle.ObstacleType.AreaQTE)
             {
                 MyQTEAreaEvent myEvent = new MyQTEAreaEvent("AreaQTE",distance + obs.distance, ObjectEvent, obs.keyQTE, timeToQTE, obs.initialArea ,obs.finalArea,obs.initialHeight,obs.finalHeight);
-                uint eventID = eventSystem.AddEvent(myEvent);
+                eventID = eventSystem.AddEvent(myEvent);
                 obsEventList.Add(eventID, obs);
             }
             else if(obs.obstacleType == SpawnObstacle.ObstacleType.AreaAltura)
             {
                 MyHeightAreaEvent myEvent = new MyHeightAreaEvent("AreaAltura", distance +obs.distance, ObjectEvent, obs.initialArea, obs.finalArea, obs.initialHeight, obs.finalHeight);
-                uint eventID = eventSystem.AddEvent(myEvent);
+                eventID = eventSystem.AddEvent(myEvent);
                 obsEventList.Add(eventID, obs);
             }
             else if(obs.obstacleType == SpawnObstacle.ObstacleType.Area)
             {
                 MyAreaEvent myEvent = new MyAreaEvent("Area", distance + obs.distance, ObjectEvent, obs.initialArea, obs.finalArea);
-                uint eventID = eventSystem.AddEvent(myEvent);
+                eventID = eventSystem.AddEvent(myEvent);
                 obsEventList.Add(eventID, obs);
             }
+            obstacle.transform.name = "#" + eventID + " Obstacle "+obs.obstacleType + obstacle.transform.name;
+
 
             //Retornem les monedes que poden aparèixer a la següent secció com a les permeses per la secció i l'inversa de les que bloqueja l'obstacle.
             return sections[sectionId].coinSides & ~obstacles[obstacleId].coinsBloqued;
