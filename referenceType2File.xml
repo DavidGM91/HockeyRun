@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfTypeDate xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <TypeDate>
+    <guid>77201e989fcef1c4bac6a30061675104</guid>
+    <fileName>Assets/Plugins/UnitySweeper/Editor/AssetCollector.cs</fileName>
+    <timeStamp>2024-06-01T15:39:43+02:00</timeStamp>
+    <typeFullName>
+      <string>UnitySweeper.AssetCollector</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp-Editor-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>1f29e2eb9c6936f41b721c6efaee9f4b</guid>
+    <fileName>Assets/Plugins/UnitySweeper/Editor/AssetReferenceCollection.cs</fileName>
+    <timeStamp>2024-06-01T15:39:43+02:00</timeStamp>
+    <typeFullName>
+      <string>UnitySweeper.AssetReferenceCollection</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp-Editor-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>6bb67b97b8344a94aab30214f4e7d21e</guid>
+    <fileName>Assets/Plugins/UnitySweeper/Editor/ClassReferenceCollection.cs</fileName>
+    <timeStamp>2024-06-01T15:39:43+02:00</timeStamp>
+    <typeFullName>
+      <string>UnitySweeper.ClassReferenceCollection</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp-Editor-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>8b64af60ae1f8f6468033da0a8444b69</guid>
+    <fileName>Assets/Plugins/UnitySweeper/Editor/CollectionData.cs</fileName>
+    <timeStamp>2024-06-01T15:39:43+02:00</timeStamp>
+    <typeFullName>
+      <string>UnitySweeper.CollectionData</string>
+      <string>UnitySweeper.TypeDate</string>
+      <string>UnitySweeper.IReferenceCollection</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp-Editor-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>86db6325c515e8242b81c97b597cc1d1</guid>
+    <fileName>Assets/Plugins/UnitySweeper/Editor/FindUnusedAssetsWindow.cs</fileName>
+    <timeStamp>2024-06-01T15:39:43+02:00</timeStamp>
+    <typeFullName>
+      <string>UnitySweeper.FindUnusedAssetsWindow</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp-Editor-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>58f778819f9935f42918478735c07337</guid>
+    <fileName>Assets/Plugins/UnitySweeper/Editor/ShaderReferenceCollection.cs</fileName>
+    <timeStamp>2024-06-01T15:39:43+02:00</timeStamp>
+    <typeFullName>
+      <string>UnitySweeper.ShaderReferenceCollection</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp-Editor-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>3a06b3990fe54df46b98679205577da0</guid>
+    <fileName>Assets/Scripts/Coin.cs</fileName>
+    <timeStamp>2024-05-30T11:35:42.4179229+02:00</timeStamp>
+    <typeFullName>
+      <string>Coin</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>ed6973e071d0af84d9f87f83728d0ed3</guid>
+    <fileName>Assets/Scripts/CoinPool.cs</fileName>
+    <timeStamp>2024-05-30T00:39:58.4230096+02:00</timeStamp>
+    <typeFullName>
+      <string>CoinPool</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>00df6324edf7833459ae9f8de8e6a25b</guid>
+    <fileName>Assets/Scripts/Enemy.cs</fileName>
+    <timeStamp>2024-05-29T00:06:55.7820251+02:00</timeStamp>
+    <typeFullName>
+      <string>Enemy</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>9c0e0b54a70b42b43911f35b2d5c2de9</guid>
+    <fileName>Assets/Scripts/LevelGenerator.cs</fileName>
+    <timeStamp>2024-06-02T18:42:03.3517397+02:00</timeStamp>
+    <typeFullName>
+      <string>LevelGenerator</string>
+      <string>LevelGenerator+SectionType</string>
+      <string>LevelGenerator+ObjectActionOnPlayer</string>
+      <string>LevelGenerator+Section</string>
+      <string>LevelGenerator+obstacle</string>
+      <string>LevelGenerator+namedValue`1</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>b19a470c511453541aa451ba1c5c949a</guid>
+    <fileName>Assets/Scripts/MyEventSystem.cs</fileName>
+    <timeStamp>2024-06-02T18:07:38.3562748+02:00</timeStamp>
+    <typeFullName>
+      <string>MyEventSystem</string>
+      <string>MyEventSystem+EventDistanceComparer</string>
+      <string>MyEvent</string>
+      <string>MyEvent+checkResult</string>
+      <string>MyAreaEvent</string>
+      <string>MyHeightAreaEvent</string>
+      <string>MyQTEEvent</string>
+      <string>MyQTEAreaEvent</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>6f7c276b0e683d84c85b44660d8edb7d</guid>
+    <fileName>Assets/Scripts/Obstacle.cs</fileName>
+    <timeStamp>2024-06-02T18:10:06.8111051+02:00</timeStamp>
+    <typeFullName>
+      <string>SpawnObstacle</string>
+      <string>SpawnObstacle+ObstacleType</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>17e35dbbdac1cc242866b61783f28f18</guid>
+    <fileName>Assets/Scripts/Orchestator.cs</fileName>
+    <timeStamp>2024-06-02T07:29:08.426838+02:00</timeStamp>
+    <typeFullName>
+      <string>Orchestrator</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>59d414a862d3bc34ba76d012baad05f8</guid>
+    <fileName>Assets/Scripts/PlayParticles.cs</fileName>
+    <timeStamp>2024-06-02T11:02:19.0192495+02:00</timeStamp>
+    <typeFullName>
+      <string>PlayParticles</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>06a395bdbd4c36242b7e4c819e26264a</guid>
+    <fileName>Assets/Scripts/Section.cs</fileName>
+    <timeStamp>2024-05-23T13:00:40.7626034+02:00</timeStamp>
+    <typeFullName>
+      <string>SpawnSection</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>58e6aa3448bd9c34393c14c716fe368c</guid>
+    <fileName>Assets/Scripts/Player/Customization.cs</fileName>
+    <timeStamp>2024-05-29T00:07:26.0078561+02:00</timeStamp>
+    <typeFullName>
+      <string>Customization</string>
+      <string>Customization+Uniform</string>
+      <string>Customization+NamedColor</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>73b7ad30f53af874bb817a24ad1d5021</guid>
+    <fileName>Assets/Scripts/Player/FollowCamera.cs</fileName>
+    <timeStamp>2024-06-01T10:38:32.4288904+02:00</timeStamp>
+    <typeFullName>
+      <string>FollowCamera</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>0c885e43fff161f42ad6e8ac1c5e489b</guid>
+    <fileName>Assets/Scripts/Player/InverseKinematics.cs</fileName>
+    <timeStamp>2024-06-01T16:53:37.5145325+02:00</timeStamp>
+    <typeFullName>
+      <string>IKControl</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>b7ff937bc2fe877459e2a2cddd469187</guid>
+    <fileName>Assets/Scripts/Player/PlayerCustomizeMenu.cs</fileName>
+    <timeStamp>2024-05-15T20:48:21.1583641+02:00</timeStamp>
+    <typeFullName>
+      <string>PlayerCustomizeMenu</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>cc03671cc8a80e4468c36f19144a3b67</guid>
+    <fileName>Assets/Scripts/Player/PlayerMovement.cs</fileName>
+    <timeStamp>2024-06-02T12:56:24.8945156+02:00</timeStamp>
+    <typeFullName>
+      <string>PlayerMovement</string>
+      <string>PlayerMovement+EAnims</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+  <TypeDate>
+    <guid>4b604a6aef263d64ab463bb44a9e337d</guid>
+    <fileName>Assets/Scripts/Props/cartellPubli.cs</fileName>
+    <timeStamp>2024-05-30T16:44:31.8910076+02:00</timeStamp>
+    <typeFullName>
+      <string>cartellPubli</string>
+    </typeFullName>
+    <assembly>Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</assembly>
+  </TypeDate>
+</ArrayOfTypeDate>
