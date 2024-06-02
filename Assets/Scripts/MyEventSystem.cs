@@ -15,21 +15,21 @@ public class MyEventSystem : MonoBehaviour
     }
 
     [SerializeField]
-    private GameObject eventMapCam;
+    public GameObject eventMapCam;
     [SerializeField]
-    private GameObject eventMap;
+    public GameObject eventMap;
 
     SortedSet<MyEvent> events = new SortedSet<MyEvent>(new EventDistanceComparer());
-    private uint nextID = 1;
-    private List<MyEvent> tickingEvents = new List<MyEvent>();
-    private GameObject playerMarker;
-    private GameObject levelMarker;
+    public uint nextID = 1;
+    public List<MyEvent> tickingEvents = new List<MyEvent>();
+    public GameObject playerMarker;
+    public GameObject levelMarker;
 
-    private bool guard = false;
+    public bool guard = false;
     
-    private Dictionary<uint, GameObject> pilotesQueSonDeBones = new Dictionary<uint, GameObject>();
+    public Dictionary<uint, GameObject> pilotesQueSonDeBones = new Dictionary<uint, GameObject>();
 
-    private void Start()
+    public void Start()
     {
         if (debug)
         {
@@ -123,20 +123,33 @@ public class MyEventSystem : MonoBehaviour
             }
             else if (e is MyQTEAreaEvent)
             {
+                MyQTEAreaEvent qte = (MyQTEAreaEvent)e;
                 marker.GetComponent<Renderer>().material.color = Color.blue;
-                marker.transform.position = new Vector3(-e.Distance, 3f, -1.0f);
+                GameObject subMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                subMarker.transform.position = new Vector3(-e.Distance, qte.initialHeight, -qte.initialAreaPos);
+                subMarker.GetComponent<Renderer>().material.color = Color.blue;
+                marker.transform.position = new Vector3(-e.Distance,qte.finalHeight, -qte.finalAreaPos);
+                subMarker.transform.parent = marker.transform;
             }
             else if (e is MyAreaEvent)
             {
                 MyAreaEvent myAreaEvent = (MyAreaEvent)e;
+                GameObject subMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                subMarker.transform.position = new Vector3(-e.Distance, 2.5f, -myAreaEvent.finalAreaPos);
+                subMarker.GetComponent<Renderer>().material.color = Color.green;
                 marker.GetComponent<Renderer>().material.color = Color.green;
                 marker.transform.position = new Vector3(-e.Distance, 3.5f, -myAreaEvent.initialAreaPos);
+                subMarker.transform.parent = marker.transform;
             }
             else if (e is MyHeightAreaEvent)
             {
                 MyHeightAreaEvent myHeightAreaEvent = (MyHeightAreaEvent)e;
+                GameObject subMarker = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                subMarker.transform.position = new Vector3(-e.Distance, myHeightAreaEvent.finalHeight, -myHeightAreaEvent.finalAreaPos);
+                subMarker.GetComponent<Renderer>().material.color = Color.magenta;
                 marker.GetComponent<Renderer>().material.color = Color.magenta;
                 marker.transform.position = new Vector3(-e.Distance, myHeightAreaEvent.initialHeight, -myHeightAreaEvent.initialAreaPos);
+                subMarker.transform.parent = marker.transform;
             }
             else
             {
@@ -182,7 +195,7 @@ public class MyEventSystem : MonoBehaviour
             }
         }
     }
-    private uint nextId()
+    public uint nextId()
     {
         uint ID = nextID;
         nextID++;
@@ -497,8 +510,8 @@ public class MyHeightAreaEvent : MyEvent
 }
 public class MyQTEEvent : MyEvent
 {
-    private KeyCode key;
-    private float remainingTime;
+    public KeyCode key;
+    public float remainingTime;
     public MyQTEEvent(string name, float distance, Action<uint, bool, MyEvent.checkResult> callback, KeyCode key, float timeGrace) : base(name, distance, callback)
     {
         this.key = key;
@@ -542,12 +555,12 @@ public class MyQTEEvent : MyEvent
 }
 public class MyQTEAreaEvent : MyEvent
 {
-    private KeyCode key;
-    private float remainingTime;
-    private float initialAreaPos;
-    private float finalAreaPos;
-    private float initialHeight;
-    private float finalHeight;
+    public KeyCode key;
+    public float remainingTime;
+    public float initialAreaPos;
+    public float finalAreaPos;
+    public float initialHeight;
+    public float finalHeight;
     public MyQTEAreaEvent(string name, float distance, Action<uint, bool, MyEvent.checkResult> callback, KeyCode key, float remainingTime, float initialAreaPos, float finalAreaPos, float initialHeight, float finalHeight) : base(name, distance, callback)
     {
         this.key = key;

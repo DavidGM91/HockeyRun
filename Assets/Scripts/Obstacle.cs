@@ -31,82 +31,116 @@ public class SpawnObstacle : MonoBehaviour
 
     public ObstacleType obstacleType;
 
-    public float distance { get {
-            if(btmR == null || origin == null)
-            {
-                origin = gameObject.transform.Find("Origin");
-                btmR = gameObject.transform.Find("EventBtmR");
-                if (btmR == null || origin == null)
-                    throw new System.Exception("No btmR or origin found. This obstacle was likely not set up correctly.");
-            }
-            return btmR.position.x - origin.position.x; } }
-    public float initialArea {
-        get
-        {
-            if (btmR == null || origin == null)
-            {
-                origin = gameObject.transform.Find("Origin");
-                btmR = gameObject.transform.Find("EventBtmR");
-                if (btmR == null || origin == null)
-                    throw new System.Exception("No btmR or origin found. This obstacle was likely not set up correctly.");
-            }
-            return btmR.position.z - origin.position.z; } }
-    public float finalArea {
-        get
-        {
-            if (btmL == null || origin == null)
-            {
-                origin = gameObject.transform.Find("Origin");
-                btmL = gameObject.transform.Find("EventBtmL");
-                if (btmR == null || origin == null)
-                    throw new System.Exception("No btmL or origin found. This obstacle was likely not set up correctly.");
-            }
-            return btmL.position.z - origin.position.z; } }
-    public float initialHeight {
-        get
-        {
-            if (btmR == null || origin == null)
-            {
-                origin = gameObject.transform.Find("Origin");
-                btmR = gameObject.transform.Find("EventBtmR");
-                if (btmR == null || origin == null)
-                    throw new System.Exception("No btmR or origin found. This obstacle was likely not set up correctly.");
-            }
-            return btmR.position.y - origin.position.y; } }
-    public float finalHeight {
-        get
-        {
-            if (btmR == null || origin == null)
-            {
-                origin = gameObject.transform.Find("Origin");
-                btmR = gameObject.transform.Find("EventTopR");
-                if (btmR == null || origin == null)
-                    throw new System.Exception("No topR or origin found. This obstacle was likely not set up correctly.");
-            }
-            return topR.position.z - origin.position.z; ; } }  
-
-    private void Start()
+    private void EnsureTransformsAssigned()
     {
         if (origin == null)
         {
             origin = gameObject.transform.Find("Origin");
+            if (origin == null)
+                throw new System.Exception("No Origin found. This obstacle was likely not set up correctly.");
         }
-        if(btmR == null)
+
+        if (btmR == null)
         {
             btmR = gameObject.transform.Find("EventBtmR");
+            if (btmR == null)
+                throw new System.Exception("No EventBtmR found. This obstacle was likely not set up correctly.");
         }
+
         if (btmL == null)
         {
             btmL = gameObject.transform.Find("EventBtmL");
+            if (btmL == null)
+                throw new System.Exception("No EventBtmL found. This obstacle was likely not set up correctly.");
         }
+
         if (topR == null)
         {
             topR = gameObject.transform.Find("EventTopR");
+            if (topR == null)
+                throw new System.Exception("No EventTopR found. This obstacle was likely not set up correctly.");
         }
+    }
+
+
+    public float distance
+    {
+        get
+        {
+            if (btmR == null || origin == null)
+            {
+                origin = gameObject.transform.Find("Origin");
+                btmR = gameObject.transform.Find("EventBtmR");
+                if (btmR == null || origin == null)
+                    throw new System.Exception("No btmR or origin found. This obstacle was likely not set up correctly.");
+            }
+            return btmR.position.x - origin.position.x;
+        }
+    }
+
+    // Property to get the initial area
+    public float initialArea
+    {
+        get
+        {
+            EnsureTransformsAssigned();
+            return -(btmR.position.z - origin.position.z);
+        }
+    }
+
+    // Property to get the final area
+    public float finalArea
+    {
+        get
+        {
+            EnsureTransformsAssigned();
+            return -(btmL.position.z - origin.position.z);
+        }
+    }
+
+    // Property to get the initial height
+    public float initialHeight
+    {
+        get
+        {
+            EnsureTransformsAssigned();
+            return (btmR.position.y - origin.position.y);
+        }
+    }
+
+    // Property to get the final height
+    public float finalHeight
+    {
+        get
+        {
+            EnsureTransformsAssigned();
+            return (topR.position.y - origin.position.y);
+        }
+    }
+    void Start()
+    {
+        origin = gameObject.transform.Find("Origin");
+        btmR = gameObject.transform.Find("EventBtmR");
+        btmL = gameObject.transform.Find("EventBtmL");
+        topR = gameObject.transform.Find("EventTopR");
         if (animator == null)
         {
             animator = gameObject.GetComponentInChildren<Animator>();
             if(animator != null)
+                animator.enabled = false;
+        }
+    }
+
+    public void Init()
+    {
+        origin = gameObject.transform.Find("Origin");
+        btmR = gameObject.transform.Find("EventBtmR");
+        btmL = gameObject.transform.Find("EventBtmL");
+        topR = gameObject.transform.Find("EventTopR");
+        if (animator == null)
+        {
+            animator = gameObject.GetComponentInChildren<Animator>();
+            if (animator != null)
                 animator.enabled = false;
         }
     }

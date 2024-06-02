@@ -300,7 +300,7 @@ public class LevelGenerator : MonoBehaviour
         if (bifurcateCopy)
         {
             rightBifurSects.Add(id);
-            myEvent = new MyEvent("Section Destroy", distance + sectionsBehind * newSection.length, SectionEvent);
+            myEvent = new MyEvent("Section Destroy", distance -10, SectionEvent);
             id2 = eventSystem.AddEvent(myEvent);
             leftBifurSects.Add(id2);
             levelSections.Add(id2, Instantiate(newSection.obj));
@@ -495,6 +495,7 @@ public class LevelGenerator : MonoBehaviour
             //Crear obstacle
             GameObject obstacle = Instantiate(obstacles[obstacleId].obj);
             SpawnObstacle obs = obstacle.GetComponent<SpawnObstacle>();
+            obs.Init();
             obs.positionYourselfPlease(anchor);
             obs.rotateYourselfAroundYourOriginPlease(levelRot.eulerAngles);
             uint eventID = 0;

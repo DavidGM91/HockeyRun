@@ -49,11 +49,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7c276b0e683d84c85b44660d8edb7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 4993679069090360550}
+  origin: {fileID: 0}
   keyQTE: 115
-  btmR: {fileID: 3762170993412881742}
-  btmL: {fileID: 1479402836673130038}
-  topR: {fileID: 4481436444113494694}
+  btmR: {fileID: 0}
+  btmL: {fileID: 0}
+  topR: {fileID: 0}
+  animator: {fileID: 0}
   obstacleType: 2
 --- !u!1 &1454987425096107646
 GameObject:

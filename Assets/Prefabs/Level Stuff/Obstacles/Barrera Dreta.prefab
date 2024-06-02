@@ -49,11 +49,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f7c276b0e683d84c85b44660d8edb7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  origin: {fileID: 4993679069090360550}
+  origin: {fileID: 0}
   keyQTE: 115
-  btmR: {fileID: 300242909719820287}
-  btmL: {fileID: 1716327522704091123}
-  topR: {fileID: 6314027517727899119}
+  btmR: {fileID: 0}
+  btmL: {fileID: 0}
+  topR: {fileID: 0}
+  animator: {fileID: 0}
   obstacleType: 1
 --- !u!1 &1454987425096107646
 GameObject:
@@ -111,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 1479402836673130038}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.56, y: 0.499867, z: 4.2}
+  m_LocalPosition: {x: 7.0499997, y: 0.499867, z: 4.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -142,7 +143,7 @@ Transform:
   m_GameObject: {fileID: 3762170993412881742}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.53, y: 0.499867, z: 6.4}
+  m_LocalPosition: {x: 7.02, y: 0.499867, z: 6.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -173,7 +174,7 @@ Transform:
   m_GameObject: {fileID: 4481436444113494694}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.97, y: 2.082, z: 6.552}
+  m_LocalPosition: {x: 6.46, y: 2.082, z: 6.552}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
